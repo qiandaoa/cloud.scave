@@ -1,0 +1,46 @@
+@url = http://localhost:5057
+
+GET {{url}}/api/user
+Accept: application/json
+
+###
+GET {{url}}/api/user/6fcaf10d-8c22-e594-5e4f-13750bbff3b4 HTTP/1.1
+
+### 
+DELETE {{url}}/api/user/6fcaf10d-8c22-e594-5e4f-13750bbff3b4  HTTP/1.1
+
+### 登录
+POST {{url}}/api/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username":"Boss",
+    "password":"abc123456"
+}
+
+### 注册
+POST {{url}}/api/register HTTP/1.1
+Content-Type: application/json
+
+{
+    "username":"aaaww140",
+    "password":"ab111111",
+    "confirmpwd":"ab111111"
+}
+
+### 重置密码操作前验证密码
+POST {{url}}/api/verify/313a0ed2-6835-4f14-971f-3a4c798dbfcd HTTP/1.1
+Content-Type: application/json
+
+{
+    "oldpassword":"abc123456"
+}
+
+### 重置密码
+PUT {{url}}/api/reset/313a0ed2-6835-4f14-971f-3a4c798dbfcd HTTP/1.1
+Content-Type: application/json
+
+{
+    "newpassword":"ab",
+    "confirmnewpassword":"ab"
+}
