@@ -1,7 +1,7 @@
 # 实训6组第一次项目
 
 #### Description
-这是一个程序员的天路
+抓住云朵
 
 #### Software Architecture
 Software architecture description
