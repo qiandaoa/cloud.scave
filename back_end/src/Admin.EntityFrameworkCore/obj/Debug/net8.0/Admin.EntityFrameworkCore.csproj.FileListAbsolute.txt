@@ -1,0 +1,17 @@
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\bin\Debug\net8.0\Admin.EntityFrameworkCore.deps.json
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\bin\Debug\net8.0\Admin.EntityFrameworkCore.runtimeconfig.json
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\bin\Debug\net8.0\Admin.EntityFrameworkCore.dll
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\bin\Debug\net8.0\Admin.EntityFrameworkCore.pdb
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\bin\Debug\net8.0\Admin.Domain.dll
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\bin\Debug\net8.0\Admin.Domain.pdb
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\obj\Debug\net8.0\Admin.EntityFrameworkCore.csproj.AssemblyReference.cache
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\obj\Debug\net8.0\Admin.EntityFrameworkCore.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\obj\Debug\net8.0\Admin.EntityFrameworkCore.AssemblyInfoInputs.cache
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\obj\Debug\net8.0\Admin.EntityFrameworkCore.AssemblyInfo.cs
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\obj\Debug\net8.0\Admin.EntityFrameworkCore.csproj.CoreCompileInputs.cache
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\obj\Debug\net8.0\Admin.EntityFrameworkCore.csproj.CopyComplete
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\obj\Debug\net8.0\Admin.EntityFrameworkCore.dll
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\obj\Debug\net8.0\refint\Admin.EntityFrameworkCore.dll
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\obj\Debug\net8.0\Admin.EntityFrameworkCore.pdb
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\obj\Debug\net8.0\Admin.EntityFrameworkCore.genruntimeconfig.cache
+C:\Users\20712\Desktop\团队项目\back_end\src\Admin.EntityFrameworkCore\obj\Debug\net8.0\ref\Admin.EntityFrameworkCore.dll
