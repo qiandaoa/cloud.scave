@@ -1,12 +1,21 @@
 <template>
     <a-layout>
-        <a-layout-sider>
-            <SildeMenu>888888888888</SildeMenu>
+        <a-layout-sider :collapsed="isSiderCollapsed" style="height: 100vh;">
+            <div class="sider-content">
+                <a-button type="primary" class="collapse-button" @click="toggleSiderCollapse">
+                    {{ isSiderCollapsed ? '展开菜单' : '折叠菜单' }}
+                </a-button>
+                <SildeMenu></SildeMenu>
+            </div>
         </a-layout-sider>
         <a-layout>
-            <a-layout-header :style="headerStyle">
+            <div class="headerstyle">
+
+           
+            <a-layout-header  :style="headerStyle">
                 <HeaderContent></HeaderContent>
             </a-layout-header>
+        </div>
             <a-layout-content :style="contentStyle">
                 <router-view></router-view>
             </a-layout-content>
@@ -16,7 +25,7 @@
 <script setup>
 import SildeMenu from './SildeMenu.vue';
 import HeaderContent from './HeaderContent.vue';
-import { h, ref, reactive } from 'vue'
+import { h, ref, reactive,watch } from 'vue'
 import {
     MailOutlined,
     CalendarOutlined,
@@ -27,53 +36,20 @@ let theme = ref('dark');
 let headerStyle = reactive({ background: '#fff', padding: 0 })
 let contentStyle = reactive({ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' })
 
-let item = reactive([
-    {
-        key: 1,
-        label: '菜单1',
-        title: '单单1',
-        icon: () => h(MailOutlined)
 
-    },
-    {
-        key: 2,
-        label: '菜单2',
-        title: '单单2',
-        icon: () => h(SettingOutlined),
-        children: [
-            {
-                key: '2-1',
-                label: '菜单2-1',
-                title: '菜单2-1'
+let isSiderCollapsed = ref(false); // 控制sider折叠状态
 
-            },
-            {
-                key: '2-2',
-                label: '菜单2-2',
-                title: '菜单2-2'
-
-            },
-            {
-                key: '2-3',
-                label: '菜单2-3',
-                title: '菜单2-3'
-
-            },
-            {
-                key: '2-4',
-                label: '菜单2-4',
-                title: '菜单2-4'
-
-            },
-        ]
-    },
-    {
-        key: 3,
-        label: '菜单3',
-        title: '单单3',
-        icon: () => h(CalendarOutlined),
-    },
-])
+// 动态调整contentStyle的paddingLeft
+watch(isSiderCollapsed, (newVal) => {
+    if (newVal) {
+        contentStyle.paddingLeft = '64px'; // sider折叠时的padding
+    } else {
+        contentStyle.paddingLeft = '200px'; // sider展开时的padding
+    }
+});
+const toggleSiderCollapse = () => {
+    isSiderCollapsed.value = !isSiderCollapsed.value;
+};
 
 </script>
 <style>
@@ -101,5 +77,19 @@ let item = reactive([
 
 .ant-layout-sider {
     height: 100vh;
+}
+.sider-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-top: 16px; /* 添加顶部填充以避免按钮与顶部边界重叠 */
+}
+
+.collapse-button {
+    margin-bottom: 16px; /* 为按钮与菜单之间留出一些空间 */
+}
+.headerstyle{
+    height: 100px;
+    
 }
 </style>
