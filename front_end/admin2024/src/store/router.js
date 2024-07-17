@@ -81,6 +81,7 @@ export const useRouterStore = defineStore('router', () => {
             activeKey.value = key;
             selectKeys.splice(0);
             selectKeys.push(activeKey.value);
+            selectKeys.values=[key]
         }
     }
 

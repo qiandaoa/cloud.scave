@@ -1,23 +1,73 @@
 <template>
-    <a-menu mode="inline" v-model:selectedKeys="selectKeys" :theme="theme" :items="menuArr" @click="handleMenuClick" />
+  <div class="logo" :class="{'logo-collapsed': isCollapsed}" @click.stop>
+    <img class="logo-png" :class="{ 'logo-png-collapsed': isCollapsed }" :src="logoSrc" alt="logo">
+  </div>
+  <a-menu mode="inline" v-model:selectedKeys="selectKeys" :theme="theme" :items="menuArr" @click="handleMenuClick" />
 </template>
+
 <script setup>
-import { ref } from 'vue'
-import { useRouterStore } from '../store/router'
-import { storeToRefs } from 'pinia'
-/*
-    一.实现点击菜单跳转页面的几种办法
-        1.给菜单项中放入<route-link>
-        2.菜单的 点击事件绑定方法，使用路由跳转的方式来完成跳转页面
+import { ref, onMounted, onUnmounted } from 'vue';
+import { useRouterStore } from '../store/router';
+import { storeToRefs } from 'pinia';
 
-*/
-let routerStore = useRouterStore();
-let { menuArr,selectKeys } = storeToRefs(routerStore)
-let theme = ref('dark');
+const isCollapsed = ref(window.innerWidth <= 768);
 
+const handleResize = () => {
+  isCollapsed.value = window.innerWidth <= 768;
+};
 
-function handleMenuClick({ key }) {
-    routerStore.changeActiveRoute(key);
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
+const routerStore = useRouterStore();
+const { menuArr, activeKey } = storeToRefs(routerStore);
+const theme = ref('dark');
+const selectKeys = ref([activeKey.value]);
+
+const logoSrc = ref('../../public/remove.photos-removed-background (1).png');
+
+const handleMenuClick = ({ key }) => {
+  routerStore.changeActiveRoute(key);
+  activeKey.value = key;
+};
+</script>
+
+<style scoped>
+.logo {
+  display: flex;
+  align-items: center;
+  padding: var(--padding-medium);
+  background-color: var(--secondary-color);
+  position: relative;
+  z-index: 1;
+  margin-bottom: var(--margin-small);
 }
 
-</script>
+.logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: all var(--transition-duration);
+}
+
+.logo-png {
+  width: 80px;
+  background-color: rgb(0, 21, 41);
+}
+
+.logo-png-collapsed {
+  width: var(--logo-size-collapsed);
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --logo-size-collapsed: 40px;
+  }
+}
+</style>
