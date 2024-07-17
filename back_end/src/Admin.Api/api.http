@@ -1,0 +1,23 @@
+@url=http://localhost:5209
+
+### get
+GET {{url}}/api/users HTTP/1.1
+
+### post
+POST {{url}}/api/users HTTP/1.1
+Content-Type: application/json
+
+{
+   "UserName":"admin",
+   "Password":"123456",
+   "ConfirmPassword":"123456"
+}
+
+### 测试登录
+POST {{url}}/api/login HTTP/1.1
+Content-Type: application/json
+
+{
+   "UserName":"admin",
+   "Password":"123456"
+}
