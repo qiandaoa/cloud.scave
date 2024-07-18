@@ -1,0 +1,9 @@
+bin/
+obj/
+Properties/
+*sln
+Class1.cs
+
+# 除了以下文件
+!.gitignore
+!appsettings.json
