@@ -5,7 +5,7 @@
                 <a-button type="primary" class="collapse-button" @click="toggleSiderCollapse">
                     {{ isSiderCollapsed ? '展开菜单' : '折叠菜单' }}
                 </a-button>
-                <SildeMenu></SildeMenu>
+                <SildeMenu :isSiderCollapsed="isSiderCollapsed" ></SildeMenu>
             </div>
         </a-layout-sider>
         <a-layout>

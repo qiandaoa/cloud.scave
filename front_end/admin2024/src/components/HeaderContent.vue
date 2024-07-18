@@ -1,104 +1,115 @@
 <template>
+    <!-- 页面布局容器 -->
     <div class="allbody">
-        <div class="header-content" >
+        <!-- 头部内容区域 -->
+        <div class="header-content">
+            <!-- 面包屑导航 -->
             <div class="breadcrumb">
                 <a-breadcrumb>
+                    <!-- 循环遍历并展示面包屑项 -->
                     <a-breadcrumb-item class="text" v-for="(item, index) in breadcrumbItems" :key="index">
                         {{ item.text }}
-                        <template #icon><RightOutlined /></template>
                     </a-breadcrumb-item>
                 </a-breadcrumb>
             </div>
+            <!-- 用户头像及下拉菜单 -->
             <div class="acvtar">
-                <a-dropdown >
+                <a-dropdown>
+                    <!-- 触发下拉菜单的链接 -->
                     <a class="ant-dropdown-link" @click.prevent>
-                        <a-space direction="vertical" :size="32">
-                            <a-space wrap :size="16">
-                                <a-avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=1" :size="36">
-                                    <template #icon></template>
+                        <a-space direction="vertical" :size="80">
+                            <a-space wrap :size="32">
+                                <!-- 用户头像 -->
+                                <a-avatar :src="avatarSrc" :size="48">
                                 </a-avatar>
                             </a-space>
                         </a-space>
-                        
                     </a>
+                    <!-- 下拉菜单内容 -->
                     <template #overlay>
                         <a-menu class="custom-menu">
+                            <!-- 首页菜单项 -->
                             <a-menu-item>
-                                <a href="/">首页</a>
+                                <a class="a" href="/">首页</a>
                             </a-menu-item>
+                            <!-- 个人中心菜单项 -->
                             <a-menu-item>
-                                <a href="../views/test.vue">测试</a>
+                                <a class="a" href="../views/userinfo.vue">个人中心</a>
                             </a-menu-item>
+                            <!-- 分割线 -->
+                            <hr>
+                            <!-- 登出菜单项 -->
                             <a-menu-item>
-                                <a href="../views/about.vue">测试</a>
+                                <a @click="handleLogout" class="a">登出</a>
                             </a-menu-item>
                         </a-menu>
                     </template>
                 </a-dropdown>
             </div>
-            
         </div>
-    <div class="tabs">
-        <a-tabs v-model:activeKey="activeKey" hide-add type="editable-card" @edit="onEdit" @change="handleTabsChange">
-            <a-tab-pane  v-for="pane in tabArr" :key="pane.key" :tab="pane.title" :closable="!pane.closable">
-                <!-- <router-view></router-view> -->
-            </a-tab-pane>
-        </a-tabs>
+        <!-- 标签页区域 -->
+        <div class="tabs">
+            <a-tabs v-model:activeKey="activeKey" ref="tabsRef" hide-add type="editable-card" @edit="onEdit" @change="handleTabsChange"   >
+                <!-- 循环生成标签页 -->
+                <a-tab-pane v-for="pane in tabArr"  :key="pane.key" :tab="pane.title"  :closable="
+        pane.title !== '工作台' && pane.title !== '仪表盘'
+    "></a-tab-pane>
+               
+            </a-tabs>
+        </div>
     </div>
-</div>
 </template>
+
 <script setup>
-import { storeToRefs } from 'pinia'
-import { useRouterStore } from '../store/router'
-import { nextTick, watch,computed } from 'vue';
-import {RightOutlined } from '@ant-design/icons-vue';
-import { useRoute,onBeforeRouteUpdate } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import { useRouterStore } from '../store/router';
+import { nextTick, watch, computed,ref } from 'vue';
+import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
 
-// 使用pinia获取routerStore的引用
-let routerStore = useRouterStore();
-// 通过storeToRefs将routerStore中的tabArr和activeKey引用到本地
-let { tabArr, activeKey } = storeToRefs(routerStore)
+// 初始化Vue Router实例
+const router = useRouter();
+// 用户头像源地址
+const avatarSrc = '/avatar.jpg';
+// 引用Pinia的路由状态存储
+const routerStore = useRouterStore();
+// 从状态存储中引用tabArr和activeKey
+const { tabArr, activeKey } = storeToRefs(routerStore);
 
-watch(tabArr,()=>{
-    if(tabArr.value.length>=2){
-        tabArr.value[0].isFixed=true;
-        tabArr.value[1].isFixed=true;
+// // 监听tabArr的变化，更新固定标签页的状态
+// watch(tabArr, () => {
+//     if (tabArr.value.length >= 2) {
+//         tabArr.value[0].isFixed = true;
+//         tabArr.value[1].isFixed = true;
+//     }
+// }, { deep: true });
 
-    }
-    },{
-        deep:true
-})
-const router=useRoute()
-// 计算属性用于生成面包屑数组
+// 获取当前路由对象
+const route = useRoute();
+
+// 计算属性：根据当前路由生成面包屑数组
 const breadcrumbItems = computed(() => {
-    // 获取当前活动的tab
-    const currentTab = tabArr.value.find(pane => pane.key === activeKey.value);
-    // 如果没有找到当前活动的tab，返回空数组
-    if (!currentTab) return [];
+    return route.matched.filter(route => route.meta && route.meta.title).map(route => ({
+        text: route.meta.title,
+    }));
+});
 
-    // 从tabArr中获取所有父级tab，直到找到一个isFixed为true的tab（假设isFixed为true的tab是根级别）
-    const parentTabs = tabArr.value.filter(pane => {
-        return tabArr.value.some(parent => parent.children?.includes(pane) && parent.isFixed);
-    });
-
-    // 将所有父级tab的title添加到数组中，再加上当前活动tab的title
-    const items = [...parentTabs.map(pane => ({ text: pane.title })), { text: currentTab.title }];
-
-    return items;
+// 监听路由变化，更新面包屑数据
+onBeforeRouteUpdate(() => {
+    // 更新breadcrumbItems
 });
 
 
-/**
- * 移除指定键值的标签页
- * @param {String} targetKey - 要移除的标签页的键值
- */
+const tabsRef = ref(null); // 在你的组件中定义
+
 const remove = targetKey => {
     let index = tabArr.value.findIndex(pane => pane.key === targetKey);
     let pane = tabArr.value.find(pane => pane.key === targetKey);
-    if(pane.isFixed)
+    if (pane.isFixed) {
         return;
-     if (index > -1 && targetKey === activeKey.value) {
-        // 如果要关闭的是当前活动标签页
+    }
+
+    // 如果要关闭的是当前活动标签页
+    if (targetKey === activeKey.value) {
         // 找到前一个页面的键值
         let previousKey = tabArr.value[index - 1]?.key;
         if (previousKey) {
@@ -113,38 +124,36 @@ const remove = targetKey => {
             }
         }
     }
+
     // Filter out the tab to be removed regardless of whether it's the active one
     tabArr.value = tabArr.value.filter(pane => pane.key !== targetKey);
-    nextTick().then(()=>{
+
+    // 使用 nextTick 确保 DOM 更新后，再进行组件的强制更新
+    nextTick().then(() => {
+        if (tabsRef.value) {
+            tabsRef.value.$forceUpdate(); // 强制更新 a-tabs 组件
+        }
         console.log('DOM updated after removing tab:', tabArr.value);
-        
-        
-    })
+    });
 };
 
-/**
- * 处理标签页的编辑操作
- * @param {String} targetKey - 被编辑的标签页的键值
- * @param {String} action - 编辑操作类型（如'remove'）
- */
+// 处理标签页的编辑操作
 const onEdit = (targetKey, action) => {
     if (action === 'remove') {
         remove(targetKey);
     }
 };
 
-/**
- * 当标签页切换时触发的事件处理函数
- * @param {String} key - 新的活动标签页的键值
- */
-function handleTabsChange(key) {
-    routerStore.changeActiveRoute(key);
-    routerStore.changeActiveKey(key)
-    // 如果左侧菜单的selectKeys直接从routerStore引用，这行代码可能不需要
-    // 但是，它可以确保在所有情况下都保持同步
-    routerStore.selectKeys = [key]; // 注意这里使用数组形式
-    
-}
+// 当标签页切换时触发的事件处理函数
+const handleTabsChange = key => {
+      routerStore.changeActiveRoute(key);
+    routerStore.selectKeys = [key];
+};
+
+// 登出功能
+const handleLogout = () => {
+    router.push('/login');
+};
 
 
 </script>
@@ -153,12 +162,12 @@ function handleTabsChange(key) {
 .header-content {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    gap: 16px; /* 间距 */
+    justify-content: space-between;
+    padding: 0 16px;
 }
 
-.acvtar{
-    margin-right: 80px;
+.acvtar {
+    margin-right: 100px;
 }
 
 /* 面包屑样式 */
@@ -167,12 +176,12 @@ function handleTabsChange(key) {
     top: 0;
     flex-grow: 1;
     display: flex;
-    
+    margin-left: 20px;
+}
 
-    
-    .text{
-        color: pink;
-    }
+.breadcrumb .text {
+    color: pink;
+    font-size: larger;
 }
 
 .breadcrumb-item:not(:last-child)::after {
@@ -184,15 +193,22 @@ function handleTabsChange(key) {
     color: #1890ff;
     cursor: pointer;
 }
+
 .ant-dropdown-link {
     display: inline-block;
     padding: 0 8px;
     cursor: pointer;
 }
+
 .custom-menu {
-    width: 120px; /* 调整宽度 */
-    max-height: 100px; /* 设置最大高度 */
-    overflow-y: hidden; /* 不显示滚动条 */
-}   
+    width: 120px;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.a:hover {
+    color: blue;
+}
+
 
 </style>
