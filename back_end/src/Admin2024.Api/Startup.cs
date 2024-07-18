@@ -30,6 +30,7 @@ public class Startup
         });
 
         app.UseRouting();
+        app.UseCors("AllowOrigin");
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseEndpoints(endPoints =>
@@ -40,6 +41,13 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddCors(options => {
+            options.AddPolicy("AllowOrigin",builder=>{
+                builder.AllowAnyHeader()
+                     .AllowAnyOrigin()
+                     .AllowAnyMethod();
+            });
+        });
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API Name", Version = "v1" });

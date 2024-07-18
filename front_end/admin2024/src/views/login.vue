@@ -33,7 +33,6 @@
 </template>
 <script setup>
     import { onMounted,watch,ref,reactive } from 'vue';
-    import { useUserStore } from '../store/user';
     import axios from 'axios';
     import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
     import { useRouter } from 'vue-router'
@@ -45,16 +44,39 @@
     });
 
     onMounted(() => {
-        if(useUserStore().user.token){
+        if(localStorage.getItem('token')){
             router.push('/');
         }
     });
 
-    async function btnSub(){
+    async function btnSub() {
         console.log(userInfo);
-        // const res = await axios.post('/api/login',userInfo);
-        // console.log(res);
+        try {
+            const res = await axios.post('http://localhost:5057/api/login', userInfo);
+            
+            // 如果登录成功
+            if (res.data.success) {
+                localStorage.setItem('token', res.data.data.token);
+                console.log('Token stored:', localStorage.getItem('token'));
+                router.push('/');
+            } else {
+                // 如果登录失败，处理逻辑
+                alert('登录失败，请重新输入');
+                userInfo.userName = '';
+                userInfo.password = '';
+            }
+        } catch (err) {
+            // 捕获请求失败的情况
+            if (err.response && err.response.status === 401) {
+                alert('登录失败，请重新输入');
+                userInfo.userName = '';
+                userInfo.password = '';
+            } else {
+                console.error('登录请求失败:', err);
+            }
+        }
     }
+
 </script>
 <style scoped>
     .box{
