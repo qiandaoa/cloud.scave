@@ -31,7 +31,7 @@ public class Startup
 
         app.UseRouting();
         app.UseCors("AllowOrigin");
-        app.UseAuthentication();
+        // app.UseAuthentication();
         app.UseAuthorization();
         app.UseEndpoints(endPoints =>
         {
