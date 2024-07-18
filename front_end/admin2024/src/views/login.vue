@@ -20,6 +20,12 @@
                         <a-button type="primary" size="large" @click="btnSub">
                             登录
                         </a-button>
+                        <span style="width: 150px; margin-left: 10px; display: inline-block; text-decoration: none;">
+                            <a class="register"  @click="handleregister" 
+                               style="text-decoration: none; color: blue; display: flex; align-items: center; height: 100%;cursor: pointer;">
+                                害没有注册吗烙铁
+                            </a>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -34,7 +40,7 @@
 <script setup>
     import { onMounted,watch,ref,reactive } from 'vue';
     import axios from 'axios';
-    import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
+    import { UserOutlined, LockOutlined,  } from "@ant-design/icons-vue";
     import { useRouter } from 'vue-router'
     
     const router = useRouter();
@@ -67,7 +73,7 @@
             }
         } catch (err) {
             // 捕获请求失败的情况
-            if (err.response && err.response.status === 401) {
+            if (err.response && err.response.status === 401) { 
                 alert('登录失败，请重新输入');
                 userInfo.userName = '';
                 userInfo.password = '';
@@ -76,7 +82,9 @@
             }
         }
     }
-
+function handleregister(){
+    router.push('/register');
+}
 </script>
 <style scoped>
     .box{
