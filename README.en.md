@@ -1,8 +1,12 @@
 # 实训6组第一次项目
 
 #### Description
-这是一个程序员的天路
-
+抓住云朵
+提交代码流程***
+git pull https://gitee.com/fjmxdx/training-group-6-first-project.git
+git add .
+git commit -m "注释"
+git push
 #### Software Architecture
 Software architecture description
 

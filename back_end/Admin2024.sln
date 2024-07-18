@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{952ABA45-1CFC-4936-A65A-446DECA20532}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin2024.Api", "src\Admin2024.Api\Admin2024.Api.csproj", "{D0766F3D-4D2E-4EAF-935A-CB1788175728}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin2024.Application", "src\Admin2024.Application\Admin2024.Application.csproj", "{6282CA47-E746-4917-A8AC-58E229442EA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin2024.Application.Contracts", "src\Admin2024.Application.Contracts\Admin2024.Application.Contracts.csproj", "{6447CFC8-DA10-422A-B357-D0567E34A405}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin2024.Domain", "src\Admin2024.Domain\Admin2024.Domain.csproj", "{72FD63A4-71AA-4652-A2AD-1F2577CB975A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin2024.EntityFramework", "src\Admin2024.EntityFramework\Admin2024.EntityFramework.csproj", "{CB80827C-ED2D-43B9-94E9-F8F05153BBF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin2024.Instructions", "src\Admin2024.Instructions\Admin2024.Instructions.csproj", "{F9BA1ED8-089A-451A-A57B-B8D3515FB315}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0766F3D-4D2E-4EAF-935A-CB1788175728}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0766F3D-4D2E-4EAF-935A-CB1788175728}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0766F3D-4D2E-4EAF-935A-CB1788175728}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0766F3D-4D2E-4EAF-935A-CB1788175728}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6282CA47-E746-4917-A8AC-58E229442EA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6282CA47-E746-4917-A8AC-58E229442EA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6282CA47-E746-4917-A8AC-58E229442EA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6282CA47-E746-4917-A8AC-58E229442EA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6447CFC8-DA10-422A-B357-D0567E34A405}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6447CFC8-DA10-422A-B357-D0567E34A405}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6447CFC8-DA10-422A-B357-D0567E34A405}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6447CFC8-DA10-422A-B357-D0567E34A405}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72FD63A4-71AA-4652-A2AD-1F2577CB975A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72FD63A4-71AA-4652-A2AD-1F2577CB975A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72FD63A4-71AA-4652-A2AD-1F2577CB975A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72FD63A4-71AA-4652-A2AD-1F2577CB975A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB80827C-ED2D-43B9-94E9-F8F05153BBF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB80827C-ED2D-43B9-94E9-F8F05153BBF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB80827C-ED2D-43B9-94E9-F8F05153BBF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB80827C-ED2D-43B9-94E9-F8F05153BBF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9BA1ED8-089A-451A-A57B-B8D3515FB315}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9BA1ED8-089A-451A-A57B-B8D3515FB315}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9BA1ED8-089A-451A-A57B-B8D3515FB315}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9BA1ED8-089A-451A-A57B-B8D3515FB315}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D0766F3D-4D2E-4EAF-935A-CB1788175728} = {952ABA45-1CFC-4936-A65A-446DECA20532}
+		{6282CA47-E746-4917-A8AC-58E229442EA6} = {952ABA45-1CFC-4936-A65A-446DECA20532}
+		{6447CFC8-DA10-422A-B357-D0567E34A405} = {952ABA45-1CFC-4936-A65A-446DECA20532}
+		{72FD63A4-71AA-4652-A2AD-1F2577CB975A} = {952ABA45-1CFC-4936-A65A-446DECA20532}
+		{CB80827C-ED2D-43B9-94E9-F8F05153BBF0} = {952ABA45-1CFC-4936-A65A-446DECA20532}
+		{F9BA1ED8-089A-451A-A57B-B8D3515FB315} = {952ABA45-1CFC-4936-A65A-446DECA20532}
+	EndGlobalSection
+EndGlobal
