@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useRouterStore } from '../store/router';
 import { storeToRefs } from 'pinia';
 
@@ -35,6 +35,9 @@ const handleMenuClick = ({ key }) => {
   routerStore.changeActiveRoute(key);
   activeKey.value = key;
 };
+watch(activeKey, () => {
+  selectKeys.value = [activeKey.value];
+});
 </script>
 
 <style scoped>

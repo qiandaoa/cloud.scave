@@ -10,9 +10,7 @@
         </a-layout-sider>
         <a-layout>
             <div class="headerstyle">
-
-           
-            <a-layout-header  :style="headerStyle">
+                 <a-layout-header  :style="headerStyle">
                 <HeaderContent></HeaderContent>
             </a-layout-header>
         </div>
@@ -41,11 +39,8 @@ let isSiderCollapsed = ref(false); // 控制sider折叠状态
 
 // 动态调整contentStyle的paddingLeft
 watch(isSiderCollapsed, (newVal) => {
-    if (newVal) {
-        contentStyle.paddingLeft = '64px'; // sider折叠时的padding
-    } else {
-        contentStyle.paddingLeft = '200px'; // sider展开时的padding
-    }
+    contentStyle.paddingLeft = '64px';
+  
 });
 const toggleSiderCollapse = () => {
     isSiderCollapsed.value = !isSiderCollapsed.value;
@@ -92,4 +87,5 @@ const toggleSiderCollapse = () => {
     height: 100px;
     
 }
+
 </style>
