@@ -5,7 +5,6 @@ using Admin2024.Domain.Interfaces;
 using Admin2024.Domain.System;
 using Admin2024.Instructions;
 using AutoMapper;
-
 namespace Admin2024.Application.AppService;
 
 public class UserAppService : IUserAppService

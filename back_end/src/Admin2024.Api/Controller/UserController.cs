@@ -23,13 +23,21 @@ public class UserController : ControllerBase
         _repo = repo;
         _userAppService = userAppService;
     }
+    /// <summary>
+    /// 获取用户信息
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<IActionResult> GetUser()
     {
         var entity = await _repo.GetAsync();
         return Ok(entity);
     }
-
+    /// <summary>
+    /// 根据id获取拥护信息
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<User>> GetUserById(Guid id)
     {
@@ -40,7 +48,11 @@ public class UserController : ControllerBase
         }
         return Ok(entity);
     }
-
+    /// <summary>
+    /// 根据id删除用户信息
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(Guid id)
     {
@@ -52,7 +64,11 @@ public class UserController : ControllerBase
         await _repo.DeleteAsync(id);
         return Ok(entity);
     }
-
+    /// <summary>
+    /// 登录功能
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
     [HttpPost("/api/login")]
     public IActionResult UserLogin(LoginDto user)
     {
@@ -60,7 +76,11 @@ public class UserController : ControllerBase
 
         return result.IsSuccess ? Ok(new { success = true, code = 200, data = new { token = result.Message }, msg = "登录成功!" }) : Unauthorized();
     }
-
+    /// <summary>
+    /// 注册功能
+    /// </summary>
+    /// <param name="info"></param>
+    /// <returns></returns>
     [HttpPost("/api/register")]
     public async Task<IActionResult> RegisterAccount(RegisterDto info)
     {
@@ -72,8 +92,12 @@ public class UserController : ControllerBase
         }
         return Ok(new { success = true, code = 200, msg = result.Message });
     }
-
-    
+    /// <summary>
+    /// 对重置密码经行旧密码验证
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="oldPasswordDto"></param>
+    /// <returns></returns>
     [HttpPost("/api/verify/{id}")]
     public IActionResult VerifyPassword(Guid id,[FromBody]VerifyPasswordDto oldPasswordDto)
     {
@@ -86,7 +110,12 @@ public class UserController : ControllerBase
         return Ok(new { success = true, code = 200, msg = result.Message });
     }
 
-    
+    /// <summary>
+    /// 重置密码
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="dto"></param>
+    /// <returns></returns>
     [HttpPut("/api/reset/{id}")]
     public async Task<IActionResult> ResetPassword(Guid id,ResetPasswordDto dto)
     {
@@ -97,11 +126,4 @@ public class UserController : ControllerBase
         }
         return Ok(new { success = true, code = 200, msg = result.Message });
     }
-
-    // [HttpPut("{id}")]
-    // public async Task<IActionResult> UpdatePersonalInfo()
-    // {
-
-    // }
-    
 }

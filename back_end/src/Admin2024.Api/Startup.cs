@@ -22,13 +22,13 @@ public class Startup
     }
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        // 使用Swagger Api调试工具
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1");
-            // Optional: Set the Swagger UI to the app's root URL
-            // c.RoutePrefix = string.Empty;
         });
+
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
