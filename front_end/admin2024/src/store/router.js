@@ -79,8 +79,8 @@ export const useRouterStore = defineStore('router', () => {
 
     // 改变当前项
     function changeActiveKey(key) {//切换当前Key
-        console.log('key值：', key);
-        console.log('activeKey值：', activeKey.value);
+        // console.log('key值：', key);
+        // console.log('activeKey值：', activeKey.value);
 
         // 设置标签栏的当前key
         activeKey.value = key;

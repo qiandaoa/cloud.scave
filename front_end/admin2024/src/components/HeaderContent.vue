@@ -49,7 +49,7 @@
         </div>
         <!-- 标签页区域 -->
         <div class="tabs">
-            <a-tabs v-model:activeKey="activeKey" hide-add type="editable-card" @edit="onEdit" @change="handleTabsChange">
+            <a-tabs v-model:activeKey="activeKey" ref="tabsRef" hide-add type="editable-card" @edit="onEdit" @change="handleTabsChange"   >
                 <!-- 循环生成标签页 -->
                 <a-tab-pane v-for="pane in tabArr"  :key="pane.key" :tab="pane.title"  :closable="
         pane.title !== '工作台' && pane.title !== '仪表盘'
@@ -63,25 +63,25 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { useRouterStore } from '../store/router';
-import { nextTick, watch, computed } from 'vue';
+import { nextTick, watch, computed,ref } from 'vue';
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
 
 // 初始化Vue Router实例
 const router = useRouter();
 // 用户头像源地址
-const avatarSrc = '../public/avatar.jpg';
+const avatarSrc = '/avatar.jpg';
 // 引用Pinia的路由状态存储
 const routerStore = useRouterStore();
 // 从状态存储中引用tabArr和activeKey
 const { tabArr, activeKey } = storeToRefs(routerStore);
 
-// 监听tabArr的变化，更新固定标签页的状态
-watch(tabArr, () => {
-    if (tabArr.value.length >= 2) {
-        tabArr.value[0].isFixed = true;
-        tabArr.value[1].isFixed = true;
-    }
-}, { deep: true });
+// // 监听tabArr的变化，更新固定标签页的状态
+// watch(tabArr, () => {
+//     if (tabArr.value.length >= 2) {
+//         tabArr.value[0].isFixed = true;
+//         tabArr.value[1].isFixed = true;
+//     }
+// }, { deep: true });
 
 // 获取当前路由对象
 const route = useRoute();
@@ -98,14 +98,18 @@ onBeforeRouteUpdate(() => {
     // 更新breadcrumbItems
 });
 
-// 移除指定键值的标签页
+
+const tabsRef = ref(null); // 在你的组件中定义
+
 const remove = targetKey => {
     let index = tabArr.value.findIndex(pane => pane.key === targetKey);
     let pane = tabArr.value.find(pane => pane.key === targetKey);
-    if(pane.isFixed)
+    if (pane.isFixed) {
         return;
-     if (index > -1 && targetKey === activeKey.value) {
-        // 如果要关闭的是当前活动标签页
+    }
+
+    // 如果要关闭的是当前活动标签页
+    if (targetKey === activeKey.value) {
         // 找到前一个页面的键值
         let previousKey = tabArr.value[index - 1]?.key;
         if (previousKey) {
@@ -120,14 +124,19 @@ const remove = targetKey => {
             }
         }
     }
+
     // Filter out the tab to be removed regardless of whether it's the active one
     tabArr.value = tabArr.value.filter(pane => pane.key !== targetKey);
-    nextTick().then(()=>{
+
+    // 使用 nextTick 确保 DOM 更新后，再进行组件的强制更新
+    nextTick().then(() => {
+        if (tabsRef.value) {
+            tabsRef.value.$forceUpdate(); // 强制更新 a-tabs 组件
+        }
         console.log('DOM updated after removing tab:', tabArr.value);
-        
-        
-    })
+    });
 };
+
 // 处理标签页的编辑操作
 const onEdit = (targetKey, action) => {
     if (action === 'remove') {
