@@ -1,4 +1,4 @@
-<template>
+n<template>
     <div>
         <div class="role-list-container">
             <span class="role-name">角色名称</span>
@@ -161,102 +161,7 @@ let tabArr = reactive([
         encode: 'user',
         createTime: '2022-01-01',
     },
-    {
-        id: 13,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 14,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 15,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 16,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 17,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 18,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 19,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 20,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 21,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 22,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 23,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 24,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 25,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 26,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 27,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 28,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
+ 
 ]);
 function Search() {
     console.log('搜索');
