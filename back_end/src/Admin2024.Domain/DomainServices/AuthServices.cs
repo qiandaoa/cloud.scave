@@ -21,6 +21,12 @@ public class AuthServices : IAuthServices
         _userRepo = repository;
         _jwtSetting = jwtSetting;
     }
+    /// <summary>
+    /// µ«¬º
+    /// </summary>
+    /// <param name="username">’À∫≈</param>
+    /// <param name="password">√‹¬Î</param>
+    /// <returns></returns>
     public string? Login(string username, string password)
     {
         var entity = _userRepo.GetByUsername(username);
@@ -33,7 +39,11 @@ public class AuthServices : IAuthServices
         }
         return null;
     }
-
+    /// <summary>
+    /// ªÒ»°token
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
     private string GenerateJwtToken(User user)
     {
         var claims = new[]
@@ -41,15 +51,13 @@ public class AuthServices : IAuthServices
             new Claim(JwtRegisteredClaimNames.Sub,user.Username),
             new Claim(JwtRegisteredClaimNames.Jti,user.Id.ToString())
         };
-
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSetting.SecretKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
         var token = new JwtSecurityToken(
             issuer: _jwtSetting.Issuer,
             audience: _jwtSetting.Audience,
             claims: claims,
-            expires: DateTime.Now.AddMinutes(_jwtSetting.ExpirationMinutes),
+            expires: DateTime.Now.AddHours(3),
             signingCredentials: creds
         );
 
