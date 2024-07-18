@@ -12,7 +12,7 @@ public class UserProfile : Profile
         .ForMember(dest => dest.Username,opt => opt.MapFrom(src => src.Username))
         .ForMember(dest => dest.Password,opt => opt.MapFrom(src => src.Password));
 
-        CreateMap<ResetPasswordDto,User>()
+        CreateMap<ModifyPasswordDto,User>()
         .ForMember(dest => dest.Password,opt => opt.MapFrom(src => src.NewPassword));
     }
 }

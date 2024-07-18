@@ -1,4 +1,6 @@
+using System.Data.Common;
 using Admin2024.Domain;
+using Admin2024.Domain.DomainServices;
 using Admin2024.Domain.System;
 using Admin2024.EntityFramework.DbConfigure;
 using Microsoft.EntityFrameworkCore;
@@ -11,38 +13,157 @@ public class AdminDbContext : DbContext
     {
 
     }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfigure).Assembly);
 
-        modelBuilder.Entity<User>(entity => {
-            var userId = Guid.NewGuid();
-            entity.HasData(
-                new User{
-                Id = userId,
-                Username = "Boss",
-                Password = "abc123456",
-                Salt = "aaaasssddd",
-                Telephone = "12345678910",
-                Email = "abc@123456.com",
-                IsActived = true,
-                IsDeleted = false,
-                CreateAt = DateTime.UtcNow,
-                UpdateAt = DateTime.UtcNow,
-                CreateBy = userId,
-                UpdateBy = userId,
-                Remark = "aaa"
-            }
-            );
+        Guid superAdmin = Guid.NewGuid();
+        Guid admin = Guid.NewGuid();
+        Guid commonUser = Guid.NewGuid();
+        modelBuilder.Entity<User>(entity =>
+        {
+            var salt = PasswordHelper.GenerateSalt();
+            entity.HasData([
+                new User
+                {
+                    Id = superAdmin,
+                    Username = "admin",
+                    Password = PasswordHelper.HashPassword("abc123456", salt),
+                    Salt = salt,
+                    NickName="超级管理员",
+                    Telephone = "12345678910",
+                    Email = "abc@123456.com",
+                    IsActived = true,
+                    IsDeleted = false,
+                    CreateAt = DateTime.UtcNow,
+                    UpdateAt = DateTime.UtcNow,
+                    CreateBy = superAdmin,
+                    UpdateBy = superAdmin,
+                    Remark = "aaa"
+                },
+                new User
+                {
+                    Id = admin,
+                    Username = "svip001",
+                    Password = "abc123456",
+                    Salt = "aaaasssddd",
+                    NickName="管理员",
+                    Telephone = "12345678910",
+                    Email = "abc@123456.com",
+                    IsActived = true,
+                    IsDeleted = false,
+                    CreateAt = DateTime.UtcNow,
+                    UpdateAt = DateTime.UtcNow,
+                    CreateBy = admin,
+                    UpdateBy = admin,
+                    Remark = "aaa"
+                },
+                new User
+                {
+                    Id = commonUser,
+                    Username = "svip001",
+                    Password = "abc123456",
+                    Salt = "aaaasssddd",
+                    NickName="普通用户",
+                    Telephone = "12345678910",
+                    Email = "abc@123456.com",
+                    IsActived = true,
+                    IsDeleted = false,
+                    CreateAt = DateTime.UtcNow,
+                    UpdateAt = DateTime.UtcNow,
+                    CreateBy = commonUser,
+                    UpdateBy = commonUser,
+                    Remark = "aaa"
+                }
+            ]);
         });
+
+        Guid superAdminId = Guid.NewGuid();
+        Guid adminId = Guid.NewGuid();
+        Guid commonUserId = Guid.NewGuid();
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.HasData([
+                new Role
+                {
+                    Id = superAdminId,
+                    RoleName = "超级管理员",
+                    IsActived = true,
+                    IsDeleted = false,
+                    CreateAt = DateTime.UtcNow,
+                    UpdateAt = DateTime.UtcNow,
+                    Remark = ""
+                },
+                new Role{
+                    Id = adminId,
+                    RoleName = "管理员",
+                    IsActived = true,
+                    IsDeleted = false,
+                    CreateAt = DateTime.UtcNow,
+                    UpdateAt = DateTime.UtcNow,
+                    Remark = ""
+                },
+                new Role{
+                    Id = commonUserId,
+                    RoleName = "普通用户",
+                    IsActived = true,
+                    IsDeleted = false,
+                    CreateAt = DateTime.UtcNow,
+                    UpdateAt = DateTime.UtcNow,
+                    Remark = ""
+                }
+            ]);
+        });
+
+
+        modelBuilder.Entity<UserRole>(entity =>
+        {
+            entity.HasData([
+                new UserRole{
+                    Id = Guid.NewGuid(),
+                    UserId = superAdmin,
+                    RoleId = superAdminId,
+                    IsActived = true,
+                    IsDeleted = false,
+                    CreateAt = DateTime.UtcNow,
+                    UpdateAt = DateTime.UtcNow,
+                    Remark = ""
+                },
+                new UserRole{
+                    Id = Guid.NewGuid(),
+                    UserId = admin,
+                    RoleId = adminId,
+                    IsActived = true,
+                    IsDeleted = false,
+                    CreateAt = DateTime.UtcNow,
+                    UpdateAt = DateTime.UtcNow,
+                    Remark = ""
+                },
+                new UserRole{
+                    Id = Guid.NewGuid(),
+                    UserId = commonUser,
+                    RoleId = commonUserId,
+                    IsActived = true,
+                    IsDeleted = false,
+                    CreateAt = DateTime.UtcNow,
+                    UpdateAt = DateTime.UtcNow,
+                    Remark = ""
+                }
+            ]);
+        });
+
+
+        // modelBuilder.Entity<Permission>(entity => {
+        //     entity.
+        // });
     }
 
     public override int SaveChanges()
     {
         var entities = ChangeTracker.Entries().Where(x => x.Entity is BaseEntity);
 
-        entities.Where(item => item.State == EntityState.Added).ToList().ForEach(x => {
+        entities.Where(item => item.State == EntityState.Added).ToList().ForEach(x =>
+        {
             var entity = (BaseEntity)x.Entity;
 
             entity.CreateAt = DateTime.UtcNow;
@@ -52,7 +173,8 @@ public class AdminDbContext : DbContext
             entity.UpdateBy = entity.Id;
         });
 
-        entities.Where(item => item.State == EntityState.Modified).ToList().ForEach(x => {
+        entities.Where(item => item.State == EntityState.Modified).ToList().ForEach(x =>
+        {
             var entity = (BaseEntity)x.Entity;
             entity.UpdateAt = DateTime.UtcNow;
         });
@@ -64,14 +186,16 @@ public class AdminDbContext : DbContext
     {
         var entities = ChangeTracker.Entries().Where(x => x.Entity is BaseEntity);
 
-        entities.Where(item => item.State == EntityState.Added).ToList().ForEach(x => {
+        entities.Where(item => item.State == EntityState.Added).ToList().ForEach(x =>
+        {
             var entity = (BaseEntity)x.Entity;
 
             entity.CreateAt = DateTime.UtcNow;
             entity.UpdateAt = DateTime.UtcNow;
         });
 
-        entities.Where(item => item.State == EntityState.Modified).ToList().ForEach(x => {
+        entities.Where(item => item.State == EntityState.Modified).ToList().ForEach(x =>
+        {
             var entity = (BaseEntity)x.Entity;
             entity.UpdateAt = DateTime.UtcNow;
         });
