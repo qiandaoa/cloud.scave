@@ -151,11 +151,6 @@ public class AdminDbContext : DbContext
                 }
             ]);
         });
-
-
-        // modelBuilder.Entity<Permission>(entity => {
-        //     entity.
-        // });
     }
 
     public override int SaveChanges()
