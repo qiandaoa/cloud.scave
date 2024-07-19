@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 @url = http://localhost:63760
+=======
+@url =  https://localhost:63759
+>>>>>>> bd0946ae7256185f3a852b334a8c785437036a32
 
 GET {{url}}/api/user
 Accept: application/json
@@ -14,8 +18,8 @@ POST {{url}}/api/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "username":"Boss",
-    "password":"abc456789"
+    "username":"admin",
+    "password":"admin123456"
 }
 
 ### 注册
@@ -23,7 +27,7 @@ POST {{url}}/api/register HTTP/1.1
 Content-Type: application/json
 
 {
-    "username":"aaaww141",
+    "username":"aaa141",
     "password":"ab111111",
     "confirmpwd":"ab111111"
 }

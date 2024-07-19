@@ -1,6 +1,6 @@
 import { routes } from '../route/staticRoutes'
 import { defineStore } from 'pinia'
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch,onMounted    } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 // 为了将路由实例引入进来，特意采用了setup语法，有没有注意到defineStore函数，没错，第2个参数是个函数，这就是setup语法
@@ -35,6 +35,11 @@ export const useRouterStore = defineStore('router', () => {
         return arr;
     })
 
+
+
+
+ 
+ 
     // 监听路由变化，设置当前标签项和当前菜单项（菜单项有些无法展开，暂不清楚是什么问题，待解决）
     watch(route, (newVal) => {
         changeActiveKey(newVal.path)
@@ -52,6 +57,7 @@ export const useRouterStore = defineStore('router', () => {
 
         })
     }
+    
 
     function addTab(key) {// 添加对象到标签数组中（如果不存在则添加）
         // console.log('拍扁的菜单数据', this.flatMenuArr);
@@ -112,7 +118,8 @@ export const useRouterStore = defineStore('router', () => {
         generatRoutes,
         addTab,
         changeActiveKey,
-        changeActiveRoute
+        changeActiveRoute,
+       
     }
 })
 

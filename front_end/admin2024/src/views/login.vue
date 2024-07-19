@@ -51,21 +51,6 @@
     </div>
 </template>
 <script setup>
-
-const formState = reactive({
-  username: '',
-  password: '',
-  remember: true,
-});
-const onFinish = values => {
-  console.log('Success:', values);
-};
-const onFinishFailed = errorInfo => {
-  console.log('Failed:', errorInfo);
-};
-
-
-
 import { onMounted, watch, ref, reactive } from 'vue';
 import axios from 'axios';
 import axiosInstance from '../store/axiosInstance.js';
@@ -96,25 +81,37 @@ async function btnSub() {
             // 可以在这里存储用户信息，跳转页面等
             useStore.user.token = res.data.data.data;
             localStorage.setItem('token', res.data.data.token);
-            const token = localStorage.getItem('token');
-            console.log(token);
+            
+            localStorage.setItem('username',userInfo.userName)
+       
             router.push('/');
         } else {
             // 处理其他状态码的情况
             console.error('登录状态码异常:', res.status);
         }
-    } catch (err) {
-        if (err.response && err.response.status === 401) {
-            // 如果登录失败
-            alert('登录失败，请重新输入');
-            userInfo.userName = '';
-            userInfo.password = '';
-        } else {
-            // 处理其他类型的错误
-            console.error('登录失败:', err);
-        }
+       } catch (err) {
+           if (err.response && err.response.status === 401) {
+               // 如果登录失败
+               alert('登录失败，请重新输入');
+               userInfo.userName = '';
+               userInfo.password = '';
+           } else {
+               // 处理其他类型的错误
+               console.error('登录失败:', err);
+           }
+       }
     }
-}
+
+    onMounted(() => {
+        if(localStorage.getItem('token')){
+            router.push('/');
+        }
+    });
+        
+    // 注册跳转
+    function btnReg(){
+        router.push('/register');
+    }
 
 // 注册跳转
 function handleregister() {
