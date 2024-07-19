@@ -20,18 +20,9 @@
                         <a-button type="primary" size="large" @click="btnSub">
                             登录
                         </a-button>
-<<<<<<< HEAD
                         <a-button type="primary" size="large" @click="btnReg">
                             注册
                         </a-button>
-=======
-                        <span style="width: 150px; margin-left: 10px; display: inline-block; text-decoration: none;">
-                            <a class="register"  @click="handleregister" 
-                               style="text-decoration: none; color: blue; display: flex; align-items: center; height: 100%;cursor: pointer;">
-                                害没有注册吗烙铁
-                            </a>
-                        </span>
->>>>>>> cd2dff46a4fc0a3f99d221fe23302866333e5894
                     </div>
                 </div>
             </div>
@@ -46,12 +37,8 @@
 <script setup>
     import { onMounted,watch,ref,reactive } from 'vue';
     import axios from 'axios';
-<<<<<<< HEAD
     import axiosInstance from '../store/axiosInstance.js';
     import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
-=======
-    import { UserOutlined, LockOutlined,  } from "@ant-design/icons-vue";
->>>>>>> cd2dff46a4fc0a3f99d221fe23302866333e5894
     import { useRouter } from 'vue-router'
     
     const router = useRouter();
@@ -67,7 +54,6 @@
     });
     // 如果用户没有登录，则进行登录验证，获取token
     async function btnSub() {
-<<<<<<< HEAD
        try {
         const res = await axiosInstance.post('http://localhost:5057/api/login', userInfo);
         if (res.status === 200) {
@@ -82,32 +68,6 @@
         } else {
             // 处理其他状态码的情况
             console.error('登录状态码异常:', res.status);
-=======
-        console.log(userInfo);
-        try {
-            const res = await axios.post('http://localhost:5057/api/login', userInfo);
-            
-            // 如果登录成功
-            if (res.data.success) {
-                localStorage.setItem('token', res.data.data.token);
-                console.log('Token stored:', localStorage.getItem('token'));
-                router.push('/');
-            } else {
-                // 如果登录失败，处理逻辑
-                alert('登录失败，请重新输入');
-                userInfo.userName = '';
-                userInfo.password = '';
-            }
-        } catch (err) {
-            // 捕获请求失败的情况
-            if (err.response && err.response.status === 401) { 
-                alert('登录失败，请重新输入');
-                userInfo.userName = '';
-                userInfo.password = '';
-            } else {
-                console.error('登录请求失败:', err);
-            }
->>>>>>> cd2dff46a4fc0a3f99d221fe23302866333e5894
         }
        } catch (err) {
            if (err.response && err.response.status === 401) {
