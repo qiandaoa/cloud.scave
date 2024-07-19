@@ -7,7 +7,7 @@
                 </div>
                 <div class="login">
                     <a-form
-                       :model="formState"
+                       :model="userInfo"
                        name="basic"
                        :label-col="{ span: 8 }"
                        :wrapper-col="{ span: 16 }"
@@ -70,6 +70,7 @@ onMounted(() => {
     //     router.push('/');
     // }
 });
+
 // 如果用户没有登录，则进行登录验证，获取token
 async function btnSub() {
     try {
@@ -78,12 +79,13 @@ async function btnSub() {
         if (res.status === 200) {
             // 登录成功
             console.log('登录成功');
-            // 可以在这里存储用户信息，跳转页面等
+            // 从服务器响应中获取的token存储到本地t
             useStore.user.token = res.data.data.data;
+            // 将 Token 存储到 LocalStorage，以保持用户的登录状态
             localStorage.setItem('token', res.data.data.token);
-            
-            localStorage.setItem('username',userInfo.userName)
-       
+            // 将用户名存储到 LocalStorage，为了在后续请求或页面加载时能够快速访问用户的身份信息
+            localStorage.setItem('username',userInfo.userName);
+            // 跳转首页
             router.push('/');
         } else {
             // 处理其他状态码的情况
@@ -100,18 +102,7 @@ async function btnSub() {
                console.error('登录失败:', err);
            }
        }
-    }
-
-    onMounted(() => {
-        if(localStorage.getItem('token')){
-            router.push('/');
-        }
-    });
-        
-    // 注册跳转
-    function btnReg(){
-        router.push('/register');
-    }
+    }      
 
 // 注册跳转
 function handleregister() {
