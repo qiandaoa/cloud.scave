@@ -2,7 +2,7 @@ namespace Admin2024.Domain.System;
 
 public class User : BaseEntity
 {
-    public List<Role> _userRole { get; set; } = new List<Role>();
+    public static List<Role> _userRole { get; set; } = new List<Role>();
     public string Username { get; set; } = null!;
     public string Password { get; set; } = null!;
     public string? NickName { get; set; }
@@ -11,11 +11,11 @@ public class User : BaseEntity
     public string? Email { get; set; }
     public string? Telephone { get; set; }
     
-    public void AllocateRole(Role role)
+    public static void AllocateRole(Role role)
     {
         _userRole.Add(role);
     }
-    public void RemoveRole(string roleName)
+    public static void RemoveRole(string roleName)
     {
         var role = _userRole.FirstOrDefault(e => e.RoleName == roleName);
         if(role != null)

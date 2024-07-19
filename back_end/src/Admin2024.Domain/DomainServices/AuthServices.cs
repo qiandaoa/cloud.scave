@@ -1,11 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-
-using Admin2024.Domain.Interfaces;
 using Admin2024.Domain.ObjectValue;
 using Admin2024.Domain.System;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 
@@ -13,37 +10,19 @@ namespace Admin2024.Domain.DomainServices;
 
 public class AuthServices : IAuthServices
 {
-    private readonly IUserDomainService _userRepo;
+    private readonly IUserDomainService _userDomainService;
     private readonly JwtSetting _jwtSetting;
 
-    public AuthServices(IUserDomainService repository, JwtSetting jwtSetting)
+    public AuthServices(IUserDomainService userDomainService, JwtSetting jwtSetting)
     {
-        _userRepo = repository;
+        _userDomainService = userDomainService;
         _jwtSetting = jwtSetting;
     }
-    /// <summary>
-    /// µ«¬º
-    /// </summary>
-    /// <param name="username">’À∫≈</param>
-    /// <param name="password">√‹¬Î</param>
-    /// <returns></returns>
-    public string? Login(string username, string password)
+    public string Login(User user)
     {
-        var entity = _userRepo.GetByUsername(username);
-
-        if (entity != null && password == entity.Password)
-        {
-            var token = GenerateJwtToken(entity);
-
-            return token;
-        }
-        return null;
+        return GenerateJwtToken(user);
     }
-    /// <summary>
-    /// ªÒ»°token
-    /// </summary>
-    /// <param name="user"></param>
-    /// <returns></returns>
+
     private string GenerateJwtToken(User user)
     {
         var claims = new[]
@@ -51,13 +30,15 @@ public class AuthServices : IAuthServices
             new Claim(JwtRegisteredClaimNames.Sub,user.Username),
             new Claim(JwtRegisteredClaimNames.Jti,user.Id.ToString())
         };
+
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSetting.SecretKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
         var token = new JwtSecurityToken(
             issuer: _jwtSetting.Issuer,
             audience: _jwtSetting.Audience,
             claims: claims,
-            expires: DateTime.Now.AddHours(3),
+            expires: DateTime.Now.AddMinutes(_jwtSetting.ExpirationMinutes),
             signingCredentials: creds
         );
 

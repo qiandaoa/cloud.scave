@@ -15,7 +15,7 @@ Content-Type: application/json
 
 {
     "username":"Boss",
-    "password":"abc123456"
+    "password":"abc456789"
 }
 
 ### 注册
@@ -23,7 +23,7 @@ POST {{url}}/api/register HTTP/1.1
 Content-Type: application/json
 
 {
-    "username":"aaaww140",
+    "username":"aaaww141",
     "password":"ab111111",
     "confirmpwd":"ab111111"
 }
