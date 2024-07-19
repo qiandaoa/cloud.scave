@@ -98,7 +98,7 @@ let UserDelete = () => {
 </template>
 
 
-<style lang="less" scoped>
+<style scoped>
 .demo-dropdown-wrap {
   border-radius: 10px;
   background-color: #ffffff;

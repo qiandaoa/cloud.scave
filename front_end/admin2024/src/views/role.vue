@@ -1,4 +1,4 @@
-<template>
+n<template>
     <div>
         <div class="role-list-container">
             <span class="role-name">角色名称</span>
@@ -176,6 +176,22 @@ let tabArr = reactive([
         encode: 'user',
         createTime: '2022-01-01',
     },
+<<<<<<< HEAD
+=======
+    {
+        id: 11,
+        name: '用户',
+        encode: 'user',
+        createTime: '2022-01-01',
+    },
+    {
+        id: 12,
+        name: '用户',
+        encode: 'user',
+        createTime: '2022-01-01',
+    },
+ 
+>>>>>>> b4497092d3bd0c842affb4231b80b0218a0512ac
 ]);
 function Search() {
     console.log('搜索');
