@@ -37,34 +37,33 @@
 <script setup>
     import { onMounted,watch,ref,reactive } from 'vue';
     import axios from 'axios';
-    import axiosInstance from '../store/axiosInstance.js';
+    // import axiosInstance from '../store/axiosInstance.js';
     import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
     import { useRouter } from 'vue-router'
-    
+
+  
     const router = useRouter();
     const userInfo = reactive({
         userName : '',
         password : ''
     });
     // 如果用户已经登录，即有token的记录，则跳转至首页
-    onMounted(() => {
-        if(localStorage.getItem('token')){
-            router.push('/');
-        }
-    });
+ 
     // 如果用户没有登录，则进行登录验证，获取token
     async function btnSub() {
        try {
-        const res = await axiosInstance.post('http://localhost:5057/api/login', userInfo);
+        const res = await axios.post('http://localhost:63760/api/login', userInfo);
+        // console.log(res.status);
         if (res.status === 200) {
             // 登录成功
             console.log('登录成功');
             // 可以在这里存储用户信息，跳转页面等
             localStorage.setItem('token', res.data.data.token);
-            const token = localStorage.getItem('token');
-            console.log(token);
+            
+            localStorage.setItem('username',userInfo.userName)
+       
             router.push('/');
-            console.log(res);
+           
         } else {
             // 处理其他状态码的情况
             console.error('登录状态码异常:', res.status);
@@ -81,14 +80,18 @@
            }
        }
     }
+
+    onMounted(() => {
+        if(localStorage.getItem('token')){
+            router.push('/');
+        }
+    });
         
     // 注册跳转
     function btnReg(){
-        router.push('/registered');
+        router.push('/register');
     }
-function handleregister(){
-    router.push('/register');
-}
+
 </script>
 <style scoped>
     .box{
