@@ -1,17 +1,13 @@
 import axios from 'axios';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
 
 // 创建axios实例
 const instance = axios.create({
-    baseURL: 'http://localhost:5057',
+    baseURL: 'http://localhost:5173',
 });
 
 // 请求拦截器
 instance.interceptors.request.use(
   function (config) {
-    console.log(config);
     // 添加token到请求头
     const token = localStorage.getItem('token');            
     console.log(token);
