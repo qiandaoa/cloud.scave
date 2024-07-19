@@ -9,9 +9,9 @@
                     <div class="input">
                         <a-input v-model:value="userInfo.userName" placeholder="Basic usage">
                             <template #prefix>
-                              <user-outlined />
+                                <user-outlined />
                             </template>
-                          </a-input>
+                        </a-input>
                     </div>
                     <div class="input">
                         <a-input-password v-model:value="userInfo.password" placeholder="input password" />
@@ -94,61 +94,68 @@
 
 </script>
 <style scoped>
-    .box{
-        height: 100vh;
-        width: 100vw;
-        background-image: url(../imgs/Login_bg.webp);
-        background-repeat: repeat;
-        background-size: cover;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .login_box{
-        background-color:white;
-        height: 80vh;
-        width: 60vw;
-        border: 1px solid rgba(119, 117, 238, 0.808);
-        display: flex;
-        justify-content:center;
-        flex-direction:column;
-        align-items: center;
-        flex-direction: row;
-        border-radius: 10px;
-        box-shadow: 2px 2px 5px rgba(70, 162, 207, 0.5);
-    }
-    .left{
-        height: 100%;
-        width: 60%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-    .left .login{
-        height: 200px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-evenly;
-    }
-    .left .input{
-        width: 200px;
-        display: flex;
-        justify-content: center;
-    }
-    .left .input button{
-        margin-left: 20px;
-    }
-    .right{
-        height: 100%;
-        width: 50%;
+.box {
+    height: 100vh;
+    width: 100vw;
+    background-image: url(../imgs/Login_bg.webp);
+    background-repeat: repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-        display: flex;
-        align-items: center;
-    }
-    .right img{
-        width: 400px;
-        height: 400px;
-    }
+.login_box {
+    background-color: white;
+    height: 80vh;
+    width: 60vw;
+    border: 1px solid rgba(119, 117, 238, 0.808);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    flex-direction: row;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(70, 162, 207, 0.5);
+}
+
+.left {
+    height: 100%;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.left .login {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.left .input {
+    width: 200px;
+    display: flex;
+    justify-content: center;
+}
+
+.left .input button {
+    margin-left: 20px;
+}
+
+.right {
+    height: 100%;
+    width: 50%;
+
+    display: flex;
+    align-items: center;
+}
+
+.right img {
+    width: 400px;
+    height: 400px;
+}
 </style>
