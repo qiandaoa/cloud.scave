@@ -1,4 +1,4 @@
-n<template>
+<template>
     <div>
         <div class="role-list-container">
             <span class="role-name">角色名称</span>
@@ -65,22 +65,22 @@ n<template>
         <div class="modal-interior">
             <span style="font-size:20px;" v-show="interior1">添加角色</span>
             <span style="font-size:20px;" v-show="interior2">编辑角色</span>
-            <form action="">
-                <table>
-                    <tr>
-                        <td><span style="color: red;">*</span> 角色名称</td>
-                        <td class="td370"><input type="text" class="input-text" required></td>
-                    </tr>
-                    <tr>
-                        <td><span style="color: red;">*</span> 角色编码</td>
-                        <td class="td370"><input type="text" class="input-text" required></td>
-                    </tr>
-                    <div>
-                        <button type="button" class="cancel-button" @click="cancel">取消</button>
-                        <button type="submit" class="confirm-button" @click="confirm">确认</button>
-                    </div>
-                </table>
-            </form>
+            <table>
+                <tr>
+                    <td><span style="color: red;">*</span> 角色名称</td>
+                    <td class="td370"><input type="text" name="username" class="input-text" v-model="name" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span style="color: red;">*</span> 角色编码</td>
+                    <td class="td370"><input type="text" name="encode" class="input-text" v-model="encode" required>
+                    </td>
+                </tr>
+                <div>
+                    <button type="button" class="cancel-button" @click="cancel">取消</button>
+                    <button type="submit" class="confirm-button" @click="confirm">确认</button>
+                </div>
+            </table>
         </div>
     </div>
 </template>
@@ -102,6 +102,8 @@ import {
 let display = ref(false);
 let interior1 = ref(false);
 let interior2 = ref(false);
+let name = ref();
+let encode = ref();
 const pageSize = 5;
 const current = ref(Number(1));
 
@@ -176,22 +178,6 @@ let tabArr = reactive([
         encode: 'user',
         createTime: '2022-01-01',
     },
-<<<<<<< HEAD
-=======
-    {
-        id: 11,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 12,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
- 
->>>>>>> b4497092d3bd0c842affb4231b80b0218a0512ac
 ]);
 function Search() {
     console.log('搜索');
@@ -224,9 +210,14 @@ function cancel() {
     display.value = false;
     interior1.value = false;
     interior2.value = false;
+    encode.value = '';
+    name.value = '';
 }
 function confirm() {
-    cancel();
+    if (encode.value && name.value) {
+        cancel();
+    }
+
 }
 </script>
 
@@ -268,7 +259,7 @@ function confirm() {
 
 .role-list-container {
     width: 100%;
-    min-width: 800px;
+    min-width: 840px;
     margin: 0 0 10px 0;
     padding: 10px;
     border: 2px solid rgb(241, 243, 248);
