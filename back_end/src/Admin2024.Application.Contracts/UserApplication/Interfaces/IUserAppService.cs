@@ -8,6 +8,6 @@ public interface IUserAppService
 {
     ReturnResult<User> Login(LoginDto user);
     Task<ReturnResult<User>> Register(RegisterDto inputInfo);
-    ReturnResult<User> VerifyPassword(Guid id,string oldPwd);
-    Task<ReturnResult<User>> ResetPassword(Guid id,ResetPasswordDto dto);
+    ReturnResult<User> VerifyPassword(Guid id, string oldPwd);
+    Task<ReturnResult<User>> ModifyPassword(Guid id, ModifyPasswordDto dto);
 }

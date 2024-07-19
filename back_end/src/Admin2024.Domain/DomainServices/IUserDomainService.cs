@@ -8,5 +8,5 @@ public interface IUserDomainService
     User? GetByUsername(string username);
     User? GetUserById(Guid id);
     Task Register(User user);
-    Task ResetPassword(User user);
+    Task ModifyPassword(User user);
 }

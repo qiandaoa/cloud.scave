@@ -20,12 +20,18 @@
                         <a-button type="primary" size="large" @click="btnSub">
                             登录
                         </a-button>
+                        <span style="width: 150px; margin-left: 10px; display: inline-block; text-decoration: none;">
+                            <a class="register"  @click="handleregister" 
+                               style="text-decoration: none; color: blue; display: flex; align-items: center; height: 100%;cursor: pointer;">
+                                害没有注册吗烙铁
+                            </a>
+                        </span>
                     </div>
                 </div>
             </div>
             <div class="right">
                 <div class="img">
-    
+                    <img src="../imgs/Login_icon.webp" alt="">
                 </div>
             </div>
         </div>
@@ -33,9 +39,8 @@
 </template>
 <script setup>
     import { onMounted,watch,ref,reactive } from 'vue';
-    import { useUserStore } from '../store/user';
     import axios from 'axios';
-    import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
+    import { UserOutlined, LockOutlined,  } from "@ant-design/icons-vue";
     import { useRouter } from 'vue-router'
     
     const router = useRouter();
@@ -45,22 +50,49 @@
     });
 
     onMounted(() => {
-        if(useUserStore().user.token){
+        if(localStorage.getItem('token')){
             router.push('/');
         }
     });
 
-    async function btnSub(){
+    async function btnSub() {
         console.log(userInfo);
-        // const res = await axios.post('/api/login',userInfo);
-        // console.log(res);
+        try {
+            const res = await axios.post('http://localhost:5057/api/login', userInfo);
+            
+            // 如果登录成功
+            if (res.data.success) {
+                localStorage.setItem('token', res.data.data.token);
+                console.log('Token stored:', localStorage.getItem('token'));
+                router.push('/');
+            } else {
+                // 如果登录失败，处理逻辑
+                alert('登录失败，请重新输入');
+                userInfo.userName = '';
+                userInfo.password = '';
+            }
+        } catch (err) {
+            // 捕获请求失败的情况
+            if (err.response && err.response.status === 401) { 
+                alert('登录失败，请重新输入');
+                userInfo.userName = '';
+                userInfo.password = '';
+            } else {
+                console.error('登录请求失败:', err);
+            }
+        }
     }
+function handleregister(){
+    router.push('/register');
+}
 </script>
 <style scoped>
     .box{
         height: 100vh;
         width: 100vw;
-        background-color:lightskyblue;
+        background-image: url(../imgs/Login_bg.webp);
+        background-repeat: repeat;
+        background-size: cover;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -69,17 +101,18 @@
         background-color:white;
         height: 80vh;
         width: 60vw;
-        border: 1px solid black;
+        border: 1px solid rgba(119, 117, 238, 0.808);
         display: flex;
         justify-content:center;
         flex-direction:column;
         align-items: center;
         flex-direction: row;
+        border-radius: 10px;
+        box-shadow: 2px 2px 5px rgba(70, 162, 207, 0.5);
     }
     .left{
         height: 100%;
-        width: 50%;
-        background-color: aquamarine;
+        width: 60%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -101,6 +134,12 @@
     .right{
         height: 100%;
         width: 50%;
-        background-color: bisque;
+
+        display: flex;
+        align-items: center;
+    }
+    .right img{
+        width: 400px;
+        height: 400px;
     }
 </style>

@@ -397,6 +397,8 @@ let UserDelete = (id) => {
 
 </template>
 
+
+<style scoped>
 <style scoped>
 .demo-dropdown-wrap {
   border-radius: 10px;

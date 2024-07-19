@@ -1,12 +1,13 @@
 import { routes } from '../route/staticRoutes'
 import { defineStore } from 'pinia'
-import { computed, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, reactive, ref, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
 // 为了将路由实例引入进来，特意采用了setup语法，有没有注意到defineStore函数，没错，第2个参数是个函数，这就是setup语法
 export const useRouterStore = defineStore('router', () => {
     // 引入路由实例
     const router = useRouter();
+    const route = useRoute();
 
     // 以下为定义的state
     const menuArr = reactive([]);// 菜单数据
@@ -23,14 +24,22 @@ export const useRouterStore = defineStore('router', () => {
         },
     ]);
     // 当前的key，用于绑定到菜单栏和标签栏的“当前项”属性
-    let activeKey = ref('/desktop')
-    const selectKeys=reactive([]);
+    let activeKey = ref('/desktop')//标签栏的当前标签
+    const selectKeys = reactive([]);
+    const openKeys = reactive([]);
 
-    // 这个是计算属性，也是getters
+    // 扁平化的菜单数据，这个是计算属性，也是getters
     const flatMenuArr = computed(() => {
         let arr = flatArr(menuArr);
+        console.log(arr);
         return arr;
     })
+
+    // 监听路由变化，设置当前标签项和当前菜单项（菜单项有些无法展开，暂不清楚是什么问题，待解决）
+    watch(route, (newVal) => {
+        changeActiveKey(newVal.path)
+    })
+
     // 由路由数据生成菜单数据
     function generatRoutes() {
         // 清空原来的所有菜单数据，准备重新生成
@@ -66,23 +75,29 @@ export const useRouterStore = defineStore('router', () => {
     function changeActiveRoute(key) {
         router.push(key);
         this.addTab(key);
-        console.log(selectKeys);
-
-        this.changeActiveKey(key);
-
-        console.log(selectKeys);
     }
 
     // 改变当前项
     function changeActiveKey(key) {//切换当前Key
-        console.log('这里输出准备要修改的key值：', key);
+        // console.log('key值：', key);
+        // console.log('activeKey值：', activeKey.value);
 
-        if (activeKey.value !== key) {
-            activeKey.value = key;
-            selectKeys.splice(0);
-            selectKeys.push(activeKey.value);
-            selectKeys.values=[key]
-        }
+        // 设置标签栏的当前key
+        activeKey.value = key;
+
+        // 设置菜单栏的当前选择的菜单项
+        selectKeys.splice(0);
+        selectKeys.push(key);
+
+        // 设置菜单栏当前展开的子菜单
+        let x = findParent(key, flatMenuArr.value);
+        let y = findParentChainIterative(flatMenuArr.value, key);
+        console.log('yyyyyyyyyy', y.map(x => x.key));
+        openKeys.splice(0);
+        openKeys.push(...y);
+
+        console.log('openKeys', openKeys);
+
     }
 
 
@@ -90,6 +105,7 @@ export const useRouterStore = defineStore('router', () => {
     return {
         menuArr,
         tabArr,
+        openKeys,
         activeKey,
         selectKeys,
         flatMenuArr,
@@ -140,16 +156,56 @@ const getOjbectByKey = function (key, arr) {
 const flatArr = (arr) => {
     let resArr = [];
     arr.forEach(item => {
-        let obj = {
-            key: item.key,
-            title: item.title,
-            content: ''
-        }
-        resArr.push(obj);
-        if (item.children && item.children.length > 0) {
-            let tmpArr = flatArr(item.children);
-            resArr = resArr.concat(tmpArr);
+        if (item && typeof item === 'object' && 'key' in item) { // 确保 item 是一个对象且有 key 属性
+            let obj = {
+                key: item.key,
+                title: item.title,
+                content: ''
+            }
+            resArr.push(obj);
+            if (item.children && item.children.length > 0) {
+                let tmpArr = flatArr(item.children);
+                resArr = resArr.concat(tmpArr);
+            }
         }
     })
     return resArr;
+}
+
+// 在拍扁的数组中，查找上级key，需要查找多级
+const findParent = (key, arr) => {
+    // console.log('传入的拍扁的数组',arr);
+    let res = [];
+    let tmpArr = arr.filter(item => item.key === key).map(item => item.parentKey);
+    tmpArr.forEach(item => {
+        if (item) {
+            res.push(item);
+        }
+
+    })
+    console.log('查找上级key', res);
+
+    return res;
+}
+
+function findParentChainIterative(records, key) {
+    const parentIdMap = records.reduce((acc, record) => {
+        acc[record.key] = record.parentKey;
+        return acc;
+    }, {});
+
+    const ancestors = [];
+    let currentId = key;
+
+    while (parentIdMap[currentId] !== 0) {
+        const parentRecord = records.find(r => r.key === parentIdMap[currentId]);
+        if (parentRecord) {
+            ancestors.unshift(parentRecord);
+            currentId = parentIdMap[currentId];
+        } else {
+            break; // 如果找不到父级记录，停止查找
+        }
+    }
+
+    return ancestors.map(x => x.key);
 }
