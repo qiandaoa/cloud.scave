@@ -38,6 +38,10 @@ public class UserAppService : IUserAppService
         {
             return ReturnResult<User>.Error("用户名或密码错误!");
         }
+        //if (user.Username != loginUser.Username && user.Password != loginUser.Password)
+        //{
+        //    return ReturnResult<User>.Error("用户名或密码错误!");
+        //}
 
         // 密码匹配，继续登录操作，获取token
         var token = _auth.Login(loginUser);

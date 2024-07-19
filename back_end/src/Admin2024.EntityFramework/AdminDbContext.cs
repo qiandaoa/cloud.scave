@@ -28,7 +28,7 @@ public class AdminDbContext : DbContext
                 {
                     Id = superAdmin,
                     Username = "admin",
-                    Password = PasswordHelper.HashPassword("abc123456", salt),
+                    Password = PasswordHelper.HashPassword("admin123456", salt),
                     Salt = salt,
                     NickName="超级管理员",
                     Telephone = "12345678910",
@@ -44,8 +44,8 @@ public class AdminDbContext : DbContext
                 new User
                 {
                     Id = admin,
-                    Username = "svip001",
-                    Password = "abc123456",
+                    Username = "svip",
+                    Password = PasswordHelper.HashPassword("svip123456", salt),
                     Salt = "aaaasssddd",
                     NickName="管理员",
                     Telephone = "12345678910",
@@ -61,8 +61,8 @@ public class AdminDbContext : DbContext
                 new User
                 {
                     Id = commonUser,
-                    Username = "svip001",
-                    Password = "abc123456",
+                    Username = "001",
+                    Password = PasswordHelper.HashPassword("123456", salt),
                     Salt = "aaaasssddd",
                     NickName="普通用户",
                     Telephone = "12345678910",
@@ -151,11 +151,6 @@ public class AdminDbContext : DbContext
                 }
             ]);
         });
-
-
-        // modelBuilder.Entity<Permission>(entity => {
-        //     entity.
-        // });
     }
 
     public override int SaveChanges()

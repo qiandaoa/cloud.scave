@@ -22,6 +22,7 @@
                                 <!-- 用户头像 -->
                                 <a-avatar :src="avatarSrc" :size="48">
                                 </a-avatar>
+                                <!-- <span class="username">{{ username }}</span> -->
                             </a-space>
                         </a-space>
                     </a>
@@ -34,7 +35,7 @@
                             </a-menu-item>
                             <!-- 个人中心菜单项 -->
                             <a-menu-item>
-                                <a class="a" href="../views/userinfo.vue">个人中心</a>
+                               <router-link to="/userinfo" class="a" >个人中心</router-link>
                             </a-menu-item>
                             <!-- 分割线 -->
                             <hr>
@@ -63,8 +64,9 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { useRouterStore } from '../store/router';
-import { nextTick, watch, computed,ref } from 'vue';
-import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router';
+import { nextTick, watch, computed,ref, onMounted } from 'vue';
+import { useRoute, onBeforeRouteUpdate, useRouter, RouterLink } from 'vue-router';
+import { FundTwoTone } from '@ant-design/icons-vue';
 
 // 初始化Vue Router实例
 const router = useRouter();
@@ -75,16 +77,11 @@ const routerStore = useRouterStore();
 // 从状态存储中引用tabArr和activeKey
 const { tabArr, activeKey } = storeToRefs(routerStore);
 
-// // 监听tabArr的变化，更新固定标签页的状态
-// watch(tabArr, () => {
-//     if (tabArr.value.length >= 2) {
-//         tabArr.value[0].isFixed = true;
-//         tabArr.value[1].isFixed = true;
-//     }
-// }, { deep: true });
 
+const username=localStorage.getItem('username');
 // 获取当前路由对象
 const route = useRoute();
+
 
 // 计算属性：根据当前路由生成面包屑数组
 const breadcrumbItems = computed(() => {
@@ -97,6 +94,8 @@ const breadcrumbItems = computed(() => {
 onBeforeRouteUpdate(() => {
     // 更新breadcrumbItems
 });
+
+
 
 
 const tabsRef = ref(null); // 在你的组件中定义
@@ -134,6 +133,8 @@ const remove = targetKey => {
             tabsRef.value.$forceUpdate(); // 强制更新 a-tabs 组件
         }
         console.log('DOM updated after removing tab:', tabArr.value);
+       // 新增：保存更新后的标签页状态到 localStorage
+      
     });
 };
 
@@ -152,6 +153,8 @@ const handleTabsChange = key => {
 
 // 登出功能
 const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('userInfo')
     router.push('/login');
 };
 
@@ -209,6 +212,9 @@ const handleLogout = () => {
 .a:hover {
     color: blue;
 }
-
-
+/* .username {
+    margin-left: -22px; /* 添加适当的间距 */
+    /* line-height: 48px; /* 使文本垂直居中，与头像高度相同 */
+    /* font-size: 18px; */
+/* } */  
 </style>

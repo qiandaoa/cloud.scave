@@ -5,18 +5,18 @@
             <form @submit.prevent="onSubmit">
                 <div class="form-group">
                     <label for="username">用户名</label>
-                    <input type="text" id="username" v-model="username" required />
+                    <input type="text" id="username" v-model="userinfo.username" required />
                 </div>
            
                 <div class="form-group">
                     <label for="password">密码</label>
-                    <input type="password" id="password" v-model="password" required />
+                    <input type="password" id="password" v-model="userinfo.password" required />
                 </div>
                 <div class="form-group">
                     <label for="confirm-password">确认密码</label>
-                    <input type="password" id="confirm-password" v-model="confirmPassword" required />
+                    <input type="password" id="confirm-password" v-model="userinfo.confirmpwd" required />
                 </div>
-                <button type="submit">注册</button>
+                <button @click="onSubmit">注册</button>
             </form>
             <div class="register-link">
                 已有账号？<a href="#" @click.prevent="goToLogin">登录</a>
@@ -31,19 +31,38 @@
 
 <script setup>
 import Modal from '../components/Modal.vue'
-import { ref, watchEffect } from 'vue';
+import { reactive, ref, watchEffect } from 'vue';
 import { router } from '../route';
+import axios from 'axios';
 
-const username = ref('');
-const password = ref('');
-const confirmPassword = ref('');
+
 const successModal = ref(null);
+const userinfo=reactive({
+    username: "",
+    password: "",
+    confirmpwd: ""
+})
 
-const onSubmit = () => {
+async function onSubmit(){
     // 这里可以添加表单验证和提交逻辑
-    console.log('Form submitted', { username: username.value, password: password.value });
-    successModal.value.show();
-};
+    if(userinfo.password !== userinfo.confirmpwd){
+        alert('两次输入的密码不一致');
+        return
+    } 
+    console.log(userinfo);
+    try{
+        const res = await axios.post('http://localhost:63760/api/register',userinfo)
+        console.log(res);
+        if(res.status === 200){
+            console.log('注册成功');
+            successModal.value.show()
+        }else{
+            alert('注册失败,请重试');
+        }
+    }catch(err){
+        console.log('注册失败',err);
+    }
+}
 
 const goToLogin = () => {
     // 导航到登录页面的逻辑
@@ -56,6 +75,7 @@ const redirectToLogin = () => {
         console.log(err);
     });
 };
+
 </script>
 
 <style scoped>

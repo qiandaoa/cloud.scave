@@ -32,12 +32,8 @@ export const routes = [
                     path:'/detail',
                     component:()=>import('../views/about.vue'),
                     meta:{title:'用户详情'}
-                    },
-                    {
-                        path:'/ss',
-                        component:()=>import('../views/ss.vue'),
-                        meta:{title:'ss'}
-                        }
+                    }
+                    
                 ]
             },
             {
@@ -63,7 +59,7 @@ export const routes = [
     {
         path: '/login',
         component: () => import("../views/login.vue"),
-        meta: { title: '登录', hide: false }
+        meta: { title: '登录', hide: true }
     },
     {
         path: '/:pathMatch(.*)*',

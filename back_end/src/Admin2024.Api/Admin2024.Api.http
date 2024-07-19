@@ -1,4 +1,4 @@
-@url = http://localhost:5057
+@url =  https://localhost:63759
 
 GET {{url}}/api/user
 Accept: application/json
@@ -14,8 +14,8 @@ POST {{url}}/api/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "username":"Boss",
-    "password":"abc456789"
+    "username":"admin",
+    "password":"admin123456"
 }
 
 ### 注册
@@ -23,7 +23,7 @@ POST {{url}}/api/register HTTP/1.1
 Content-Type: application/json
 
 {
-    "username":"aaaww141",
+    "username":"aaa141",
     "password":"ab111111",
     "confirmpwd":"ab111111"
 }
