@@ -24,9 +24,13 @@ public class Startup
     public void ConfigureContainer(ContainerBuilder builder)
     {
         // 注册要通过的反射创建的组件
-        // 将整个服务程序集经行注入(未解耦)
-        //var assemblysServices = Assembly.Load("实现类"); // 这里注入的必须要是实现类 Load解决方案名称
-        //builder.RegisterAssemblyTypes(assemblysServices).AsImplementedInterfaces(); // 扫描整个程序集为提供所有其实现的接口
+        // 将整个服务程序集经行注入
+        //var assemblysDomian = Assembly.Load("Admin2024.Domain"); // 这里注入的必须要是实现类 Load解决方案名称
+        //builder.RegisterAssemblyTypes(assemblysDomian).AsImplementedInterfaces(); // 扫描整个程序集为提供所有其实现的接口
+        //var assemblysApplication= Assembly.Load("Admin2024.Application"); 
+        //builder.RegisterAssemblyTypes(assemblysApplication).AsImplementedInterfaces();
+        //var assemblysEntityFramework = Assembly.Load("Admin2024.EntityFramework");
+        //builder.RegisterAssemblyTypes(assemblysEntityFramework).AsImplementedInterfaces();
     }
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
