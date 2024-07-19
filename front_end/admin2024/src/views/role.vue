@@ -1,4 +1,4 @@
-n<template>
+<template>
     <div>
         <div class="role-list-container">
             <span class="role-name">角色名称</span>
@@ -40,13 +40,13 @@ n<template>
                         <td>{{ item.encode }}</td>
                         <td>{{ item.createTime }}</td>
                         <td class="tdcenter">
-                            <button class="blue" @click="Edit(item.id)">
+                            <button type="button" class="blue" @click="Edit(item.id)">
                                 <EditOutlined />
                             </button>
-                            <button class="red" @click="Delete(item.id)">
+                            <button type="button" class="red" @click="Delete(item.id)">
                                 <DeleteOutlined />
                             </button>
-                            <button class="yellow">
+                            <button type="button" class="yellow">
                                 <PlusCircleOutlined />
                             </button>
                         </td>
@@ -57,6 +57,30 @@ n<template>
         <div class="role-list-container pagination">
             <a-pagination v-model:current="current" :total="tabArr.length" :pageSize="pageSize" show-quick-jumper
                 @change="onChange" />
+        </div>
+    </div>
+
+
+    <div class="modal" v-show="display">
+        <div class="modal-interior">
+            <span style="font-size:20px;" v-show="interior1">添加角色</span>
+            <span style="font-size:20px;" v-show="interior2">编辑角色</span>
+            <table>
+                <tr>
+                    <td><span style="color: red;">*</span> 角色名称</td>
+                    <td class="td370"><input type="text" name="username" class="input-text" v-model="name" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span style="color: red;">*</span> 角色编码</td>
+                    <td class="td370"><input type="text" name="encode" class="input-text" v-model="encode" required>
+                    </td>
+                </tr>
+                <div>
+                    <button type="button" class="cancel-button" @click="cancel">取消</button>
+                    <button type="submit" class="confirm-button" @click="confirm">确认</button>
+                </div>
+            </table>
         </div>
     </div>
 </template>
@@ -75,7 +99,12 @@ import {
 } from '@ant-design/icons-vue';
 
 // 创建响应式状态
-const pageSize = 10;
+let display = ref(false);
+let interior1 = ref(false);
+let interior2 = ref(false);
+let name = ref();
+let encode = ref();
+const pageSize = 5;
 const current = ref(Number(1));
 
 const currentPageData = computed(() => {
@@ -149,19 +178,6 @@ let tabArr = reactive([
         encode: 'user',
         createTime: '2022-01-01',
     },
-    {
-        id: 11,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 12,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
- 
 ]);
 function Search() {
     console.log('搜索');
@@ -173,6 +189,8 @@ function Reset() {
 
 function Add() {
     console.log('添加');
+    display.value = true;
+    interior1.value = true;
 };
 
 function BatchDelete() {
@@ -181,11 +199,26 @@ function BatchDelete() {
 
 function Edit(id) {
     console.log(`编辑`);
+    display.value = true;
+    interior2.value = true;
 };
 
 function Delete(id) {
     console.log(`删除`);
 };
+function cancel() {
+    display.value = false;
+    interior1.value = false;
+    interior2.value = false;
+    encode.value = '';
+    name.value = '';
+}
+function confirm() {
+    if (encode.value && name.value) {
+        cancel();
+    }
+
+}
 </script>
 
 
@@ -200,8 +233,9 @@ function Delete(id) {
 .input-text {
     width: 90%;
     margin-left: 10px;
-    padding: 10px;
+    padding: 5px;
     border: 2px solid rgb(241, 243, 248);
+    border-radius: 5px;
 }
 
 .search-button {
@@ -225,7 +259,7 @@ function Delete(id) {
 
 .role-list-container {
     width: 100%;
-    min-width: 800px;
+    min-width: 840px;
     margin: 0 0 10px 0;
     padding: 10px;
     border: 2px solid rgb(241, 243, 248);
@@ -235,7 +269,10 @@ function Delete(id) {
     text-align: center;
 }
 
-[type=button] {
+.search-button,
+.reset-button,
+.add-button,
+.delete-button {
     width: 100px;
     height: 30px;
     margin: 10px;
@@ -274,7 +311,7 @@ td {
 }
 
 td button {
-    width: 30px;
+    width: 40px;
     height: 20px;
     color: rgb(255, 255, 255);
     margin: 5px;
@@ -301,5 +338,72 @@ button:hover,
 
 button:active {
     transform: scale(0.9);
+}
+</style>
+
+<style scoped>
+.modal {
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+}
+
+.modal-interior {
+    width: 500px;
+    height: 300px;
+    padding: 20px;
+    position: relative;
+    background-color: rgb(255, 255, 255);
+}
+
+.modal table,
+.modal tr,
+.modal th,
+.modal td {
+    margin: 40px 0 0 0;
+    border: 0;
+}
+
+.td370 {
+    width: 370px;
+}
+
+.td400 input {
+    width: 100%;
+    height: 70%;
+    padding: 0;
+}
+
+.cancel-button,
+.confirm-button {
+    width: 50px;
+    height: 30px;
+    margin: 10px;
+    padding: 5px;
+    font-size: 12px;
+    border-radius: 5px;
+    border: 0;
+    background-color: rgb(255, 255, 255);
+}
+
+.cancel-button {
+    color: rgb(24, 144, 255);
+    position: absolute;
+    right: 80px;
+    bottom: 20px;
+}
+
+.confirm-button {
+    color: rgb(255, 255, 255);
+    background-color: rgb(24, 144, 255);
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
 }
 </style>
