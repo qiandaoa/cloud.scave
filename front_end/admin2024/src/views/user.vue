@@ -325,7 +325,7 @@ let AddButton = () => {
 let UserEdit = (id) => {
   console.log("编辑" + id);
 };
-//删除
+//删除并重新排序
 let UserDelete = (index, id) => {
   if (confirm(`确定删除${index}吗？`)) {
     console.log(`删除id为${id}的数据`);
