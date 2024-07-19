@@ -20,12 +20,18 @@
                         <a-button type="primary" size="large" @click="btnSub">
                             登录
                         </a-button>
+<<<<<<< HEAD
+                        <a-button type="primary" size="large" @click="btnReg">
+                            注册
+                        </a-button>
+=======
                         <span style="width: 150px; margin-left: 10px; display: inline-block; text-decoration: none;">
                             <a class="register"  @click="handleregister" 
                                style="text-decoration: none; color: blue; display: flex; align-items: center; height: 100%;cursor: pointer;">
                                 害没有注册吗烙铁
                             </a>
                         </span>
+>>>>>>> cd2dff46a4fc0a3f99d221fe23302866333e5894
                     </div>
                 </div>
             </div>
@@ -40,7 +46,12 @@
 <script setup>
     import { onMounted,watch,ref,reactive } from 'vue';
     import axios from 'axios';
+<<<<<<< HEAD
+    import axiosInstance from '../store/axiosInstance.js';
+    import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
+=======
     import { UserOutlined, LockOutlined,  } from "@ant-design/icons-vue";
+>>>>>>> cd2dff46a4fc0a3f99d221fe23302866333e5894
     import { useRouter } from 'vue-router'
     
     const router = useRouter();
@@ -48,14 +59,30 @@
         userName : '',
         password : ''
     });
-
+    // 如果用户已经登录，即有token的记录，则跳转至首页
     onMounted(() => {
         if(localStorage.getItem('token')){
             router.push('/');
         }
     });
-
+    // 如果用户没有登录，则进行登录验证，获取token
     async function btnSub() {
+<<<<<<< HEAD
+       try {
+        const res = await axiosInstance.post('http://localhost:5057/api/login', userInfo);
+        if (res.status === 200) {
+            // 登录成功
+            console.log('登录成功');
+            // 可以在这里存储用户信息，跳转页面等
+            localStorage.setItem('token', res.data.data.token);
+            const token = localStorage.getItem('token');
+            console.log(token);
+            router.push('/');
+            console.log(res);
+        } else {
+            // 处理其他状态码的情况
+            console.error('登录状态码异常:', res.status);
+=======
         console.log(userInfo);
         try {
             const res = await axios.post('http://localhost:5057/api/login', userInfo);
@@ -80,7 +107,24 @@
             } else {
                 console.error('登录请求失败:', err);
             }
+>>>>>>> cd2dff46a4fc0a3f99d221fe23302866333e5894
         }
+       } catch (err) {
+           if (err.response && err.response.status === 401) {
+               // 如果登录失败
+               alert('登录失败，请重新输入');
+               userInfo.userName = '';
+               userInfo.password = '';
+           } else {
+               // 处理其他类型的错误
+               console.error('登录失败:', err);
+           }
+       }
+    }
+        
+    // 注册跳转
+    function btnReg(){
+        router.push('/registered');
     }
 function handleregister(){
     router.push('/register');
@@ -130,7 +174,9 @@ function handleregister(){
         display: flex;
         justify-content: center;
     }
-    
+    .left .input button{
+        margin-left: 20px;
+    }
     .right{
         height: 100%;
         width: 50%;

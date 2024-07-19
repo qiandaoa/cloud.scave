@@ -38,7 +38,12 @@ public class Startup
             // c.RoutePrefix = string.Empty;
         });
         app.UseRouting();
+<<<<<<< HEAD
+        app.UseCors("AllowOrigin");
+        // app.UseAuthentication();
+=======
         app.UseAuthentication();
+>>>>>>> cd2dff46a4fc0a3f99d221fe23302866333e5894
         app.UseAuthorization();
         app.UseCors("CorsTest");
         app.UseEndpoints(endPoints =>
