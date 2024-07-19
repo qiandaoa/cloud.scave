@@ -70,5 +70,9 @@ export const routes = [
         component: () => import("../views/ex404.vue"),
         meta: { title: 'notFound', hide: true }
     },
-   
+   {
+        path: '/register',
+        component: () => import("../views/register.vue"),
+        meta: { title: '注册', hide: true }
+   }
 ]
