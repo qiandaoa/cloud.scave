@@ -32,7 +32,7 @@ namespace Admin2024.EntityFramework.Migrations
                     b.Property<DateTime>("CreateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 7, 19, 0, 11, 58, 98, DateTimeKind.Utc).AddTicks(9201))
+                        .HasDefaultValue(new DateTime(2024, 7, 19, 1, 52, 37, 103, DateTimeKind.Utc).AddTicks(4361))
                         .HasColumnName("create_at");
 
                     b.Property<Guid>("CreateBy")
@@ -67,7 +67,7 @@ namespace Admin2024.EntityFramework.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 7, 19, 0, 11, 58, 98, DateTimeKind.Utc).AddTicks(9451))
+                        .HasDefaultValue(new DateTime(2024, 7, 19, 1, 52, 37, 103, DateTimeKind.Utc).AddTicks(4603))
                         .HasColumnName("update_at");
 
                     b.Property<Guid>("UpdateBy")
@@ -89,7 +89,7 @@ namespace Admin2024.EntityFramework.Migrations
                     b.Property<DateTime>("CreateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 7, 19, 0, 11, 58, 99, DateTimeKind.Utc).AddTicks(2457))
+                        .HasDefaultValue(new DateTime(2024, 7, 19, 1, 52, 37, 103, DateTimeKind.Utc).AddTicks(7547))
                         .HasColumnName("create_at");
 
                     b.Property<Guid>("CreateBy")
@@ -131,7 +131,7 @@ namespace Admin2024.EntityFramework.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 7, 19, 0, 11, 58, 99, DateTimeKind.Utc).AddTicks(2700))
+                        .HasDefaultValue(new DateTime(2024, 7, 19, 1, 52, 37, 103, DateTimeKind.Utc).AddTicks(7814))
                         .HasColumnName("update_at");
 
                     b.Property<Guid>("UpdateBy")
@@ -155,7 +155,7 @@ namespace Admin2024.EntityFramework.Migrations
                     b.Property<DateTime>("CreateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 7, 19, 0, 11, 58, 99, DateTimeKind.Utc).AddTicks(5173))
+                        .HasDefaultValue(new DateTime(2024, 7, 19, 1, 52, 37, 104, DateTimeKind.Utc).AddTicks(286))
                         .HasColumnName("create_at");
 
                     b.Property<Guid>("CreateBy")
@@ -190,7 +190,7 @@ namespace Admin2024.EntityFramework.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 7, 19, 0, 11, 58, 99, DateTimeKind.Utc).AddTicks(5366))
+                        .HasDefaultValue(new DateTime(2024, 7, 19, 1, 52, 37, 104, DateTimeKind.Utc).AddTicks(487))
                         .HasColumnName("update_at");
 
                     b.Property<Guid>("UpdateBy")
@@ -212,7 +212,7 @@ namespace Admin2024.EntityFramework.Migrations
                     b.Property<DateTime>("CreateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 7, 19, 0, 11, 58, 99, DateTimeKind.Utc).AddTicks(7632))
+                        .HasDefaultValue(new DateTime(2024, 7, 19, 1, 52, 37, 104, DateTimeKind.Utc).AddTicks(2770))
                         .HasColumnName("create_at");
 
                     b.Property<Guid>("CreateBy")
@@ -243,7 +243,7 @@ namespace Admin2024.EntityFramework.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 7, 19, 0, 11, 58, 99, DateTimeKind.Utc).AddTicks(7825))
+                        .HasDefaultValue(new DateTime(2024, 7, 19, 1, 52, 37, 104, DateTimeKind.Utc).AddTicks(2965))
                         .HasColumnName("update_at");
 
                     b.Property<Guid>("UpdateBy")
@@ -257,38 +257,38 @@ namespace Admin2024.EntityFramework.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0692d3a1-fde7-47de-9fb2-5e536c79d723"),
-                            CreateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7447),
+                            Id = new Guid("02169564-b34a-4fde-b8ae-99cde634ab40"),
+                            CreateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(2065),
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             IsActived = true,
                             IsDeleted = false,
                             Remark = "",
                             RoleName = "超级管理员",
-                            UpdateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7447),
+                            UpdateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(2066),
                             UpdateBy = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
-                            Id = new Guid("15db577a-8812-40f9-aad9-6eed34005e28"),
-                            CreateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7450),
+                            Id = new Guid("7e86d114-8477-4801-a249-f784e52ec638"),
+                            CreateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(2068),
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             IsActived = true,
                             IsDeleted = false,
                             Remark = "",
                             RoleName = "管理员",
-                            UpdateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7450),
+                            UpdateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(2068),
                             UpdateBy = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
-                            Id = new Guid("4ea7b1a8-946e-4d41-bed2-2278729a0e4c"),
-                            CreateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7452),
+                            Id = new Guid("8b72d1b4-7df6-4704-b379-38fa3db6dc25"),
+                            CreateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(2070),
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             IsActived = true,
                             IsDeleted = false,
                             Remark = "",
                             RoleName = "普通用户",
-                            UpdateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7452),
+                            UpdateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(2070),
                             UpdateBy = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -303,7 +303,7 @@ namespace Admin2024.EntityFramework.Migrations
                     b.Property<DateTime>("CreateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 7, 19, 0, 11, 58, 99, DateTimeKind.Utc).AddTicks(9991))
+                        .HasDefaultValue(new DateTime(2024, 7, 19, 1, 52, 37, 104, DateTimeKind.Utc).AddTicks(5388))
                         .HasColumnName("create_at");
 
                     b.Property<Guid>("CreateBy")
@@ -337,7 +337,7 @@ namespace Admin2024.EntityFramework.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(238))
+                        .HasDefaultValue(new DateTime(2024, 7, 19, 1, 52, 37, 104, DateTimeKind.Utc).AddTicks(5582))
                         .HasColumnName("update_at");
 
                     b.Property<Guid>("UpdateBy")
@@ -362,7 +362,7 @@ namespace Admin2024.EntityFramework.Migrations
                     b.Property<DateTime>("CreateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(2467))
+                        .HasDefaultValue(new DateTime(2024, 7, 19, 1, 52, 37, 104, DateTimeKind.Utc).AddTicks(7853))
                         .HasColumnName("create_at");
 
                     b.Property<Guid>("CreateBy")
@@ -408,7 +408,7 @@ namespace Admin2024.EntityFramework.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(2689))
+                        .HasDefaultValue(new DateTime(2024, 7, 19, 1, 52, 37, 104, DateTimeKind.Utc).AddTicks(8052))
                         .HasColumnName("update_at");
 
                     b.Property<Guid>("UpdateBy")
@@ -427,54 +427,54 @@ namespace Admin2024.EntityFramework.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("380c3392-c8d6-4002-aa20-6daf9103074c"),
-                            CreateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7245),
-                            CreateBy = new Guid("380c3392-c8d6-4002-aa20-6daf9103074c"),
+                            Id = new Guid("8306ee09-e4b5-4c61-ab4a-5a9837484eaa"),
+                            CreateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(1867),
+                            CreateBy = new Guid("8306ee09-e4b5-4c61-ab4a-5a9837484eaa"),
                             Email = "abc@123456.com",
                             IsActived = true,
                             IsDeleted = false,
                             NickName = "超级管理员",
-                            Password = "crGs4ESr1NUd31yUPadkXguTAgHsnSlT2OSc15BrB3s=",
+                            Password = "PtD0caF2bvnLv85kkYrMmF4Z1y+AdDi+8M8oMacFGHE=",
                             Remark = "aaa",
-                            Salt = "Y8o9LzwTFGwVlwMjSPx81A==",
+                            Salt = "DniOf1oPOHGlBfs3RBWjIA==",
                             Telephone = "12345678910",
-                            UpdateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7247),
-                            UpdateBy = new Guid("380c3392-c8d6-4002-aa20-6daf9103074c"),
+                            UpdateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(1867),
+                            UpdateBy = new Guid("8306ee09-e4b5-4c61-ab4a-5a9837484eaa"),
                             Username = "admin"
                         },
                         new
                         {
-                            Id = new Guid("dfebd047-d931-4b85-929f-55835c3e36b9"),
-                            CreateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7251),
-                            CreateBy = new Guid("dfebd047-d931-4b85-929f-55835c3e36b9"),
+                            Id = new Guid("a8481068-69fa-4f60-b327-998528cfa485"),
+                            CreateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(1891),
+                            CreateBy = new Guid("a8481068-69fa-4f60-b327-998528cfa485"),
                             Email = "abc@123456.com",
                             IsActived = true,
                             IsDeleted = false,
                             NickName = "管理员",
-                            Password = "abc123456",
+                            Password = "rmOYmmEmQ6l4bAkufKuGy/RAZMgm1SxYrw92bL7zntA=",
                             Remark = "aaa",
                             Salt = "aaaasssddd",
                             Telephone = "12345678910",
-                            UpdateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7251),
-                            UpdateBy = new Guid("dfebd047-d931-4b85-929f-55835c3e36b9"),
-                            Username = "svip001"
+                            UpdateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(1891),
+                            UpdateBy = new Guid("a8481068-69fa-4f60-b327-998528cfa485"),
+                            Username = "svip"
                         },
                         new
                         {
-                            Id = new Guid("e03e6b14-1a3d-4039-ab8c-2fa79b7f6ce7"),
-                            CreateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7254),
-                            CreateBy = new Guid("e03e6b14-1a3d-4039-ab8c-2fa79b7f6ce7"),
+                            Id = new Guid("beb055a1-8248-44f0-a44e-af28c351adc8"),
+                            CreateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(1907),
+                            CreateBy = new Guid("beb055a1-8248-44f0-a44e-af28c351adc8"),
                             Email = "abc@123456.com",
                             IsActived = true,
                             IsDeleted = false,
                             NickName = "普通用户",
-                            Password = "abc123456",
+                            Password = "OivdjmMhRK5rPpH5pcWqeoIs5FA4V8Ar7g90LMPigFk=",
                             Remark = "aaa",
                             Salt = "aaaasssddd",
                             Telephone = "12345678910",
-                            UpdateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7254),
-                            UpdateBy = new Guid("e03e6b14-1a3d-4039-ab8c-2fa79b7f6ce7"),
-                            Username = "svip001"
+                            UpdateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(1908),
+                            UpdateBy = new Guid("beb055a1-8248-44f0-a44e-af28c351adc8"),
+                            Username = "001"
                         });
                 });
 
@@ -488,7 +488,7 @@ namespace Admin2024.EntityFramework.Migrations
                     b.Property<DateTime>("CreateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(5144))
+                        .HasDefaultValue(new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(563))
                         .HasColumnName("create_at");
 
                     b.Property<Guid>("CreateBy")
@@ -518,7 +518,7 @@ namespace Admin2024.EntityFramework.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(5320))
+                        .HasDefaultValue(new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(778))
                         .HasColumnName("update_at");
 
                     b.Property<Guid>("UpdateBy")
@@ -536,42 +536,42 @@ namespace Admin2024.EntityFramework.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("30de7cba-e85a-4da8-b074-36f4a3754d81"),
-                            CreateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7484),
+                            Id = new Guid("8e5ee9c8-e3d5-495b-bbff-e917b6b90a6b"),
+                            CreateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(2108),
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             IsActived = true,
                             IsDeleted = false,
                             Remark = "",
-                            RoleId = new Guid("0692d3a1-fde7-47de-9fb2-5e536c79d723"),
-                            UpdateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7485),
+                            RoleId = new Guid("02169564-b34a-4fde-b8ae-99cde634ab40"),
+                            UpdateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(2109),
                             UpdateBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UserId = new Guid("380c3392-c8d6-4002-aa20-6daf9103074c")
+                            UserId = new Guid("8306ee09-e4b5-4c61-ab4a-5a9837484eaa")
                         },
                         new
                         {
-                            Id = new Guid("92b02cca-4d06-47c7-8d0c-2b0b5dd974bf"),
-                            CreateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7487),
+                            Id = new Guid("f29a50ca-cd2f-4e9f-8cd0-7194157428bd"),
+                            CreateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(2111),
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             IsActived = true,
                             IsDeleted = false,
                             Remark = "",
-                            RoleId = new Guid("15db577a-8812-40f9-aad9-6eed34005e28"),
-                            UpdateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7487),
+                            RoleId = new Guid("7e86d114-8477-4801-a249-f784e52ec638"),
+                            UpdateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(2111),
                             UpdateBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UserId = new Guid("dfebd047-d931-4b85-929f-55835c3e36b9")
+                            UserId = new Guid("a8481068-69fa-4f60-b327-998528cfa485")
                         },
                         new
                         {
-                            Id = new Guid("c280c2af-fd98-4b4e-9b4d-4fbc2234f3e9"),
-                            CreateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7489),
+                            Id = new Guid("3d85295d-c749-41a5-9e1b-1aa8a3c5f8fb"),
+                            CreateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(2113),
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             IsActived = true,
                             IsDeleted = false,
                             Remark = "",
-                            RoleId = new Guid("4ea7b1a8-946e-4d41-bed2-2278729a0e4c"),
-                            UpdateAt = new DateTime(2024, 7, 19, 0, 11, 58, 100, DateTimeKind.Utc).AddTicks(7490),
+                            RoleId = new Guid("8b72d1b4-7df6-4704-b379-38fa3db6dc25"),
+                            UpdateAt = new DateTime(2024, 7, 19, 1, 52, 37, 105, DateTimeKind.Utc).AddTicks(2113),
                             UpdateBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UserId = new Guid("e03e6b14-1a3d-4039-ab8c-2fa79b7f6ce7")
+                            UserId = new Guid("beb055a1-8248-44f0-a44e-af28c351adc8")
                         });
                 });
 

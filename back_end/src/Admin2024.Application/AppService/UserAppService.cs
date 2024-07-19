@@ -29,19 +29,19 @@ public class UserAppService : IUserAppService
         }
 
         // 若是存在，取出该用户名的盐，与进行登录操作的用户输入的密码哈希
-        //var salt = loginUser.Salt;
-        //var hashLoginDtoPassword = PasswordHelper.HashPassword(user.Password, salt);
+        var salt = loginUser.Salt;
+        var hashLoginDtoPassword = PasswordHelper.HashPassword(user.Password, salt);
 
         // 将进行登录操作的用户输入的密码哈希后
         // 和该用户名数据库中哈希后的密码对比，若是不对，返回用户名或密码错误
-        //if (loginUser.Password != hashLoginDtoPassword)
-        //{
-        //    return ReturnResult<User>.Error("用户名或密码错误!");
-        //}
-        if (user.Username != loginUser.Username && user.Password != loginUser.Password)
+        if (loginUser.Password != hashLoginDtoPassword)
         {
             return ReturnResult<User>.Error("用户名或密码错误!");
         }
+        //if (user.Username != loginUser.Username && user.Password != loginUser.Password)
+        //{
+        //    return ReturnResult<User>.Error("用户名或密码错误!");
+        //}
 
         // 密码匹配，继续登录操作，获取token
         var token = _auth.Login(loginUser);
