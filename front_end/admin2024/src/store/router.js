@@ -31,7 +31,7 @@ export const useRouterStore = defineStore('router', () => {
     // 扁平化的菜单数据，这个是计算属性，也是getters
     const flatMenuArr = computed(() => {
         let arr = flatArr(menuArr);
-        console.log(arr);
+       
         return arr;
     })
 
@@ -40,7 +40,7 @@ export const useRouterStore = defineStore('router', () => {
 
  
  
-    // 监听路由变化，设置当前标签项和当前菜单项（菜单项有些无法展开，暂不清楚是什么问题，待解决）
+    // 监听路由变化，设置当前标签项和当前菜单
     watch(route, (newVal) => {
         changeActiveKey(newVal.path)
     })
@@ -98,11 +98,11 @@ export const useRouterStore = defineStore('router', () => {
         // 设置菜单栏当前展开的子菜单
         let x = findParent(key, flatMenuArr.value);
         let y = findParentChainIterative(flatMenuArr.value, key);
-        console.log('yyyyyyyyyy', y.map(x => x.key));
+        
         openKeys.splice(0);
         openKeys.push(...y);
 
-        console.log('openKeys', openKeys);
+            
 
     }
 
@@ -133,6 +133,7 @@ const createMenuItemFromRoute = (route) => {
         key: route.path,
         title: route.meta.title,
         label: route.meta.title,
+        icon:route.meta.icon
     }
 
     // 尝试处理其下级路由，将其转化为菜单数组返回，挂载到孩子属性
@@ -190,7 +191,7 @@ const findParent = (key, arr) => {
         }
 
     })
-    console.log('查找上级key', res);
+    
 
     return res;
 }

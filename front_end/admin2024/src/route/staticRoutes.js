@@ -1,37 +1,38 @@
 import Layout from '../components/Layout.vue'
-import { MailOutlined, CalendarOutlined, AppstoreOutlined,  } from '@ant-design/icons-vue';
+import { MailOutlined, LaptopOutlined ,IdcardOutlined, ApartmentOutlined, HomeOutlined,SettingOutlined,UserOutlined,CreditCardOutlined  } from '@ant-design/icons-vue';
+import{h} from 'vue'
 export const routes = [
     {
         path: '/',
         component: Layout,
-        meta: { title: '首页', icon: '' },
+        meta: { title: '首页', icon: ()=>h(HomeOutlined) },
         children: [
             {
                 path: '/desktop',
                 component: () => import('../views/desktop.vue'),
-                meta: { title: '工作台', icon:'AppstoreOutlined'}
+                meta: { title: '工作台',icon: ()=>h(CreditCardOutlined) }
             },
             {
                 path: '/dashboard',
                 component: () => import('../views/dashboard.vue'),
-                meta: { title: '仪表盘', icon:' AppstoreOutlined'}
+                meta: { title: '仪表盘',icon: ()=>h(LaptopOutlined)}
             }
         ]
     },
     {
         path: '/system',
         component: Layout,
-        meta: { title: '系统管理', icon: 'AppstoreOutlined' },
+        meta: { title: '系统管理', icon: ()=>h(SettingOutlined) },
         children: [
             {
                 path: '/user',
                 component: () => import('../views/user.vue'),
-                meta: { title: '用户管理',inco:'CalendarOutlined'},
+                meta: { title: '用户管理',icon: ()=>h(UserOutlined)},
                 children:[
                     {
                     path:'/detail',
                     component:()=>import('../views/about.vue'),
-                    meta:{title:'用户详情'}
+                    meta:{title:'用户详情',icon: ()=>h(MailOutlined)}
                     }
                     
                 ]
@@ -39,13 +40,13 @@ export const routes = [
             {
                 path: '/role',
                 component: () => import('../views/role.vue'),
-                meta: { title: '角色管理',icon:'AppstoreOutlined'}
+                meta: { title: '角色管理',icon: ()=>h(IdcardOutlined)}
             },
         
             {
                 path: '/permission',
                 component: () => import('../views/permission.vue'),
-                meta: { title: '权限管理',icon:'MailOutlined' }
+                meta: { title: '权限管理',icon: ()=>h(ApartmentOutlined) }
             },
             {
                 path: '/userinfo',

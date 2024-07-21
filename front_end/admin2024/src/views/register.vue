@@ -5,16 +5,16 @@
             <form @submit.prevent="onSubmit">
                 <div class="form-group">
                     <label for="username">用户名</label>
-                    <input type="text" id="username" v-model="userinfo.username" required />
+                    <input type="text" id="username" v-model="userinfo.username" required placeholder="请输入用户名" />
                 </div>
            
                 <div class="form-group">
                     <label for="password">密码</label>
-                    <input type="password" id="password" v-model="userinfo.password" required />
+                    <input type="password" id="password" v-model="userinfo.password" required placeholder="密码长度需要大于8位" />
                 </div>
                 <div class="form-group">
                     <label for="confirm-password">确认密码</label>
-                    <input type="password" id="confirm-password" v-model="userinfo.confirmpwd" required />
+                    <input type="password" id="confirm-password" v-model="userinfo.confirmpwd" required  placeholder="请再次输入密码" />
                 </div>
                 <button @click="onSubmit">注册</button>
             </form>

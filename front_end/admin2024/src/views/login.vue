@@ -14,18 +14,18 @@
                        autocomplete="off"
                         @finish="btnSub"     
                     >
+                       <!-- 用户名输入框 -->
                       <a-form-item
                         label="Username"
                         name="username"
-                        :rules="[{ required: true, message: '用户名不能为空!' }]"
+                        :rules="[{ required: false, message: '用户名不能为空!',trigger: ['blur'] }]"
                       >
-                       <!-- 用户名输入框 -->
                          <a-input v-model:value="userInfo.userName" placeholder="请输入用户名">
                             <template #prefix>
                                 <user-outlined />
                             </template>
                          </a-input>
-                       </a-form-item>
+                       </a-form-item>     
                        <!-- 密码输入框 -->
                        <a-form-item
                           label="Password"
