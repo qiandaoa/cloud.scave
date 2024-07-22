@@ -51,6 +51,12 @@ public class UserDomainService : IUserDomainService
     {
         await _User.UpdateAsync(user);
     }
-    // 获取所有用户和角色信息
+
+    public async Task<User> UserAdd(User user)
+    {
+        await _User.UpdateAsync(user);
+        return user;
+    }
+
 
 }

@@ -4,7 +4,6 @@ public class BaseParameters
   private int _pageIndex; // 页面索引值
   private int _pageSize; // 页面大小值
   public string? keywords{get;set;} // 搜索关键字
-  public string? FileByFlag {get;set;} // 过滤词
   private static int RegulIndex(int index)
   {
     int minIndex = 1; // 页面索引最小值

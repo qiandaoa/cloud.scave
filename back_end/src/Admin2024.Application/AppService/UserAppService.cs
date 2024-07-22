@@ -47,7 +47,7 @@ public class UserAppService : IUserAppService
         var token = _auth.Login(loginUser);
         return token == null ? ReturnResult<User>.Error("登录失败!") : ReturnResult<User>.Success(loginUser,token);
     }
-
+    // 注册用户
     public async Task<ReturnResult<User>> Register(RegisterDto inputInfo)
     {
         // 判断用户名和密码是否有留空
@@ -78,7 +78,7 @@ public class UserAppService : IUserAppService
 
         // 将Dto类型映射为实体类型
         var user = _mapper.Map<RegisterDto, User>(inputInfo);
-
+ 
         // 注册操作
         await _userDomainService.Register(user);
 
@@ -134,6 +134,15 @@ public class UserAppService : IUserAppService
         return ReturnResult<User>.Success("重置成功!");
 
     }
-
-   
+    // 添加用户
+    public async Task<User> UserAdd(UserCreateInfoDto dto)
+    {
+        var user = _mapper.Map<User>(dto);
+        var salt = PasswordHelper.GenerateSalt();
+        var hashLoginDtoPassword = PasswordHelper.HashPassword(user.Password, salt);
+        user.Password = hashLoginDtoPassword;
+        user.Salt = salt;
+        var entity  = _userDomainService.UserAdd(user);
+        return await entity;
+    }
 }

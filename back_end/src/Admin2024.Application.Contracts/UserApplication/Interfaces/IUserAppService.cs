@@ -10,5 +10,5 @@ public interface IUserAppService
     Task<ReturnResult<User>> Register(RegisterDto inputInfo);
     ReturnResult<User> VerifyPassword(Guid id, string oldPwd);
     Task<ReturnResult<User>> ModifyPassword(Guid id, ModifyPasswordDto dto);
-
+    Task<User> UserAdd(UserCreateInfoDto dto);
 }

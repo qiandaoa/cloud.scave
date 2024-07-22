@@ -12,10 +12,6 @@
         </member>
         <member name="M:Admin2024.Api.UserController.GetUserById(System.Guid)">
             <summary>
-            获取全部用户角色关联信息
-            </summary>
-            <returns></returns>
-            <summary>
             获取指定id的用户
             </summary>
             <param name="id"></param>
@@ -28,19 +24,11 @@
             <param name="baseParameters"></param>
             <returns></returns>
         </member>
-        <member name="M:Admin2024.Api.UserController.DeleteUser(System.Guid)">
+        <member name="M:Admin2024.Api.UserController.AddUser(Admin2024.Application.Contracts.UserApplication.Dto.UserCreateInfoDto)">
             <summary>
-            删除用户（软删除）
+            添加用户
             </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Admin2024.Api.UserController.UpdateUser(System.Guid,Admin2024.Application.Contracts.UserApplication.Dto.UserUpdateInfoDto)">
-            <summary>
-            修改用户信息
-            </summary>
-            <param name="id"></param>
-            <param name="userUpdateInfoDto"></param>
+            <param name="userCreateInfoDto"></param>
             <returns></returns>
         </member>
         <member name="M:Admin2024.Api.UserController.UserLogin(Admin2024.Application.Contracts.UserApplication.Dto.LoginDto)">
@@ -75,10 +63,25 @@
         </member>
         <member name="M:Admin2024.Api.UserController.Actived(System.Guid,System.Boolean)">
             <summary>
-            用户是否被禁用，禁用为true，启动为false
+            是否启用
             </summary>
             <param name="id"></param>
             <param name="or"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.UserController.UpdateUser(System.Guid,Admin2024.Application.Contracts.UserApplication.Dto.UserUpdateInfoDto)">
+            <summary>
+            修改用户信息
+            </summary>
+            <param name="id"></param>
+            <param name="userUpdateInfoDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.UserController.DeleteUser(System.Guid)">
+            <summary>
+            删除用户（软删除）
+            </summary>
+            <param name="id"></param>
             <returns></returns>
         </member>
     </members>
