@@ -13,6 +13,9 @@ public static class Swagger
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API Name", Version = "v1" });
+            var basePath = AppContext.BaseDirectory; // 获取应用程序的基本目录路径
+            var xmlPath = Path.Combine(basePath,"Admin2024.xml");  //将基本路径组成一个完成的路径
+            c.IncludeXmlComments(xmlPath, true); // 表示将xml注释文件添加到swagger生成器中,xmlpath表示xml的位置.true表示启动xml的详细注释信息,默认值为false
         });
         var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSetting>();
         // 如果为空则自己new一个，确保不为空
