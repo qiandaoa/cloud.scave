@@ -303,16 +303,16 @@ let ModalRoleData = ref([
     label: '朝霞',
   },
 ]);
-// let ModalData=reactive({
-//       username: '',
-//       nickName: '',
-//       email: '',
-//       telephone: '',
-//       role: '云朵',
-//       IsActive: false,
-//       State: ''
-//    }
-// )
+let ModalData=reactive({
+      username: '',
+      nickName: '',
+      email: '',
+      telephone: '',
+      role: '云朵',
+      IsActive: false,
+      State: ''
+   }
+)
 
 //分页
 let current1 = ref(1);
@@ -343,14 +343,14 @@ let AddButton = () => {
 };
 // 编辑
 let UserEdit = (id) => {
-  ModalData.value = UserData.find(item => item.id === id)// 获取当前行的数据
+  ModalData.value = UserDatas.find(item => item.id === id)// 获取当前行的数据
   console.log("编辑" + id);
 };
 //删除并重新排序
 let UserDelete = (index, id) => {
   if (confirm(`确定删除id为${id}的数据吗？`)) {
     console.log(`删除id为${id}的数据`);
-    UserData.splice(index, 1);
+    UserDatas.splice(index, 1);
   }
 };
 // 定义一个响应式数据用于控制模态框的显示状态
@@ -362,7 +362,6 @@ if (showModal.value) {
 else {
   document.body.style.overflow = '';
 }
-
 // 模态框表单中角色选择的提交功能
 const handleBlur = () => {
   console.log('blur');
@@ -383,14 +382,13 @@ const handleChange = value => {
 let ButtonSubmit = () => {
   if (ModalData.id == null) {
     ModalData.value.id = UserData.length + 1;// 添加id
-    UserData.push(ModalData.value);// 添加数据
+    UserDatas.push(ModalData.value);// 添加数据
     console.log(ModalData.value);
   } else {
     console.log(ModalData.value);
   }
   showModal.value = false;
 }
-
 let ButtonSave = () => {
   console.log(`保存`);
 }
@@ -451,8 +449,6 @@ let ButtonSave = () => {
     public string? Salt { get; set; }
     public string? Email { get; set; }
     public string? Telephone { get; set; } -->
-
-   
     <table class="Usertable">
       <tr>
         <th>序号</th>
@@ -521,7 +517,7 @@ let ButtonSave = () => {
                   </td>
                 </tr>
                 <tr>
-                  <th>手机</th>
+                  <th>邮箱</th>
                   <td>
                     <a-space direction="vertical">
                       <a-input v-model:value="ModalData.email" placeholder="请输入邮箱" />
@@ -556,7 +552,7 @@ let ButtonSave = () => {
                         @blur="handleBlur"
                         // 监听 change 事件，当下拉选项发生改变时触发 handleChange 方法
                         @change="handleChange"> -->
-                    <a-select v-model:value="ModalData.Role" show-search placeholder="请选择角色" style="width: 180px"
+                    <a-select v-model:value="ModalData.role" show-search placeholder="请选择角色" style="width: 180px"
                       :options="ModalRoleData" :filter-option="filterOption" @focus="handleFocus" @blur="handleBlur"
                       @change="handleChange"></a-select>
                   </td>
