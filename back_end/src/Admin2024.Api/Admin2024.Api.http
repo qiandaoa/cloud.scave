@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-@url = http://localhost:63760
-=======
 @url =  https://localhost:63759
->>>>>>> bd0946ae7256185f3a852b334a8c785437036a32
 
 GET {{url}}/api/user
 Accept: application/json
