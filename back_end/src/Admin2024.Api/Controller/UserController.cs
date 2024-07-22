@@ -3,6 +3,7 @@ using Admin2024.Application.Contracts.UserApplication.Interface;
 using Admin2024.Domain.Interfaces;
 using Admin2024.Domain.System;
 using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 namespace Admin2024.Api;
 [ApiController]
@@ -18,15 +19,31 @@ public class UserController : ControllerBase
         _userAppService = userAppService;
         _mapper = mapper;
     }
-    // 获取全部用户列表
+    /// <summary>
+    /// 获取全部用户列表
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<IActionResult> GetUser()
     {
         var entity = await _repo.GetAsync();
         return Ok(entity);
     }
-
-    // 获取指定id的用户
+    /// <summary>
+    /// 获取全部用户角色表
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("/api/UserRole")]
+    //public Task<IActionResult> GetUserRole()
+    //{
+    //    return async Ok("AA");
+    //}
+    /// <summary>
+    /// 获取指定id的用户
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<User>> GetUserById(Guid id)
     {
@@ -37,8 +54,11 @@ public class UserController : ControllerBase
         }
         return Ok(entity);
     }
-
-    // 删除用户（软删除）
+    /// <summary>
+    /// 删除用户（软删除）
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(Guid id)
     {
@@ -51,7 +71,12 @@ public class UserController : ControllerBase
         return Ok(entity);
     }
 
-    // 修改用户信息
+    /// <summary>
+    /// 修改用户信息
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="userUpdateInfoDto"></param>
+    /// <returns></returns>
     [HttpPut("/api/UserUpdate/{id}")]
     public async Task<IActionResult> UpdateUser(Guid id, UserUpdateInfoDto userUpdateInfoDto)
     {
@@ -69,7 +94,11 @@ public class UserController : ControllerBase
         return Ok(userDto);
     }
 
-    // 处理用户登录请求
+    /// <summary>
+    /// 处理用户登录请求
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
     [HttpPost("/api/login")]
     public IActionResult UserLogin(LoginDto user)
     {
@@ -78,7 +107,11 @@ public class UserController : ControllerBase
         return result.IsSuccess  ? Ok(new { success = true, code = 200, data = new { token = result.Message }, msg = "登录成功!" }) : Unauthorized();
     }
 
-    // 注册用户
+    /// <summary>
+    /// 注册用户
+    /// </summary>
+    /// <param name="info"></param>
+    /// <returns></returns>
     [HttpPost("/api/register")]
     public async Task<IActionResult> RegisterAccount(RegisterDto info)
     {
@@ -90,7 +123,12 @@ public class UserController : ControllerBase
         }
         return Ok(new { success = true, code = 200, msg = result.Message });
     }
-
+    /// <summary>
+    /// 修改密码之前要对旧密码经行一次验证
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="oldPasswordDto"></param>
+    /// <returns></returns>
 
     [HttpPost("/api/verify/{id}")]
     public IActionResult VerifyPassword(Guid id, [FromBody] VerifyPasswordDto oldPasswordDto)
@@ -103,7 +141,12 @@ public class UserController : ControllerBase
         }
         return Ok(new { success = true, code = 200, msg = result.Message });
     }
-
+    /// <summary>
+    /// 修改密码
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="dto"></param>
+    /// <returns></returns>
 
     [HttpPut("/api/modify/{id}")]
     public async Task<IActionResult> ModifyPassword(Guid id, ModifyPasswordDto dto)
@@ -114,5 +157,26 @@ public class UserController : ControllerBase
             return BadRequest(new { success = false, code = 400, msg = result.Message });
         }
         return Ok(new { success = true, code = 200, msg = result.Message });
+    }
+    /// <summary>
+    /// 用户是否被禁用，禁用为true，启动为false
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="or"></param>
+    /// <returns></returns>
+    [HttpPut("/api/actived/{id}")]
+    public async Task<IActionResult> Actived(Guid id,bool or)
+    {
+        var entity = await _repo.GetByIdAsync(id);
+        if (entity == null)
+        {
+            return Ok("用户不存在");
+        }
+        if ((entity.IsActived == false && or ==false) || (entity.IsActived == true && or == true))
+        {
+            return entity.IsActived ? Ok("用户已经是启用状态,请更换bool值!!!!") : Ok("用户已经是禁用状态,请更换bool值！！！");
+        }
+        await _repo.UpdateActiveState(id,or);
+        return Ok(new { IsActived = entity.IsActived, code = 200, msg = $"用户状态已经更新:{entity.IsActived}"});
     }
 }

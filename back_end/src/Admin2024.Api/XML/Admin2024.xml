@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Admin2024.Api</name>
+    </assembly>
+    <members>
+        <member name="M:Admin2024.Api.UserController.GetUser">
+            <summary>
+            获取全部用户列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.UserController.DeleteUser(System.Guid)">
+            <summary>
+            删除用户（软删除）
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.UserController.UpdateUser(System.Guid,Admin2024.Application.Contracts.UserApplication.Dto.UserUpdateInfoDto)">
+            <summary>
+            修改用户信息
+            </summary>
+            <param name="id"></param>
+            <param name="userUpdateInfoDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.UserController.UserLogin(Admin2024.Application.Contracts.UserApplication.Dto.LoginDto)">
+            <summary>
+            处理用户登录请求
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.UserController.RegisterAccount(Admin2024.Application.Contracts.UserApplication.Dto.RegisterDto)">
+            <summary>
+            注册用户
+            </summary>
+            <param name="info"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.UserController.VerifyPassword(System.Guid,Admin2024.Application.Contracts.UserApplication.Dto.VerifyPasswordDto)">
+            <summary>
+            修改密码之前要对旧密码经行一次验证
+            </summary>
+            <param name="id"></param>
+            <param name="oldPasswordDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.UserController.ModifyPassword(System.Guid,Admin2024.Application.Contracts.UserApplication.Dto.ModifyPasswordDto)">
+            <summary>
+            修改密码
+            </summary>
+            <param name="id"></param>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.UserController.Actived(System.Guid,System.Boolean)">
+            <summary>
+            用户是否被禁用，禁用为true，启动为false
+            </summary>
+            <param name="id"></param>
+            <param name="or"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

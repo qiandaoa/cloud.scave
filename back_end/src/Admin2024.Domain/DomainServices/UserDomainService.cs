@@ -41,7 +41,6 @@ public class UserDomainService : IUserDomainService
         user.UpdateBy = user.Id;
         await _repo.UpdateAsync(user);  
     }
-
     public async Task ModifyPassword(User user)
     {
         await _repo.UpdateAsync(user);

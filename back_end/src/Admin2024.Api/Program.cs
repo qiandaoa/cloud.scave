@@ -10,7 +10,7 @@ public class Program
     }
     public static IHostBuilder ConfigureWebHostBuilder(string[] args)
     {
-        return Host.CreateDefaultBuilder(args).UseServiceProviderFactory(new AutofacServiceProviderFactory())  // 添加Autofac工厂服务
+        return Host.CreateDefaultBuilder(args) // 添加Autofac工厂服务
         .ConfigureWebHostDefaults(webBuilder => {
             webBuilder.UseStartup<Startup>();
         });

@@ -9,6 +9,6 @@ public interface IRepository<T> where T : BaseEntity
     Task<T?> DeleteAsync(Guid id);
     Task<T> AddAsync(T entity);
     Task<T?> UpdateAsync(T entity);
-    Task<T?> UpdateActiveState(Guid id);
+    Task<T?> UpdateActiveState(Guid id,bool or);
     Task<T?> UpdateActiveState(T entity);
 }
