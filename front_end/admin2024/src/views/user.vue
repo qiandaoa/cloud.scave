@@ -36,6 +36,19 @@ let Find = () => {
   console.log(Findkeyword.value);
 }
 //数据库
+let UserData = reactive([
+  {
+    id: 1,
+    UserName: '用户',
+    Compellation: '张三',
+    PhoneNumberer: 122222222222,
+    Role: '蓝天',
+    IsActive: false,
+    State: '离线',
+    CreateTime: '2022-01-01'
+  },
+
+]);
 // let UserData = reactive([
 //   {
 //     id: 1,
