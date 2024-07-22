@@ -30,10 +30,6 @@ public class UserController : ControllerBase
         var entity = await _repo.GetAsync();
         return Ok(entity);
     }
-    /// <summary>
-    /// 获取全部用户角色关联信息
-    /// </summary>
-    /// <returns></returns>
 
     /// <summary>
     /// 获取指定id的用户
@@ -60,7 +56,6 @@ public class UserController : ControllerBase
     {
         var users = _repo.Table;
         var keywords = baseParameters.keywords;
-        var filer = baseParameters.FileByFlag;
         // 进行关键字搜索
         if (!string.IsNullOrEmpty(keywords))
         {
@@ -81,46 +76,23 @@ public class UserController : ControllerBase
         var userList = _mapper.Map<List<User>>(list);
         return Ok(userList);
     }
-    /// <summary>
-    /// 删除用户（软删除）
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUser(Guid id)
-    {
-        var entity = await _repo.GetByIdAsync(id);
-        if (entity == null)
-        {
-            return NotFound();
-        }
-        await _repo.DeleteAsync(id);
-        return Ok(entity);
-    }
 
     /// <summary>
-    /// 修改用户信息
+    /// 添加用户
     /// </summary>
-    /// <param name="id"></param>
-    /// <param name="userUpdateInfoDto"></param>
+    /// <param name="userCreateInfoDto"></param>
     /// <returns></returns>
-    [HttpPut("/api/UserUpdate/{id}")]
-    public async Task<IActionResult> UpdateUser(Guid id, UserUpdateInfoDto userUpdateInfoDto)
+    [HttpPost]
+    public async Task<IActionResult> AddUser(UserCreateInfoDto userCreateInfoDto)
     {
-        var entity = await _repo.GetByIdAsync(id);
-        if (entity == null)
+        var creatUser = await _userAppService.UserAdd(userCreateInfoDto);
+        if (creatUser == null)
         {
-            return Ok("查找不到用户，修改失败");
+            return Ok("添加失败");
         }
-        _mapper.Map(userUpdateInfoDto, entity);
-        var updateUser = await _repo.UpdateAsync(entity);
-        if(updateUser == null){
-            return Ok("修改失败");
-        }
-        var userDto = _mapper.Map<User>(entity);
+        var userDto = _mapper.Map<User>(creatUser);
         return Ok(userDto);
     }
-
     /// <summary>
     /// 处理用户登录请求
     /// </summary>
@@ -186,7 +158,7 @@ public class UserController : ControllerBase
         return Ok(new { success = true, code = 200, msg = result.Message });
     }
     /// <summary>
-    /// 用户是否被禁用，禁用为true，启动为false
+    /// 是否启用
     /// </summary>
     /// <param name="id"></param>
     /// <param name="or"></param>
@@ -205,5 +177,44 @@ public class UserController : ControllerBase
         }
         await _repo.UpdateActiveState(id,or);
         return Ok(new { IsActived = entity.IsActived, code = 200, msg = $"用户状态已经更新:{entity.IsActived}"});
+    }
+    /// <summary>
+    /// 修改用户信息
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="userUpdateInfoDto"></param>
+    /// <returns></returns>
+    [HttpPut("/api/UserUpdate/{id}")]
+    public async Task<IActionResult> UpdateUser(Guid id, UserUpdateInfoDto userUpdateInfoDto)
+    {
+        var entity = await _repo.GetByIdAsync(id);
+        if (entity == null)
+        {
+            return Ok("查找不到用户，修改失败");
+        }
+        _mapper.Map(userUpdateInfoDto, entity);
+        var updateUser = await _repo.UpdateAsync(entity);
+        if (updateUser == null)
+        {
+            return Ok("修改失败");
+        }
+        var userDto = _mapper.Map<User>(entity);
+        return Ok(userDto);
+    }
+    /// <summary>
+    /// 删除用户（软删除）
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteUser(Guid id)
+    {
+        var entity = await _repo.GetByIdAsync(id);
+        if (entity == null)
+        {
+            return NotFound();
+        }
+        await _repo.DeleteAsync(id);
+        return Ok(entity);
     }
 }

@@ -19,14 +19,12 @@ namespace Admin2024.EntityFramework.Helps
                     pageIndex = baseParameters.PageIndex - 1,
                     pageSize = baseParameters.PageSize,
                     keywords = baseParameters.keywords,
-                    filter = baseParameters.FileByFlag
                 }),
                 nextPage = baseParameters.PageIndex < totalPages ? Url.Link("GetAllUsers", new
                 {
                     pageIndex = baseParameters.PageIndex + 1,
                     pageSize = baseParameters.PageSize,
                     keywords = baseParameters.keywords,
-                    filter = baseParameters.FileByFlag
                 }) : null
             };
             response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagination));

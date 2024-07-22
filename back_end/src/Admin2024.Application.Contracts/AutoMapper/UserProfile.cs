@@ -16,5 +16,6 @@ public class UserProfile : Profile
         .ForMember(dest => dest.Password,opt => opt.MapFrom(src => src.NewPassword));
 
         CreateMap<UserUpdateInfoDto,User>();
+        CreateMap<UserCreateInfoDto, User>();
     }
 }

@@ -10,4 +10,5 @@ public interface IUserDomainService
     User? GetUserById(Guid id);
     Task Register(User user);
     Task ModifyPassword(User user);
+    Task<User> UserAdd(User user);
 }
