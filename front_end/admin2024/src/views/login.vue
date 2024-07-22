@@ -85,6 +85,8 @@ async function btnSub() {
             localStorage.setItem('token', res.data.data.token);
             // 将用户名存储到 LocalStorage，为了在后续请求或页面加载时能够快速访问用户的身份信息
             localStorage.setItem('username',userInfo.userName);
+            localStorage.setItem('userId',res.data.data.id)
+            // console.log(res.data.data.id);
             // 跳转首页
             router.push('/');
         } else {

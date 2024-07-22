@@ -17,6 +17,8 @@ import {useUserStore} from '../store/user.js'
 let UserDatas = reactive([])
 const useStore = useUserStore()
 
+
+
 onMounted(async () => {
   // await axios.get('https://localhost:63759/api/user')
   //   .then(res => {
@@ -62,9 +64,9 @@ let ModalRoleData = ref([
 ]);
 let ModalData=reactive({
       username: '',
-      nickName: '',
-      email: '',
-      telephone: '',
+      nickName: "",
+      email: "",
+      telephone: "",
       role: '云朵',
       IsActive: false,
       State: ''
@@ -75,17 +77,44 @@ let ModalData=reactive({
 let current1 = ref(1);
 let pageSize = 5;
 let currentPageData = computed(() => {
+  const filteredData = UserDatas.filter(item => !item.isDeleted);
   const start = (current1.value - 1) * pageSize;
   const end = start + pageSize;
-  return UserDatas.slice(start, end);
+  return filteredData.slice(start, end);
 });
 let onChange = () => {
-  console.log(current1.value);
+  // console.log(current1.value);
 }
-// 修改状态
-let State = () => {
-  user.IsActive = !user.IsActive;
-}
+// 修改状态  给后端发送请求来更改是否启用的状态
+let State = async (id) => {
+  // UserDatas.IsActive = !UserDatas.IsActive;
+  const index=UserDatas.findIndex(item=>item.id==id);
+  if(index === -1){
+    console.log('没有找到该用户');
+    return
+  }
+  const user = UserDatas[index]
+  console.log(user.isActived);
+  if(user.IsActived==false){
+    console.log('该用户已经被禁用了');
+    return
+  }
+    try{
+      let res = await axios.put(`http://localhost:63760/api/actived/${id}?or=false`)
+      if(res.status===200){
+        UserDatas[index].IsActived=false
+        console.log(res.data);
+      }else{
+        console.log('禁用成功');
+      }
+      
+      
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
+
 // 重置按钮
 let Reset = () => {
   console.log("重置");
@@ -104,10 +133,20 @@ let UserEdit = (id) => {
   console.log("编辑" + id);
 };
 //删除并重新排序
-let UserDelete = (index, id) => {
-  if (confirm(`确定删除id为${id}的数据吗？`)) {
-    console.log(`删除id为${id}的数据`);
-    UserDatas.splice(index, 1);
+
+let UserDelete = async(id) => {
+  console.log(id);
+  if(confirm(`确定将id为${id}的数据标记为已删除吗？`)){
+    try{
+      let res = await axios.delete(`http://localhost:63760/api/User/${id}`)
+      const index = UserDatas.findIndex(item => item.id === id);
+      if (index !== -1) {
+        UserDatas[index].isDeleted = true;
+      }
+      console.log(res);
+    }catch(err){
+      console.log(err);
+    }
   }
 };
 // 定义一个响应式数据用于控制模态框的显示状态
@@ -149,6 +188,23 @@ let ButtonSubmit = () => {
 let ButtonSave = () => {
   console.log(`保存`);
 }
+//更改时间格式 更加直观
+const formatDateTime = (isoString) => {
+  const date = new Date(isoString);
+  const formatter = new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  });
+  return formatter.format(date);
+};
+const formatItemCreateAt=(item)=>{
+  return formatDateTime(item.createAt);
+}
 </script>
 
 <template>
@@ -179,7 +235,7 @@ let ButtonSave = () => {
               </a-menu-item>
               <a-menu-item key="3">
                 <UserOutlined />
-                角色3
+             角色3
               </a-menu-item>
             </a-menu>
           </template>
@@ -215,7 +271,7 @@ let ButtonSave = () => {
         <th>邮箱</th>
         <th>电话</th>
         <th>所属角色</th>
-        <th>状态</th>
+        <th>是否启用</th>
         <th>创建时间</th>
         <th>操作</th>
       </tr>
@@ -229,15 +285,15 @@ let ButtonSave = () => {
         <td>{{ item.role }}</td>
         <td>
           <a-space direction="vertical">
-            <a-switch v-model:checked="item.IsActive" size="small" @click="State" />
+            <a-switch v-model:checked="item.isActived" size="small" @click="State(item.id)" />
           </a-space>
         </td>
-        <td>{{ item.createcime }}</td>
+        <td>{{ formatItemCreateAt(item) }}</td>
         <td>
           <a-button type="primary" id="EditButton" :icon="h(EditOutlined)"
             @click="UserEdit(item.id), showModal = true"></a-button>
           <a-button type="primary" id="DeleteButton" :icon="h(DeleteOutlined)"
-            @click="UserDelete(index, item.id)"></a-button>
+            @click="UserDelete(item.id)"></a-button>
         </td>
       </tr>
     </table>
@@ -266,7 +322,7 @@ let ButtonSave = () => {
                   </td>
                 </tr>
                 <tr>
-                  <th>姓名</th>
+                  <th>昵称</th>
                   <td>
                     <a-space direction="vertical">
                       <a-input v-model:value="ModalData.nickName" placeholder="请输入昵称" />
@@ -314,6 +370,7 @@ let ButtonSave = () => {
                       @change="handleChange"></a-select>
                   </td>
                 </tr>
+               
                 <tr>
                   <td>
                     <a-space wrap>

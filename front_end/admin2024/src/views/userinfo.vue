@@ -20,11 +20,22 @@
         </a-card>
       </a-col>
       <a-col :span="14">
-        <a-card :bordered="false" title="用户资料">
-          <div v-for="(item, index) in userData" :key="index" class="data-item">
-            <span>{{ item.label }}:</span>
-            <span>{{ item.value }}</span>
-          </div>
+        <a-card :bordered="false" title="用户资料" style="min-height: 200px;">
+          <div class="data-item">
+  <div class="input-group">
+    <label>昵称:</label>
+    <input type="text">
+  </div>
+  <div class="input-group">
+    <label>手机号:</label>
+    <input type="text">
+  </div>
+  <div class="input-group">
+    <label>邮箱:</label>
+    <input type="text">
+  </div>
+
+</div>
           <div class="action-buttons">
             <a-button type="primary" @click="saveConfiguration">保存配置</a-button>
           </div>
@@ -36,7 +47,7 @@
       <div class="modal" v-if="isModalVisible">
         <div class="modal-content">
           <h3>修改密码</h3>
-          <form @submit.prevent="submitPasswordChange">
+          <form @submit.prevent="submitPasswordChange(id)">
             <div class="form-group">
               <label for="oldPassword">旧密码</label>
               <input type="password" id="oldPassword" v-model="formState.oldPassword" required />
@@ -47,7 +58,7 @@
             </div>
             <div class="form-group">
               <label for="confirmPassword">确认新密码</label>
-              <input type="password" id="confirmPassword" v-model="formState.confirmPassword" required />
+              <input type="password" id="confirmPassword" v-model="formState.confirmNewPassword" required />
             </div>
             <button type="submit" style="margin-left: 30px;">提交</button>
             <button type="button" @click="hideModal" style="margin-left: 100px;" >取消</button>
@@ -58,8 +69,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { LoginOutlined,PhoneOutlined,MailOutlined ,InsuranceOutlined } from '@ant-design/icons-vue';
+import axios from 'axios';
 // 假设这是从后端获取的用户信息
 const userAvatar = ref('/avatar.jpg');
 
@@ -77,9 +89,9 @@ const saveConfiguration = () => {
 };
 const isModalVisible = ref(false);
 const formState = ref({
-  oldPassword: '',
-  newPassword: '',
-  confirmPassword: ''
+  oldPassword: "",
+  newPassword: "",
+  confirmNewPassword: ""
 });
 
 const showModal = () => {
@@ -89,27 +101,41 @@ const showModal = () => {
 const hideModal = () => {
   isModalVisible.value = false;
   formState.value = {
-    oldPassword: '',
-    newPassword: '',
-    confirmPassword: ''
+    oldPassword: "",
+    newPassword: "",
+    confirmNewPassword: ""
   };
 };
 
-const submitPasswordChange = () => {
-  
+
+const id = localStorage.getItem('userId')
+console.log(id);
+const submitPasswordChange = async (id) => {
   if (formState.value.newPassword === formState.value.oldPassword) {
     alert('新密码不能与旧密码相同！');
     return;
   }
 
   // 验证两次输入的新密码是否一致
-  if (formState.value.newPassword !== formState.value.confirmPassword) {
+  if (formState.value.newPassword !== formState.value.confirmNewPassword) {
     alert('新密码和确认密码不一致！');
     return;
   }
 
   // 如果所有验证都通过，执行密码修改逻辑
-  console.log('密码修改请求:', formState.value);
+  try{
+    let res = await axios.put(`http://localhost:63760/api/modify/${id}`,{
+     
+        newPassword: formState.value.newPassword,
+        confirmNewPassword: formState.value.confirmNewPassword
+      
+    })
+
+    console.log(res.data);
+  }catch(err){
+    console.log(err);
+  }
+  
   hideModal(); // 成功后关闭模态框
   };
   
@@ -118,8 +144,11 @@ const submitPasswordChange = () => {
 <style scoped>
 .action-buttons {
   /* 确保按钮在卡片内居下 */
-  position: absolute;
+  /* position: absolute; */
   bottom: 16px;
+  margin-top: 20px;
+  /* right: 16px; */
+  margin-left: 80px;
  
 }
 
@@ -130,10 +159,29 @@ const submitPasswordChange = () => {
 
 
 .data-item {
-  /* 每个数据项的label和value并列显示 */
   display: flex;
-  justify-content: space-between;
+  flex-direction: column; /* 改为垂直排列 */
   margin-bottom: 8px;
+}
+
+.data-item .input-group {
+  display: flex;
+  align-items: center; /* 文本和输入框垂直居中 */
+  margin-bottom: 8px;
+}
+
+.data-item .input-group:last-child {
+  margin-bottom: 0; /* 最后一个数据项不需要底部间距 */
+}
+
+.data-item .input-group label {
+  width: 100px; /* 固定宽度的标签 */
+  text-align: right; /* 标签右对齐 */
+  margin-right: 8px; /* 标签和输入框之间的间距 */
+}
+
+.data-item .input-group input[type="text"] {
+  flex: 1; /* 输入框占据剩余的空间 */
 }
 :where(.css-dev-only-do-not-override-19iuou).ant-avatar{
   width: 100px;
@@ -195,7 +243,7 @@ const submitPasswordChange = () => {
 /* 添加按钮样式以使其更美观 */
 button[type="submit"],
 button[type="button"] {
-  margin-top: 20px;
+  /* margin-top: 20px; */
   padding: 10px 20px;
   background-color: #007BFF;
   color: white;
@@ -218,5 +266,8 @@ button[type="button"]:hover {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+.input-group input[type="text"] {
+  width: 100px; /* 或者你希望的任何其他宽度 */
 }
 </style>

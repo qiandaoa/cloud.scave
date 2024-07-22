@@ -34,9 +34,18 @@ export const useRouterStore = defineStore('router', () => {
        
         return arr;
     })
+    function saveStateToLocalStorage() {
+        localStorage.setItem('activeTab', String(activeKey.value));
+    }
 
-
-
+    onMounted(() => {
+        const savedActiveKey = localStorage.getItem('activeTab');
+        if (savedActiveKey) {
+            activeKey.value = savedActiveKey;
+            // 可能需要调用一些方法来确保界面状态正确更新
+            changeActiveKey(savedActiveKey);
+        }
+    })
 
  
  
@@ -90,7 +99,7 @@ export const useRouterStore = defineStore('router', () => {
 
         // 设置标签栏的当前key
         activeKey.value = key;
-
+        
         // 设置菜单栏的当前选择的菜单项
         selectKeys.splice(0);
         selectKeys.push(key);
@@ -102,6 +111,7 @@ export const useRouterStore = defineStore('router', () => {
         openKeys.splice(0);
         openKeys.push(...y);
 
+        saveStateToLocalStorage();
             
 
     }
