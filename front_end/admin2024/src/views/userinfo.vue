@@ -96,6 +96,7 @@ const hideModal = () => {
 };
 
 const submitPasswordChange = () => {
+  
   if (formState.value.newPassword === formState.value.oldPassword) {
     alert('新密码不能与旧密码相同！');
     return;
