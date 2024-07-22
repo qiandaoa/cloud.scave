@@ -420,31 +420,6 @@ let ButtonSave = () => {
           </a-space>
         </div>
       </div>
-      <div class="input-role">
-        角色：
-        <a-dropdown>
-          <template #overlay>
-            <a-menu @click="handleMenuClick">
-              <a-menu-item key="1">
-                <UserOutlined />
-                角色1
-              </a-menu-item>
-              <a-menu-item key="2">
-                <UserOutlined />
-                角色2
-              </a-menu-item>
-              <a-menu-item key="3">
-                <UserOutlined />
-                角色3
-              </a-menu-item>
-            </a-menu>
-          </template>
-          <a-button class="ant-dropdown-link">
-            请选择角色
-            <DownOutlined />
-          </a-button>
-        </a-dropdown>
-      </div>
     </div>
     <div class="Button-wrap-Find-Reset">
       <a-button type="primary" :icon="h(SearchOutlined)" @click="Find" id="FindButton"> 搜索</a-button>
@@ -455,34 +430,23 @@ let ButtonSave = () => {
     <a-button type="primary" id="AddButton" :icon="h(PlusOutlined)" @click="AddButton, showModal = true"> 添加</a-button>
   </div>
   <div class="table-wrap">
-    <!-- public string Username { get; set; } = null!;
-    public string Password { get; set; } = null!;
-    public string? NickName { get; set; }
-    public string? Avatar { get; set; }
-    public string? Salt { get; set; }
-    public string? Email { get; set; }
-    public string? Telephone { get; set; } -->
     <table class="Usertable">
       <tr>
         <th>序号</th>
-        <th>用户Id</th>
         <th>用户名</th>
         <th>昵称</th>
         <th>邮箱</th>
         <th>电话</th>
-        <th>所属角色</th>
         <th>状态</th>
         <th>创建时间</th>
         <th>操作</th>
       </tr>
       <tr v-for="(item, index) in currentPageData" :key="item.id">
         <td>{{ index + 1 }}</td>
-        <td>{{ item.id }}</td>
         <td>{{ item.username }}</td>
         <td>{{ item.nickName }}</td>
         <td>{{ item.email }}</td>
         <td>{{ item.telephone }}</td>
-        <td>{{ item.role }}</td>
         <td>
           <a-space direction="vertical">
             <a-switch v-model:checked="item.IsActive" size="small" @click="State" />
@@ -543,31 +507,6 @@ let ButtonSave = () => {
                     <a-space direction="vertical">
                       <a-input v-model:value="ModalData.telephone" placeholder="请输入手机" />
                     </a-space>
-                  </td>
-                </tr>
-                <tr>
-                  <th>所属角色</th>
-                  <td>
-                    <!-- // 绑定 v-model:value 指令到 UserData.Role，实现双向数据绑定，用于显示和更新用户的角色选择
-                        // 启用搜索功能，方便在选项较多时进行快速查找
-                        show-search 
-                        // 设置占位符文本，当没有选择任何选项时显示
-                        placeholder="请选择角色" 
-                        // 设置样式宽度为180px，以适应布局需求
-                        style="width: 180px"
-                        // 动态绑定 options 属性，将 ModalRoleData 数组作为下拉选项的数据源
-                        :options="ModalRoleData" 
-                        // 动态绑定 filter-option 属性，使用自定义的过滤函数来筛选下拉列表中的选项
-                        :filter-option="filterOption" 
-                        // 监听 focus 事件，当元素获得焦点时触发 handleFocus 方法
-                        @focus="handleFocus" 
-                        // 监听 blur 事件，当元素失去焦点时触发 handleBlur 方法
-                        @blur="handleBlur"
-                        // 监听 change 事件，当下拉选项发生改变时触发 handleChange 方法
-                        @change="handleChange"> -->
-                    <a-select v-model:value="ModalData.role" show-search placeholder="请选择角色" style="width: 180px"
-                      :options="ModalRoleData" :filter-option="filterOption" @focus="handleFocus" @blur="handleBlur"
-                      @change="handleChange"></a-select>
                   </td>
                 </tr>
                 <tr>
