@@ -47,37 +47,24 @@ let Find = () => {
 }
 
 
-//模态框角色数据库
-let ModalRoleData = ref([
-  {
-    value: '云朵',
-    label: '云朵',
-  },
-  {
-    value: '蓝天',
-    label: '蓝天',
-  },
-  {
-    value: '朝霞',
-    label: '朝霞',
-  },
-]);
+
 let ModalData=reactive({
-      username: '',
+      username: "",
       nickName: "",
       email: "",
       telephone: "",
-      role: '云朵',
-      IsActive: false,
-      State: ''
+      
    }
 )
 
 //分页
 let current1 = ref(1);
 let pageSize = 5;
+//排列顺序按照isactived来进行排列
 let currentPageData = computed(() => {
-  const filteredData = UserDatas.filter(item => !item.isDeleted);
+  const filteredData = UserDatas.filter(item => !item.isDeleted).sort((a,b)=>{
+    return b.isActived-a.isActived
+  });
   const start = (current1.value - 1) * pageSize;
   const end = start + pageSize;
   return filteredData.slice(start, end);
@@ -95,42 +82,56 @@ let State = async (id) => {
   }
   const user = UserDatas[index]
   console.log(user.isActived);
-  if(user.IsActived==false){
-    console.log('该用户已经被禁用了');
-    return
-  }
-    try{
-      let res = await axios.put(`http://localhost:63760/api/actived/${id}?or=false`)
-      if(res.status===200){
-        UserDatas[index].IsActived=false
-        console.log(res.data);
-      }else{
-        console.log('禁用成功');
-      }
-      
-      
+  try{
+    const isActive= user.isActived;
+  // console.log(isActive);
+    let res = await axios.put(`http://localhost:63760/api/actived/${id}?or=${isActive}`)
+    if(res.status===200){
+      console.log(res);
+      UserDatas[index].isActived=isActive
+    }else{
+      console.log('请求失败',res.status);
     }
-    catch(err){
-      console.log(err);
-    }
+  }catch(err){
+    console.log(err);
   }
+}
 
 // 重置按钮
 let Reset = () => {
   console.log("重置");
 }
 // 用户选择角色的下拉菜单
-let handleMenuClick = e => {
-  console.log('click', e);
-};
+
 // 添加按钮
 let AddButton = () => {
   console.log("添加");
+  showModal.value=!showModal.value
+  ModalData = reactive({
+    username: "",
+    nickName: "",
+    email: "",
+    telephone: "",
+    id: undefined,
+  });
 };
 // 编辑
-let UserEdit = (id) => {
-  ModalData.value = UserDatas.find(item => item.id === id)// 获取当前行的数据
-  console.log("编辑" + id);
+let UserEdit = async (id) => {
+  try{
+    let res = await axios.get(`http://localhost:63760/api/User/${id}`)
+    // console.log(res.data);
+    ModalData={
+      id: id,
+      username: res.data.username,
+      nickName: res.data.nickName,
+      email: res.data.email,
+      telephone: res.data.telephone,
+    }
+    showModal.value=true
+  }catch(err){
+    console.log(err);
+  }
+  
 };
 //删除并重新排序
 
@@ -158,35 +159,39 @@ if (showModal.value) {
 else {
   document.body.style.overflow = '';
 }
-// 模态框表单中角色选择的提交功能
-const handleBlur = () => {
-  console.log('blur');
-};
-// 模态框表单中角色选择的搜索功能
-const handleFocus = () => {
-  console.log('focus');
-};
-// 模态框表单的过滤功能，
-const filterOption = (input, option) => {
-  return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-};
-// 模态框表单的选中功能
-const handleChange = value => {
-  console.log(`selected ${value}`);
-};
+
 // 模态框表单的提交功能
-let ButtonSubmit = () => {
-  if (ModalData.id == null) {
-    ModalData.value.id = UserData.length + 1;// 添加id
-    UserDatas.push(ModalData.value);// 添加数据
-    console.log(ModalData.value);
-  } else {
-    console.log(ModalData.value);
+let ButtonSubmit = async (id) => {
+  console.log(id);
+  try{
+    // console.log(ModalData);
+    if(id){
+      let res = await axios.put(`http://localhost:63760/api/UserUpdate/${id}`,{
+      username: ModalData.username,
+      nickName: ModalData.nickName,
+      email: ModalData.email,
+      telephone: ModalData.telephone,
+      
+    } )
+    console.log(res);
+    showModal.value=!showModal.value
+    setTimeout(() => {
+      const index = UserDatas.findIndex(item => item.id === id);
+      if (index !== -1) {
+        UserDatas[index] = { ...UserDatas[index], ...ModalData };
+      }
+    }, 0);
+    }else{
+      //实现添加
+    }
+ 
+  }catch(err){
+    console.log(err);
   }
-  showModal.value = false;
-}
-let ButtonSave = () => {
-  console.log(`保存`);
+  }
+
+let Cancel = () => {
+  showModal.value=!showModal.value
 }
 //更改时间格式 更加直观
 const formatDateTime = (isoString) => {
@@ -227,7 +232,7 @@ const formatItemCreateAt=(item)=>{
     </div>
   </div>
   <div class="button-wrap-UserAdd">
-    <a-button type="primary" id="AddButton" :icon="h(PlusOutlined)" @click="AddButton, showModal = true"> 添加</a-button>
+    <a-button type="primary" id="AddButton" :icon="h(PlusOutlined)" @click="AddButton"> 添加</a-button>
   </div>
   <div class="table-wrap">
     <table class="Usertable">
@@ -237,7 +242,7 @@ const formatItemCreateAt=(item)=>{
         <th>昵称</th>
         <th>邮箱</th>
         <th>电话</th>
-        <th>所属角色</th>
+        
         <th>是否启用</th>
         <th>创建时间</th>
         <th>操作</th>
@@ -256,7 +261,7 @@ const formatItemCreateAt=(item)=>{
         <td>{{ formatItemCreateAt(item) }}</td>
         <td>
           <a-button type="primary" id="EditButton" :icon="h(EditOutlined)"
-            @click="UserEdit(item.id), showModal = true"></a-button>
+            @click="UserEdit(item.id)"></a-button>
           <a-button type="primary" id="DeleteButton" :icon="h(DeleteOutlined)"
             @click="UserDelete(item.id)"></a-button>
         </td>
@@ -272,7 +277,7 @@ const formatItemCreateAt=(item)=>{
       <div v-if="showModal" class="modal-backdrop">
         <div class="modal">
           <div class="modal-content">
-            <h1>云朵编辑</h1>
+            <h1>用户编辑</h1>
             <a-button type="primary" id="modalClose" :icon="h(CloseOutlined)" @click="showModal = false"></a-button>
           </div>
           <div class="modal-table-from">
@@ -313,12 +318,12 @@ const formatItemCreateAt=(item)=>{
                 <tr>
                   <td>
                     <a-space wrap>
-                      <a-button type="primary" id="ButtonSubmit" @click="ButtonSubmit">提交</a-button>
+                      <a-button type="primary" id="ButtonSubmit" @click="ButtonSubmit(ModalData.id)">保存</a-button>
                     </a-space>
                   </td>
                   <td>
                     <a-space wrap>
-                      <a-button type="primary" id="ButtonSave" @click="ButtonSave">保存</a-button>
+                      <a-button type="primary" id="ButtonSave" @click="Cancel">取消</a-button>
                     </a-space>
                   </td>
                 </tr>
@@ -354,7 +359,9 @@ const formatItemCreateAt=(item)=>{
   margin: 200px;
   height: 70px;
 }
-
+#ButtonSubmit[data-v-5ccf79a5] {
+  background-color:blue;
+}
 h1 {
   font-size: 40px;
   /* 设置较大的字体大小 */

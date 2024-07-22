@@ -199,10 +199,10 @@ public class UserController : ControllerBase
         {
             return Ok("用户不存在");
         }
-        if ((entity.IsActived == false && or ==false) || (entity.IsActived == true && or == true))
-        {
-            return entity.IsActived ? Ok("用户已经是启用状态,请更换bool值!!!!") : Ok("用户已经是禁用状态,请更换bool值！！！");
-        }
+        // if ((entity.IsActived == false && or ==true) || (entity.IsActived == true && or == false))
+        // {
+        //     return entity.IsActived ? Ok("用户已经是启用状态,请更换bool值!!!!") : Ok("用户已经是禁用状态,请更换bool值！！！");
+        // }
         await _repo.UpdateActiveState(id,or);
         return Ok(new { IsActived = entity.IsActived, code = 200, msg = $"用户状态已经更新:{entity.IsActived}"});
     }
