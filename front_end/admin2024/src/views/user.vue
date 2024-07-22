@@ -1,6 +1,6 @@
 <!-- 用户管理 -->
 <script setup>
-import { h, ref, reactive, computed } from 'vue';
+import { h, ref, reactive, computed, onMounted } from 'vue';
 import {
   SearchOutlined,
   UserOutlined,
@@ -11,273 +11,283 @@ import {
   DeleteOutlined,
   CloseOutlined
 } from '@ant-design/icons-vue'
+import axios from 'axios'
+
+let UserDatas = reactive([])
+
+onMounted(async () => {
+  await axios.get('https://localhost:63759/api/user')
+    .then(res => {
+      console.log(res.data);
+      res.data.forEach(item => {
+        UserDatas.push(item)
+      });
+      var a = res.data;
+      console.log(a[0].id);
+    })
+
+})
 
 // 搜索关键词
 let Findkeyword = ref('');
-// 定义一个响应式数据用于存储模态框表单的数据
-let ModalData = ref({
-  UserName: '',
-  Compellation: '',
-  PhoneNumberer: '',
-  Role:''
-});
+
 // 搜索按钮
 let Find = () => {
   console.log(Findkeyword.value);
 }
 //数据库
-let UserData = reactive([
-  {
-    id: 1,
-    UserName: '用户',
-    Compellation: '张三',
-    PhoneNumberer: 122222222222,
-    Role: '蓝天',
-    IsActive: false,
-    State: '离线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 2,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 3,
-    UserName: '用户',
-    Compellation: '李四',
-    PhoneNumberer: 122222222222,
-    Role: '乌云',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 4,
-    UserName: '用户',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '朝霞',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 5,
-    UserName: '管理员',
-    Compellation: '李白',
-    PhoneNumberer: 122222222222,
-    Role: '日出',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 6,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 7,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 8,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 9,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 10,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 11,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 12,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 13,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 14,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 15,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 16,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 17,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 18,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 19,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 20,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 21,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 22,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 23,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 24,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-  {
-    id: 25,
-    UserName: '管理员',
-    Compellation: '王五',
-    PhoneNumberer: 122222222222,
-    Role: '云朵',
-    IsActive: false,
-    State: '在线',
-    CreateTime: '2022-01-01'
-  },
-]);
+// let UserData = reactive([
+//   {
+//     id: 1,
+//     UserName: '用户',
+//     Compellation: '张三',
+//     PhoneNumberer: 122222222222,
+//     Role: '蓝天',
+//     IsActive: false,
+//     State: '离线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 2,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 3,
+//     UserName: '用户',
+//     Compellation: '李四',
+//     PhoneNumberer: 122222222222,
+//     Role: '乌云',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 4,
+//     UserName: '用户',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '朝霞',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 5,
+//     UserName: '管理员',
+//     Compellation: '李白',
+//     PhoneNumberer: 122222222222,
+//     Role: '日出',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 6,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 7,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 8,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 9,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 10,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 11,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 12,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 13,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 14,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 15,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 16,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 17,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 18,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 19,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 20,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 21,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 22,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 23,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 24,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+//   {
+//     id: 25,
+//     UserName: '管理员',
+//     Compellation: '王五',
+//     PhoneNumberer: 122222222222,
+//     Role: '云朵',
+//     IsActive: false,
+//     State: '在线',
+//     CreateTime: '2022-01-01'
+//   },
+// ]);
 //模态框角色数据库
 let ModalRoleData = ref([
   {
@@ -293,18 +303,28 @@ let ModalRoleData = ref([
     label: '朝霞',
   },
 ]);
+// let ModalData=reactive({
+//       username: '',
+//       nickName: '',
+//       email: '',
+//       telephone: '',
+//       role: '云朵',
+//       IsActive: false,
+//       State: ''
+//    }
+// )
+
 //分页
 let current1 = ref(1);
 let pageSize = 6;
 let currentPageData = computed(() => {
   const start = (current1.value - 1) * pageSize;
   const end = start + pageSize;
-  return UserData.slice(start, end);
+  return UserDatas.slice(start, end);
 });
 let onChange = () => {
   console.log(current1.value);
 }
-
 // 修改状态
 let State = () => {
   UserData.IsActive = !UserData.IsActive;
@@ -323,11 +343,12 @@ let AddButton = () => {
 };
 // 编辑
 let UserEdit = (id) => {
+  ModalData.value = UserData.find(item => item.id === id)// 获取当前行的数据
   console.log("编辑" + id);
 };
 //删除并重新排序
 let UserDelete = (index, id) => {
-  if (confirm(`确定删除${index}吗？`)) {
+  if (confirm(`确定删除id为${id}的数据吗？`)) {
     console.log(`删除id为${id}的数据`);
     UserData.splice(index, 1);
   }
@@ -360,9 +381,16 @@ const handleChange = value => {
 };
 // 模态框表单的提交功能
 let ButtonSubmit = () => {
-  ModalData.Role=ModalRoleData.value;
-  console.log(ModalData.value);
+  if (ModalData.id == null) {
+    ModalData.value.id = UserData.length + 1;// 添加id
+    UserData.push(ModalData.value);// 添加数据
+    console.log(ModalData.value);
+  } else {
+    console.log(ModalData.value);
+  }
+  showModal.value = false;
 }
+
 let ButtonSave = () => {
   console.log(`保存`);
 }
@@ -416,13 +444,23 @@ let ButtonSave = () => {
     <a-button type="primary" id="AddButton" :icon="h(PlusOutlined)" @click="AddButton, showModal = true"> 添加</a-button>
   </div>
   <div class="table-wrap">
+    <!-- public string Username { get; set; } = null!;
+    public string Password { get; set; } = null!;
+    public string? NickName { get; set; }
+    public string? Avatar { get; set; }
+    public string? Salt { get; set; }
+    public string? Email { get; set; }
+    public string? Telephone { get; set; } -->
+
+   
     <table class="Usertable">
       <tr>
         <th>序号</th>
         <th>用户Id</th>
         <th>用户名</th>
-        <th>姓名</th>
-        <th>手机</th>
+        <th>昵称</th>
+        <th>邮箱</th>
+        <th>电话</th>
         <th>所属角色</th>
         <th>状态</th>
         <th>创建时间</th>
@@ -431,18 +469,20 @@ let ButtonSave = () => {
       <tr v-for="(item, index) in currentPageData" :key="item.id">
         <td>{{ index + 1 }}</td>
         <td>{{ item.id }}</td>
-        <td>{{ item.UserName }}</td>
-        <td>{{ item.Compellation }}</td>
-        <td>{{ item.PhoneNumberer }}</td>
-        <td>{{ item.Role }}</td>
+        <td>{{ item.username }}</td>
+        <td>{{ item.nickName }}</td>
+        <td>{{ item.email }}</td>
+        <td>{{ item.telephone }}</td>
+        <td>{{ item.role }}</td>
         <td>
           <a-space direction="vertical">
             <a-switch v-model:checked="item.IsActive" size="small" @click="State" />
           </a-space>
         </td>
-        <td>{{ item.CreateTime }}</td>
+        <td>{{ item.createcime }}</td>
         <td>
-          <a-button type="primary" id="EditButton" :icon="h(EditOutlined)" @click="UserEdit(item.id)"></a-button>
+          <a-button type="primary" id="EditButton" :icon="h(EditOutlined)"
+            @click="UserEdit(item.id), showModal = true"></a-button>
           <a-button type="primary" id="DeleteButton" :icon="h(DeleteOutlined)"
             @click="UserDelete(index, item.id)"></a-button>
         </td>
@@ -468,7 +508,7 @@ let ButtonSave = () => {
                   <th>用户名</th>
                   <td>
                     <a-space direction="vertical">
-                      <a-input v-model:value="ModalData.UserName" placeholder="请输入用户名" />
+                      <a-input v-model:value="ModalData.username" placeholder="请输入用户名" />
                     </a-space>
                   </td>
                 </tr>
@@ -476,7 +516,7 @@ let ButtonSave = () => {
                   <th>姓名</th>
                   <td>
                     <a-space direction="vertical">
-                      <a-input v-model:value="ModalData.Compellation" placeholder="请输入姓名" />
+                      <a-input v-model:value="ModalData.nickName" placeholder="请输入昵称" />
                     </a-space>
                   </td>
                 </tr>
@@ -484,7 +524,15 @@ let ButtonSave = () => {
                   <th>手机</th>
                   <td>
                     <a-space direction="vertical">
-                      <a-input v-model:value="ModalData.PhoneNumberer" placeholder="请输入手机" />
+                      <a-input v-model:value="ModalData.email" placeholder="请输入邮箱" />
+                    </a-space>
+                  </td>
+                </tr>
+                <tr>
+                  <th>手机</th>
+                  <td>
+                    <a-space direction="vertical">
+                      <a-input v-model:value="ModalData.telephone" placeholder="请输入手机" />
                     </a-space>
                   </td>
                 </tr>
@@ -549,6 +597,7 @@ let ButtonSave = () => {
   z-index: 1000;
   /* 确保模态框在所有元素之上 */
 }
+
 .modal-table tr,
 .modal-table td,
 .modal-table th {
@@ -556,6 +605,7 @@ let ButtonSave = () => {
   margin: 200px;
   height: 70px;
 }
+
 h1 {
   font-size: 40px;
   /* 设置较大的字体大小 */
@@ -568,6 +618,7 @@ h1 {
   text-align: center;
   /* 文本居中 */
 }
+
 .modal {
   background-color: #ffffff;
   padding: 20px;
@@ -579,6 +630,7 @@ h1 {
   align-items: center;
   flex-direction: column;
 }
+
 .close {
   cursor: pointer;
   position: absolute;
@@ -586,12 +638,14 @@ h1 {
   right: 10px;
   /* font-size: 20px; */
 }
+
 .modal-content {
   width: 100%;
   height: 100px;
   display: flex;
   justify-content: space-between;
 }
+
 /* 模态框里的控件样式 */
 #modalClose {
   margin-top: -10px;
@@ -599,14 +653,17 @@ h1 {
   border-radius: 50%;
   background-color: #a0cfff;
 }
+
 #ButtonSave {
   background-color: #fab6b6;
   width: 100px;
 }
+
 #ButtonSubmit {
   background-color: #a0cfff;
   width: 100px;
 }
+
 /* 用户列表 */
 .demo-dropdown-wrap {
   border-radius: 10px;
@@ -614,18 +671,22 @@ h1 {
   display: flex;
   columns: 3;
 }
+
 .input-key {
   margin: 10px;
   text-align: center;
   width: 300px;
   display: flex;
 }
+
 .input-key-text {
   margin: 9px;
 }
+
 .input-role {
   margin: 9px;
 }
+
 #DeleteButton {
   margin: 10px;
   background-color: #fab6b6;
@@ -635,6 +696,7 @@ h1 {
   padding: 0px;
   border-radius: 5px;
 }
+
 #ResetButton {
   margin-left: 10px;
   width: 100px;
@@ -642,6 +704,7 @@ h1 {
   line-height: 0px;
   border-radius: 5px;
 }
+
 #FindButton {
   width: 100px;
   height: 28px;
@@ -649,6 +712,7 @@ h1 {
   border-radius: 5px;
   margin-top: 0px;
 }
+
 #EditButton {
   margin: 10px;
   background-color: #a0cfff;
@@ -658,6 +722,7 @@ h1 {
   padding: 0px;
   border-radius: 5px;
 }
+
 #AddButton {
   margin: 10px;
   margin-left: 0px;
@@ -668,13 +733,16 @@ h1 {
   padding: 5px;
   border-radius: 5px;
 }
+
 .input-role ant-dropdown-link {
   color: #bfbfc9;
 }
+
 .button-wrap {
   padding: 10px;
   border: 2px solid #f1f3f8;
 }
+
 .Page {
   margin-top: 10px;
   padding: 10px;
@@ -682,11 +750,13 @@ h1 {
   text-align: center;
   height: 60px;
 }
+
 .button-wrap .Button-wrap-Find-Reset {
   display: flex;
   justify-content: space-between;
   width: 180px;
 }
+
 .button-wrap-UserAdd {
   display: flex;
   justify-content: flex-start;
@@ -696,11 +766,13 @@ h1 {
   align-items: center;
   padding-left: 10px;
 }
+
 .Usertable {
   padding-top: 10px;
   margin-top: 10px;
   width: 100%;
 }
+
 .Usertable tr,
 th,
 td {
@@ -713,6 +785,7 @@ td {
 .Usertable tr:hover {
   background-color: #f1f3f8;
 }
+
 .ant-dropdown-link {
   color: #8b8989;
 
