@@ -1,16 +1,20 @@
 <template>
   <div class="user-profile">
     <a-row :gutter="16">
-      <a-col :span="6">
+      <a-col :span="10">
         <a-card :bordered="false" title="个人信息">
           <div class="user-info">
-            <a-avatar shape="square" size="128" :src="userAvatar" />
+            <a-avatar shape="cirle" size="128" :src="userAvatar" style="margin-left: 100px;" />
             <div class="user-details">
-              <h2>{{ userName }}</h2>
-              <div class="contact-info">
-                <p>手机号: {{ phoneNumber }}</p>
-                <p>邮箱: {{ email }}</p>
-              </div>
+              <LoginOutlined /> <span>登陆账号：{{ userName }}</span>
+             
+            
+              <PhoneOutlined /><span>手机号: {{ phoneNumber }}</span>
+              <MailOutlined /><span class="email">邮箱: {{ email }}</span>
+              <InsuranceOutlined /><span>安全设置 <span @click="showModal" style="margin-left: 150px;cursor: pointer;color: blue ;">修改密码</span></span>
+             
+              
+              
             </div>
           </div>
         </a-card>
@@ -28,16 +32,40 @@
       </a-col>
     </a-row>
   </div>
+  <transition name="fade">
+      <div class="modal" v-if="isModalVisible">
+        <div class="modal-content">
+          <h3>修改密码</h3>
+          <form @submit.prevent="submitPasswordChange">
+            <div class="form-group">
+              <label for="oldPassword">旧密码</label>
+              <input type="password" id="oldPassword" v-model="formState.oldPassword" required />
+            </div>
+            <div class="form-group">
+              <label for="newPassword">新密码</label>
+              <input type="password" id="newPassword" v-model="formState.newPassword" required />
+            </div>
+            <div class="form-group">
+              <label for="confirmPassword">确认新密码</label>
+              <input type="password" id="confirmPassword" v-model="formState.confirmPassword" required />
+            </div>
+            <button type="submit" style="margin-left: 30px;">提交</button>
+            <button type="button" @click="hideModal" style="margin-left: 100px;" >取消</button>
+          </form>
+        </div>
+      </div>
+    </transition>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-
+import { LoginOutlined,PhoneOutlined,MailOutlined ,InsuranceOutlined } from '@ant-design/icons-vue';
 // 假设这是从后端获取的用户信息
 const userAvatar = ref('/avatar.jpg');
-const userName = ref('张三');
+
+const userName = localStorage.getItem('username')
 const phoneNumber = ref('13800138000');
-const email = ref('zhangsan@example.com');
+const email = ref('@example.com');
 const userData = ref([
   { label: '详细资料1', value: '内容1' },
   { label: '详细资料2', value: '内容2' },
@@ -47,6 +75,43 @@ const userData = ref([
 const saveConfiguration = () => {
   console.log('保存配置点击事件');
 };
+const isModalVisible = ref(false);
+const formState = ref({
+  oldPassword: '',
+  newPassword: '',
+  confirmPassword: ''
+});
+
+const showModal = () => {
+  isModalVisible.value = true;
+};
+
+const hideModal = () => {
+  isModalVisible.value = false;
+  formState.value = {
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  };
+};
+
+const submitPasswordChange = () => {
+  if (formState.value.newPassword === formState.value.oldPassword) {
+    alert('新密码不能与旧密码相同！');
+    return;
+  }
+
+  // 验证两次输入的新密码是否一致
+  if (formState.value.newPassword !== formState.value.confirmPassword) {
+    alert('新密码和确认密码不一致！');
+    return;
+  }
+
+  // 如果所有验证都通过，执行密码修改逻辑
+  console.log('密码修改请求:', formState.value);
+  hideModal(); // 成功后关闭模态框
+  };
+  
 </script>
 
 <style scoped>
@@ -54,20 +119,103 @@ const saveConfiguration = () => {
   /* 确保按钮在卡片内居下 */
   position: absolute;
   bottom: 16px;
-  right: 16px;
+ 
 }
 
-.contact-info {
-  /* 为了让手机号和邮箱信息垂直居中 */
-  display: flex;
-  flex-direction: column;
-  justify-content:last baseline ;
+.email{
+  margin-left: 2px;
+  
 }
+
 
 .data-item {
   /* 每个数据项的label和value并列显示 */
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
+}
+:where(.css-dev-only-do-not-override-19iuou).ant-avatar{
+  width: 100px;
+  height: 100px;
+}
+.user-details{
+  margin-top: 15px;
+  
+  font-size: 13.5px;
+}
+.user-details > *:not(.anticon)::after {
+  content: '';
+  display: block;
+  width: 100%;
+  border-top: 1px solid #ccc;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  width: 30%; /* 调整宽度以适应更大的模态框 */
+  max-width: 400px; /* 设置最大宽度限制 */
+  background-color: white;
+  padding: 30px; /* 增加内边距 */
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  display: flex; /* 使用Flex布局 */
+  flex-direction: column; /* 垂直堆叠元素 */
+  align-items: center; /* 居中对齐 */
+}
+
+.form-group {
+  display: flex; /* 使用Flex布局 */
+  align-items: center; /* 垂直居中对齐 */
+  margin-bottom: 20px;
+  width: 100%; /* 使表单组占据整个宽度 */
+}
+
+.form-group label {
+  width: 100px; /* 设置label的固定宽度 */
+  text-align: right; /* 右对齐label */
+  margin-right: 10px; /* 在label和input之间添加间距 */
+}
+
+.form-group input {
+  flex-grow: 1; /* 输入框占据剩余的空间 */
+}
+/* 添加按钮样式以使其更美观 */
+button[type="submit"],
+button[type="button"] {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover,
+button[type="button"]:hover {
+  background-color: #0056b3;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
