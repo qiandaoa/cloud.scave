@@ -12,19 +12,29 @@ import {
   CloseOutlined
 } from '@ant-design/icons-vue'
 import axios from 'axios'
+import {useUserStore} from '../store/user.js'
 
 let UserDatas = reactive([])
+const useStore = useUserStore()
+
+
 
 onMounted(async () => {
-  await axios.get('https://localhost:63759/api/user')
-    .then(res => {
-      console.log(res.data);
-      res.data.forEach(item => {
-        UserDatas.push(item)
-      });
-      var a = res.data;
-      console.log(a[0].id);
-    })
+  // await axios.get('https://localhost:63759/api/user')
+  //   .then(res => {
+  //     console.log(res.data);
+  //     res.data.forEach(item => {
+  //       UserDatas.push(item)
+  //     });
+  //     var a = res.data;
+  //     console.log(a[0].id);
+  //   })
+ const res =  await useStore.fetchUserDate()
+ const user=res.data
+//  console.log(user);
+ user.forEach(item => {
+   UserDatas.push(item)
+ });
 
 })
 
@@ -35,272 +45,8 @@ let Findkeyword = ref('');
 let Find = () => {
   console.log(Findkeyword.value);
 }
-//数据库
-let UserData = reactive([
-  {
-    id: 1,
-    UserName: '用户',
-    Compellation: '张三',
-    PhoneNumberer: 122222222222,
-    Role: '蓝天',
-    IsActive: false,
-    State: '离线',
-    CreateTime: '2022-01-01'
-  },
 
-]);
-// let UserData = reactive([
-//   {
-//     id: 1,
-//     UserName: '用户',
-//     Compellation: '张三',
-//     PhoneNumberer: 122222222222,
-//     Role: '蓝天',
-//     IsActive: false,
-//     State: '离线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 2,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 3,
-//     UserName: '用户',
-//     Compellation: '李四',
-//     PhoneNumberer: 122222222222,
-//     Role: '乌云',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 4,
-//     UserName: '用户',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '朝霞',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 5,
-//     UserName: '管理员',
-//     Compellation: '李白',
-//     PhoneNumberer: 122222222222,
-//     Role: '日出',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 6,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 7,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 8,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 9,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 10,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 11,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 12,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 13,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 14,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 15,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 16,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 17,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 18,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 19,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 20,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 21,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 22,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 23,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 24,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-//   {
-//     id: 25,
-//     UserName: '管理员',
-//     Compellation: '王五',
-//     PhoneNumberer: 122222222222,
-//     Role: '云朵',
-//     IsActive: false,
-//     State: '在线',
-//     CreateTime: '2022-01-01'
-//   },
-// ]);
+
 //模态框角色数据库
 let ModalRoleData = ref([
   {
@@ -318,9 +64,9 @@ let ModalRoleData = ref([
 ]);
 let ModalData=reactive({
       username: '',
-      nickName: '',
-      email: '',
-      telephone: '',
+      nickName: "",
+      email: "",
+      telephone: "",
       role: '云朵',
       IsActive: false,
       State: ''
@@ -329,19 +75,46 @@ let ModalData=reactive({
 
 //分页
 let current1 = ref(1);
-let pageSize = 6;
+let pageSize = 5;
 let currentPageData = computed(() => {
+  const filteredData = UserDatas.filter(item => !item.isDeleted);
   const start = (current1.value - 1) * pageSize;
   const end = start + pageSize;
-  return UserDatas.slice(start, end);
+  return filteredData.slice(start, end);
 });
 let onChange = () => {
-  console.log(current1.value);
+  // console.log(current1.value);
 }
-// 修改状态
-let State = () => {
-  UserData.IsActive = !UserData.IsActive;
-}
+// 修改状态  给后端发送请求来更改是否启用的状态
+let State = async (id) => {
+  // UserDatas.IsActive = !UserDatas.IsActive;
+  const index=UserDatas.findIndex(item=>item.id==id);
+  if(index === -1){
+    console.log('没有找到该用户');
+    return
+  }
+  const user = UserDatas[index]
+  console.log(user.isActived);
+  if(user.IsActived==false){
+    console.log('该用户已经被禁用了');
+    return
+  }
+    try{
+      let res = await axios.put(`http://localhost:63760/api/actived/${id}?or=false`)
+      if(res.status===200){
+        UserDatas[index].IsActived=false
+        console.log(res.data);
+      }else{
+        console.log('禁用成功');
+      }
+      
+      
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
+
 // 重置按钮
 let Reset = () => {
   console.log("重置");
@@ -360,10 +133,20 @@ let UserEdit = (id) => {
   console.log("编辑" + id);
 };
 //删除并重新排序
-let UserDelete = (index, id) => {
-  if (confirm(`确定删除id为${id}的数据吗？`)) {
-    console.log(`删除id为${id}的数据`);
-    UserDatas.splice(index, 1);
+
+let UserDelete = async(id) => {
+  console.log(id);
+  if(confirm(`确定将id为${id}的数据标记为已删除吗？`)){
+    try{
+      let res = await axios.delete(`http://localhost:63760/api/User/${id}`)
+      const index = UserDatas.findIndex(item => item.id === id);
+      if (index !== -1) {
+        UserDatas[index].isDeleted = true;
+      }
+      console.log(res);
+    }catch(err){
+      console.log(err);
+    }
   }
 };
 // 定义一个响应式数据用于控制模态框的显示状态
@@ -405,6 +188,23 @@ let ButtonSubmit = () => {
 let ButtonSave = () => {
   console.log(`保存`);
 }
+//更改时间格式 更加直观
+const formatDateTime = (isoString) => {
+  const date = new Date(isoString);
+  const formatter = new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  });
+  return formatter.format(date);
+};
+const formatItemCreateAt=(item)=>{
+  return formatDateTime(item.createAt);
+}
 </script>
 
 <template>
@@ -420,31 +220,6 @@ let ButtonSave = () => {
           </a-space>
         </div>
       </div>
-      <div class="input-role">
-        角色：
-        <a-dropdown>
-          <template #overlay>
-            <a-menu @click="handleMenuClick">
-              <a-menu-item key="1">
-                <UserOutlined />
-                角色1
-              </a-menu-item>
-              <a-menu-item key="2">
-                <UserOutlined />
-                角色2
-              </a-menu-item>
-              <a-menu-item key="3">
-                <UserOutlined />
-                角色3
-              </a-menu-item>
-            </a-menu>
-          </template>
-          <a-button class="ant-dropdown-link">
-            请选择角色
-            <DownOutlined />
-          </a-button>
-        </a-dropdown>
-      </div>
     </div>
     <div class="Button-wrap-Find-Reset">
       <a-button type="primary" :icon="h(SearchOutlined)" @click="Find" id="FindButton"> 搜索</a-button>
@@ -455,51 +230,41 @@ let ButtonSave = () => {
     <a-button type="primary" id="AddButton" :icon="h(PlusOutlined)" @click="AddButton, showModal = true"> 添加</a-button>
   </div>
   <div class="table-wrap">
-    <!-- public string Username { get; set; } = null!;
-    public string Password { get; set; } = null!;
-    public string? NickName { get; set; }
-    public string? Avatar { get; set; }
-    public string? Salt { get; set; }
-    public string? Email { get; set; }
-    public string? Telephone { get; set; } -->
     <table class="Usertable">
       <tr>
         <th>序号</th>
-        <th>用户Id</th>
         <th>用户名</th>
         <th>昵称</th>
         <th>邮箱</th>
         <th>电话</th>
         <th>所属角色</th>
-        <th>状态</th>
+        <th>是否启用</th>
         <th>创建时间</th>
         <th>操作</th>
       </tr>
       <tr v-for="(item, index) in currentPageData" :key="item.id">
         <td>{{ index + 1 }}</td>
-        <td>{{ item.id }}</td>
         <td>{{ item.username }}</td>
         <td>{{ item.nickName }}</td>
         <td>{{ item.email }}</td>
         <td>{{ item.telephone }}</td>
-        <td>{{ item.role }}</td>
         <td>
           <a-space direction="vertical">
-            <a-switch v-model:checked="item.IsActive" size="small" @click="State" />
+            <a-switch v-model:checked="item.isActived" size="small" @click="State(item.id)" />
           </a-space>
         </td>
-        <td>{{ item.createcime }}</td>
+        <td>{{ formatItemCreateAt(item) }}</td>
         <td>
           <a-button type="primary" id="EditButton" :icon="h(EditOutlined)"
             @click="UserEdit(item.id), showModal = true"></a-button>
           <a-button type="primary" id="DeleteButton" :icon="h(DeleteOutlined)"
-            @click="UserDelete(index, item.id)"></a-button>
+            @click="UserDelete(item.id)"></a-button>
         </td>
       </tr>
     </table>
   </div>
   <div class="Page">
-    <a-pagination v-model:current="current1" show-quick-jumper :total="500" @change="onChange" />
+    <a-pagination v-model:current="current1" show-quick-jumper :total="UserDatas.length" @change="onChange" />
   </div>
   <!-- 编辑添加模态框 -->
   <div v-if="showModal" class="modal-wrap">
@@ -522,7 +287,7 @@ let ButtonSave = () => {
                   </td>
                 </tr>
                 <tr>
-                  <th>姓名</th>
+                  <th>昵称</th>
                   <td>
                     <a-space direction="vertical">
                       <a-input v-model:value="ModalData.nickName" placeholder="请输入昵称" />
@@ -543,31 +308,6 @@ let ButtonSave = () => {
                     <a-space direction="vertical">
                       <a-input v-model:value="ModalData.telephone" placeholder="请输入手机" />
                     </a-space>
-                  </td>
-                </tr>
-                <tr>
-                  <th>所属角色</th>
-                  <td>
-                    <!-- // 绑定 v-model:value 指令到 UserData.Role，实现双向数据绑定，用于显示和更新用户的角色选择
-                        // 启用搜索功能，方便在选项较多时进行快速查找
-                        show-search 
-                        // 设置占位符文本，当没有选择任何选项时显示
-                        placeholder="请选择角色" 
-                        // 设置样式宽度为180px，以适应布局需求
-                        style="width: 180px"
-                        // 动态绑定 options 属性，将 ModalRoleData 数组作为下拉选项的数据源
-                        :options="ModalRoleData" 
-                        // 动态绑定 filter-option 属性，使用自定义的过滤函数来筛选下拉列表中的选项
-                        :filter-option="filterOption" 
-                        // 监听 focus 事件，当元素获得焦点时触发 handleFocus 方法
-                        @focus="handleFocus" 
-                        // 监听 blur 事件，当元素失去焦点时触发 handleBlur 方法
-                        @blur="handleBlur"
-                        // 监听 change 事件，当下拉选项发生改变时触发 handleChange 方法
-                        @change="handleChange"> -->
-                    <a-select v-model:value="ModalData.role" show-search placeholder="请选择角色" style="width: 180px"
-                      :options="ModalRoleData" :filter-option="filterOption" @focus="handleFocus" @blur="handleBlur"
-                      @change="handleChange"></a-select>
                   </td>
                 </tr>
                 <tr>

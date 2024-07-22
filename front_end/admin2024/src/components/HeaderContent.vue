@@ -148,7 +148,8 @@ const onEdit = (targetKey, action) => {
 // 当标签页切换时触发的事件处理函数
 const handleTabsChange = key => {
       routerStore.changeActiveRoute(key);
-    routerStore.selectKeys = [key];
+        routerStore.selectKeys = [key];
+        
 };
 
 // 登出功能
@@ -157,6 +158,7 @@ const handleLogout = () => {
     localStorage.removeItem('userInfo')
     router.push('/login');
 };
+
 
 
 </script>

@@ -9,9 +9,9 @@ router.beforeEach((to, from, next) => {
     // 从store中获取用户状态，例如登录状态或token
     const token = localStorage.getItem('token');
     const username=localStorage.getItem('username');
-    console.log('username:', username);
+    // console.log('username:', username);
 
-    console.log('token:', token); // 添加调试语句
+    // console.log('token:', token); // 添加调试语句
 
     // 如果用户尝试访问登录页面，直接放行
     if (to.path === '/login') {
