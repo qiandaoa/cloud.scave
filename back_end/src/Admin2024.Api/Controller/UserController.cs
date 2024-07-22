@@ -2,6 +2,7 @@ using Admin2024.Application.Contracts.UserApplication.Dto;
 using Admin2024.Application.Contracts.UserApplication.Interface;
 using Admin2024.Domain.Interfaces;
 using Admin2024.Domain.System;
+using Admin2024.EntityFramework.Helps;
 using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -30,15 +31,10 @@ public class UserController : ControllerBase
         return Ok(entity);
     }
     /// <summary>
-    /// 获取全部用户角色表
+    /// 获取全部用户角色关联信息
     /// </summary>
-    /// <param name="id"></param>
     /// <returns></returns>
-    [HttpGet("/api/UserRole")]
-    //public Task<IActionResult> GetUserRole()
-    //{
-    //    return async Ok("AA");
-    //}
+
     /// <summary>
     /// 获取指定id的用户
     /// </summary>
@@ -53,6 +49,37 @@ public class UserController : ControllerBase
             return NotFound();
         }
         return Ok(entity);
+    }
+    /// <summary>
+    /// 获取全部用户列表、进行关键字搜索、 分页
+    /// </summary>
+    /// <param name="baseParameters"></param>
+    /// <returns></returns>
+    [HttpGet(("/api/GetAllUsers"),Name = "GetAllUsers")]
+    public ActionResult<List<User>> GetAllUser([FromQuery] BaseParameters baseParameters)
+    {
+        var users = _repo.Table;
+        var keywords = baseParameters.keywords;
+        var filer = baseParameters.FileByFlag;
+        // 进行关键字搜索
+        if (!string.IsNullOrEmpty(keywords))
+        {
+            users = users.Where(x =>
+              x.Username.Contains(keywords) ||
+              x.NickName.Contains(keywords) ||
+              x.Email.Contains(keywords) ||
+              x.Telephone.Contains(keywords) ||
+              x.Remark.Contains(keywords)
+            );
+        }
+        var totalCount = users.Count();
+        var totalPages = (int)Math.Ceiling((double)totalCount / baseParameters.PageSize);
+        // 分页
+        var list = users.Skip((baseParameters.PageIndex - 1) * baseParameters.PageSize)
+                        .Take(baseParameters.PageSize).ToList();
+        Pagination.GetPagination(baseParameters, totalPages, totalCount, Url, Response);
+        var userList = _mapper.Map<List<User>>(list);
+        return Ok(userList);
     }
     /// <summary>
     /// 删除用户（软删除）
@@ -103,8 +130,8 @@ public class UserController : ControllerBase
     public IActionResult UserLogin(LoginDto user)
     {
         var result = _userAppService.Login(user);
-
-        return result.IsSuccess  ? Ok(new { success = true, code = 200, data = new { token = result.Message }, msg = "登录成功!" }) : Unauthorized();
+        Console.WriteLine(result);
+        return result.IsSuccess  ? Ok(new { success = true, code = 200, data = new { token = result.Message ,Id = result.Data.Id}, msg = "登录成功!" }) : Unauthorized();
     }
 
     /// <summary>

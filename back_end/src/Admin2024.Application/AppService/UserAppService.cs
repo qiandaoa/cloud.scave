@@ -45,8 +45,7 @@ public class UserAppService : IUserAppService
 
         // 密码匹配，继续登录操作，获取token
         var token = _auth.Login(loginUser);
-
-        return token == null ? ReturnResult<User>.Error("登录失败!") : ReturnResult<User>.Success(token);
+        return token == null ? ReturnResult<User>.Error("登录失败!") : ReturnResult<User>.Success(loginUser,token);
     }
 
     public async Task<ReturnResult<User>> Register(RegisterDto inputInfo)
@@ -135,4 +134,6 @@ public class UserAppService : IUserAppService
         return ReturnResult<User>.Success("重置成功!");
 
     }
+
+   
 }

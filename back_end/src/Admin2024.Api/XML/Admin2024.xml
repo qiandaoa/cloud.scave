@@ -10,6 +10,24 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Admin2024.Api.UserController.GetUserById(System.Guid)">
+            <summary>
+            获取全部用户角色关联信息
+            </summary>
+            <returns></returns>
+            <summary>
+            获取指定id的用户
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.UserController.GetAllUser(Admin2024.EntityFramework.Helps.BaseParameters)">
+            <summary>
+            获取全部用户列表、进行关键字搜索、 分页
+            </summary>
+            <param name="baseParameters"></param>
+            <returns></returns>
+        </member>
         <member name="M:Admin2024.Api.UserController.DeleteUser(System.Guid)">
             <summary>
             删除用户（软删除）
