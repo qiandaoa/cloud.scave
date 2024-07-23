@@ -5,6 +5,4 @@ public class RoleUpdateInfoDto
 {
   public string RoleName { get; set; } = null!;
     public string? Remark { get; set; }
-
-
 }
