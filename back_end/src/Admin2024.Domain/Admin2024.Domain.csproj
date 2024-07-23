@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Admin2024.Instructions\Admin2024.Instructions.csproj" />
-    <ProjectReference Include="..\Admin2024.Application.Contracts\Admin2024.Application.Contracts.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

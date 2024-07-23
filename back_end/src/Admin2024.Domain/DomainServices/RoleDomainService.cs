@@ -1,6 +1,7 @@
 using Admin2024.Domain.Interfaces;
 using Admin2024.Domain.System;
 using Admin2024.Instructions;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Admin2024.Domain.DomainServices;
 public class RoleDomainService : IRoleDomainService
@@ -17,10 +18,8 @@ public class RoleDomainService : IRoleDomainService
         if(roleInfo != null){
           return ReturnResult<Role>.Error("角色已存在");
         }
-#pragma warning disable CS8604 // 引用类型参数可能为 null。
-        await _roleRep.AddAsync(roleInfo);
-#pragma warning restore CS8604 // 引用类型参数可能为 null。
-        return ReturnResult<Role>.Success(roleInfo);
+        await _roleRep.AddAsync(role);
+        return ReturnResult<Role>.Success(role);
     }
 
     // 删除角色
@@ -37,18 +36,46 @@ public class RoleDomainService : IRoleDomainService
         return ReturnResult<Role>.Success(role);
     }
 
-    public async Task<List<Role>> GetAllRole()
+    // 获取所有角色
+    public async Task<ReturnResult<List<Role>>> GetAllRole()
     {
         var roles = await _roleRep.GetAsync();
+        if(roles == null){
+           return ReturnResult<List<Role>>.Error("当前没有任何角色，可以选择创建新角色");
+        }
+        return ReturnResult<List<Role>>.Success(roles);
     }
 
-    public Task<ReturnResult<Role>> GetRoleById(Guid id)
+    // 获取角色名称
+    public Role? GetByRoleName(string roleName)
     {
-        throw new NotImplementedException();
+        var role = _roleRep.Table.FirstOrDefault(r => r.RoleName == roleName);
+        return role;
     }
 
-    public Task<ReturnResult<Role>> UpdateRole(Guid roleId, Role role)
+    // 获取指定id角色
+    public async Task<ReturnResult<Role>> GetRoleById(Guid id)
     {
-        throw new NotImplementedException();
+        var role = await _roleRep.GetByIdAsync(id);
+        if(role == null){
+          return ReturnResult<Role>.Error("该角色不存在");
+        }
+        if(role.IsDeleted == true){
+          return ReturnResult<Role>.Error("该角色已被删除");
+        }
+        return ReturnResult<Role>.Success(role);
+    }
+
+    // 修改角色
+    public async Task<ReturnResult<Role>> UpdateRole(Guid roleId, Role role)
+    {
+        var roleInfo = await _roleRep.GetByIdAsync(roleId);
+        if(roleInfo == null){
+          return ReturnResult<Role>.Error("该角色不存在");
+        }
+        roleInfo.RoleName = role.RoleName;
+        roleInfo.Remark = role.Remark; 
+        await _roleRep.UpdateAsync(roleInfo);
+        return ReturnResult<Role>.Success(roleInfo);
     }
 }
