@@ -1,3 +1,4 @@
+
 namespace Admin2024.Instructions;
 
 public class ReturnResult<T>
@@ -34,4 +35,6 @@ public class ReturnResult<T>
         return new ReturnResult<T>(false,default,msg);
 #pragma warning restore CS8604 // 引用类型参数可能为 null。
     }
+
+   
 }
