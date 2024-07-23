@@ -69,13 +69,18 @@ let ModalData=reactive({
 let current1 = ref(1);
 let pageSize = 10
 //排列顺序按照isactived来进行排列
-let currentPageData = computed(() => {
-  const filteredData = UserDatas.filter(item => !item.isDeleted).sort((a,b)=>{
-    return b.isActived-a.isActived
+let filteredAndSortedData = computed(() => {
+  return UserDatas.filter(item => !item.isDeleted).sort((a, b) => {
+    return b.isActived - a.isActived;
   });
+});
+const filteredAndSortedDataLength = computed(() => filteredAndSortedData.value.length);
+
+// ...
+let currentPageData = computed(() => {
   const start = (current1.value - 1) * pageSize;
   const end = start + pageSize;
-  return filteredData.slice(start, end);
+  return filteredAndSortedData.value.slice(start, end);
 });
 let onChange = () => {
   // console.log(current1.value);
@@ -107,6 +112,7 @@ let State = async (id) => {
 
 // 重置按钮
 let Reset = () => {
+  Findkeyword.value=""
   console.log("重置");
 }
 // 用户选择角色的下拉菜单
@@ -282,7 +288,7 @@ const formatItemCreateAt=(item)=>{
     </table>
   </div>
   <div class="Page">
-    <a-pagination v-model:current="current1" show-quick-jumper :total="UserDatas.length" @change="onChange" />
+    <a-pagination v-model:current="current1" show-quick-jumper :total="filteredAndSortedDataLength" @change="onChange" />
   </div>
   <!-- 编辑添加模态框 -->
   <div v-if="showModal" class="modal-wrap">

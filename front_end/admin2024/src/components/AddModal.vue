@@ -59,8 +59,7 @@ const useStore = useUserStore()
         let res = await axios.post('http://localhost:63760/api/User',{
             username: formState.username,
             password:formState.password,
-            Avatar:'1',
-            salt:"2323",
+           
              nickName: formState.nickName,
          email: formState.email,
          telephone: formState.telephone,
