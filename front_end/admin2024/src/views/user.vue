@@ -115,20 +115,7 @@ let Reset = () => {
   Findkeyword.value=""
   console.log("重置");
 }
-// 用户选择角色的下拉菜单
 
-// 添加按钮
-let AddButton = () => {
-  console.log("添加");
-  showModal.value=!showModal.value
-  ModalData = reactive({
-    username: "",
-    nickName: "",
-    email: "",
-    telephone: "",
-    id: undefined,
-  });
-};
 // 编辑
 let UserEdit = async (id) => {
   try{
