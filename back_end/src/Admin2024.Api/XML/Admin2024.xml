@@ -6,7 +6,7 @@
     <members>
         <member name="M:Admin2024.Api.RoleController.GetAllRole(Admin2024.EntityFramework.Helps.BaseParameters)">
             <summary>
-            获取全部角色
+            获取全部角色 keywords表示关键字 pageindex表示页数 pagesize表示每页的内容数量
             </summary>
             <param name="baseParameters"></param>
             <returns></returns>

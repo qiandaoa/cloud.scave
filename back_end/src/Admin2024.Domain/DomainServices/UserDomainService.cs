@@ -20,7 +20,7 @@ public class UserDomainService : IUserDomainService
     // 登录
     public User? GetByUsername(string username)
     {
-        var entity = _User.Table.FirstOrDefault(e => e.Username == username);
+        var entity = _User.Table.FirstOrDefault(e => e.Username == username && e.IsActived == true);
 
         return entity;
     }

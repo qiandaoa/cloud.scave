@@ -20,7 +20,7 @@ public class RoleController : ControllerBase
   }
 
   /// <summary>
-  /// 获取全部角色
+  /// 获取全部角色 keywords表示关键字 pageindex表示页数 pagesize表示每页的内容数量
   /// </summary>
   /// <param name="baseParameters"></param>
   /// <returns></returns>
@@ -67,6 +67,7 @@ public class RoleController : ControllerBase
       return Ok("该角色已存在，请勿重复添加");
     }
     var role = _mapper.Map<Role>(roleCreateInfoDto);
+        role.IsDeleted = false;
     var newRole = await _repRole.AddAsync(role);
     if(newRole == null){
       return Ok("添加失败");
