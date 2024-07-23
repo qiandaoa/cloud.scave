@@ -35,7 +35,7 @@
                         <td>
                             <input type="checkbox" name="" id="">
                         </td>
-                        <td class="tdcenter">{{   index + 1 }}</td>
+                        <td class="tdcenter">{{ index + 1 + (current.value - 1) * pageSize }}</td>
                         <td>{{ item.roleName }}</td>
                         <td>{{ item.remark }}</td>
                         <td>{{formatItemCreateAt(item) }}</td>
@@ -56,7 +56,7 @@
         </div>
         <div class="role-list-container pagination">
             <a-pagination v-model:current="current" :total="tabArr.length" :pageSize="pageSize" show-quick-jumper
-                @change="handlePageChange" />
+                @change="" />
         </div>
     </div>
 
@@ -87,7 +87,7 @@
 
 
 
-<script setup lang="ts">
+<script setup lang="js">
 import { ref, reactive, computed,onMounted } from 'vue';
 import {
     SearchOutlined,
@@ -111,7 +111,7 @@ let formState=reactive({
 })
 // 分页
 const pageSize = 5;
-const current = ref(Number(1));
+const current = ref(1);
 const filteredTabArr = computed(() => {
     return tabArr.filter(item => !item.isDeleted);
 });
@@ -120,12 +120,9 @@ const currentPageData = computed(() => {
     const end = start + pageSize;
     return filteredTabArr.value.slice(start, end);
 });
-let tabArr = reactive([
-    
-]);
+let tabArr = reactive([]);
 
-
-
+//页面加载获取列表
 onMounted(async () => {
     try {
         const res = await axios.get('http://localhost:63760/api/role');
@@ -140,13 +137,28 @@ onMounted(async () => {
 // 分页改变时的处理函数
 
 
-function Search() {
-    console.log('搜索');
-};
+let Search = async()=>{
+        let keywords=Findkeyword.value.trim()
+    try{
+        if(keywords){
+        let res = await axios.get(`http://localhost:63760/api/Role?keywords=${keywords}`)
+        console.log(res);
+        tabArr.splice(0, tabArr.length, ...res.data); // 清空并填充新的搜索结果
+        
+        }else{
+            alert('请输入关键字')
+        }
+      
+    }catch(err){
+        console.log(err);
+    }
+}
 
+//重置页面
 function Reset() {
-    console.log('重置');
+    // console.log('重置');
      Findkeyword.value=""
+    fetchRoles()
 };
 
 function Add() {
@@ -261,9 +273,7 @@ const formatItemCreateAt=(item)=>{
 }
 
 // 分页改变时的处理函数
-function handlePageChange(pageNumber: number) {
-    current.value = pageNumber;
-};
+
 </script>
 
 

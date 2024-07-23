@@ -16,6 +16,8 @@ import {useUserStore} from '../store/user.js'
 import AddUserModal from '../components/AddModal.vue'
 let UserDatas = reactive([])
 const useStore = useUserStore()
+let Findkeyword = ref('');
+let originalData = reactive([]);
 
 
 
@@ -33,12 +35,9 @@ onMounted(async () => {
  const user=res.data
 //  originnaTotal= user.length //记录原始长度
 //  console.log(user);
- user.forEach(item => {
-  
-    UserDatas.push(item)
-
-  
- });
+  originalData.push(...user);
+  // 将原始数据复制到 UserDatas
+  UserDatas.push(...originalData);
 //  let total=originnaTotal
 })
 
@@ -47,11 +46,28 @@ const showModals=()=>{
   addUserModalRef.value.show()
 }
 // 搜索关键词
-let Findkeyword = ref('');
 
 // 搜索按钮
-let Find = () => {
-  console.log(Findkeyword.value);
+let Find = async()=>{
+        let keywords=Findkeyword.value.trim()
+    try{
+        if(keywords){
+        let res = await axios.get(`http://localhost:63760/api/GetAllUsers?keywords=${keywords}`)
+        console.log(res);
+        // tabArr.splice(0, tabArr.length, ...res.data); // 清空并填充新的搜索结果
+        UserDatas.splice(0, UserDatas.length);
+          res.data.forEach(item => {
+            UserDatas.push(item)
+          });
+        
+        }else{
+          UserDatas.splice(0, UserDatas.length);
+          UserDatas.push(...originalData);
+        }
+      
+    }catch(err){
+        console.log(err);
+    }
 }
 
 
@@ -76,7 +92,7 @@ let filteredAndSortedData = computed(() => {
 });
 const filteredAndSortedDataLength = computed(() => filteredAndSortedData.value.length);
 
-// ...
+// 分页
 let currentPageData = computed(() => {
   const start = (current1.value - 1) * pageSize;
   const end = start + pageSize;
@@ -111,25 +127,35 @@ let State = async (id) => {
 }
 
 // 重置按钮
-let Reset = () => {
-  Findkeyword.value=""
-  console.log("重置");
+let Reset = async () => {
+  Findkeyword.value="";
+  // console.log("重置");s
+  try {
+    const res = await useStore.fetchUserDate();
+    const user = res.data;
+    // 清空并用原始数据重新填充
+    originalData.splice(0, originalData.length);
+    originalData.push(...user);
+    // 使用原始数据填充 UserDatas
+    UserDatas.splice(0, UserDatas.length);
+    UserDatas.push(...originalData);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 // 编辑
 let UserEdit = async (id) => {
   try{
     let res = await axios.get(`http://localhost:63760/api/User/${id}`)
-    // console.log(res.data);
-    ModalData={
-      id: id,
-      username: res.data.username,
-      nickName: res.data.nickName,
-      email: res.data.email,
-      telephone: res.data.telephone,
-      remark:res.data.remark
-    }
-    showModal.value=true
+  // 不再重新定义 ModalData，而是更新现有的 ModalData
+  ModalData.id = id;
+    ModalData.username = res.data.username;
+    ModalData.nickName = res.data.nickName;
+    ModalData.email = res.data.email;
+    ModalData.telephone = res.data.telephone;
+    ModalData.remark = res.data.remark;
+    showModal.value = true;
   }catch(err){
     console.log(err);
   }
@@ -162,36 +188,23 @@ else {
   document.body.style.overflow = '';
 }
 
-// 模态框表单的提交功能
-let ButtonSubmit = async (id) => {
-  console.log(id);
-  try{
-    // console.log(ModalData);
-    if(id){
-      let res = await axios.put(`http://localhost:63760/api/UserUpdate/${id}`,{
-      username: ModalData.username,
-      nickName: ModalData.nickName,
-      email: ModalData.email,
-      telephone: ModalData.telephone,
-      remark:ModalData.remark
-
-    } )
-    console.log(res);
-    showModal.value=!showModal.value
-    setTimeout(() => {
+// 模态框提交功能
+const ButtonSubmit = async (id) => {
+  try {
+    if (id) {
+      await axios.put(`http://localhost:63760/api/UserUpdate/${id}`, ModalData);
       const index = UserDatas.findIndex(item => item.id === id);
       if (index !== -1) {
         UserDatas[index] = { ...UserDatas[index], ...ModalData };
       }
-    }, 0);
-    }else{
-      //实现添加
+      showModal.value = false;
+    } else {
+      // 实现添加功能
     }
- 
-  }catch(err){
-    console.log(err);
+  } catch (err) {
+    console.error('提交错误:', err);
   }
-  }
+};
 
 let Cancel = () => {
   showModal.value=!showModal.value

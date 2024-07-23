@@ -1,21 +1,18 @@
 <template>
   <div class="user-profile">
     <a-row :gutter="16">
-      <a-col :span="10">
+      <a-col :span="8">
         <a-card :bordered="false" title="个人信息">
           <div class="user-info">
-            <a-avatar shape="cirle" size="128" :src="userAvatar" style="margin-left: 100px;" />
+            <a-avatar shape="cirle" size="128" :src="userAvatar" />
             <div class="user-details">
               <LoginOutlined /> <span>登陆账号：{{ userName }}</span>
              
             
               <PhoneOutlined /><span>手机号: {{ userData.telephone }}</span>
               <MailOutlined /><span class="email">邮箱: {{ userData.email }}</span>
-              <InsuranceOutlined /><span>安全设置 <span @click="showModal" style="margin-left: 150px;cursor: pointer;color: blue ;">修改密码</span></span>
-             
-              
-              
-            </div>
+              <InsuranceOutlined /><span>安全设置 <span @click="showModal" style="cursor: pointer;color: blue ;">修改密码</span></span>
+              </div>
           </div>
         </a-card>
       </a-col>
@@ -24,15 +21,17 @@
           <div class="data-item">
   <div class="input-group">
     <label>昵称:</label>
-    <input type="text">
+    <input type="text"  class="custom-input" v-model="userData.nickName">
+    <label for="">昵称不作登陆使用</label>
   </div>
   <div class="input-group">
     <label>手机号:</label>
-    <input type="text">
+    <input type="text"  class="custom-input" v-model="userData.telephone" >
+    <label for="">手机号不能重复</label>
   </div>
   <div class="input-group">
     <label>邮箱:</label>
-    <input type="text">
+    <input type="text"  class="custom-input" v-model="userData.email">
   </div>
 
 </div>
@@ -50,7 +49,7 @@
           <form @submit.prevent="submitPasswordChange(id)">
             <div class="form-group">
               <label for="oldPassword">旧密码</label>
-              <input type="password" id="oldPassword" v-model="formState.oldPassword" required />
+              <input type="password"  id="oldPassword" v-model="formState.oldPassword" required />
             </div>
             <div class="form-group">
               <label for="newPassword">新密码</label>
@@ -78,8 +77,10 @@ const userAvatar = ref('/avatar.jpg');
 const userName = localStorage.getItem('username')
 const userData=reactive({
   email:'',
-  telephone:""
+  telephone:"",
+  nickName:"",
 })
+
 const saveConfiguration = () => {
   console.log('保存配置点击事件');
 };
@@ -157,8 +158,10 @@ const submitPasswordChange = async (id) => {
   margin-top: 20px;
   /* right: 16px; */
   margin-left: 80px;
+
  
 }
+
 
 .email{
   margin-left: 2px;
@@ -188,9 +191,7 @@ const submitPasswordChange = async (id) => {
   margin-right: 8px; /* 标签和输入框之间的间距 */
 }
 
-.data-item .input-group input[type="text"] {
-  flex: 1; /* 输入框占据剩余的空间 */
-}
+
 :where(.css-dev-only-do-not-override-19iuou).ant-avatar{
   width: 100px;
   height: 100px;
@@ -252,7 +253,7 @@ const submitPasswordChange = async (id) => {
 button[type="submit"],
 button[type="button"] {
   /* margin-top: 20px; */
-  padding: 10px 20px;
+  /* padding: 10px 20px; */
   background-color: #007BFF;
   color: white;
   border: none;
@@ -278,4 +279,36 @@ button[type="button"]:hover {
 .input-group input[type="text"] {
   width: 100px; /* 或者你希望的任何其他宽度 */
 }
+.custom-input {
+  width: 200px; /* 或者你希望的任何其他宽度 */
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+.input-group input[type="text"][data-v-11bde6a2] {
+    width: 200px;
+}
+/* 使输入框和标签在一行中对齐并设置标签颜色为灰色 */
+.input-group {
+  display: flex;
+  align-items: center; /* 垂直居中对齐 */
+  /* gap: 5px; 间隔 */
+  margin-bottom: 10px; /* 每个输入组下方的间距 */
+}
+
+.input-group label {
+  color: gray; /* 将标签颜色设置为灰色 */
+  flex-shrink: 0; /* 防止标签在容器缩小时缩小 */
+}
+
+/* 保持输入框宽度一致 */
+
+
+/* 额外的标签应该紧挨着输入框 */
+.input-group label[for=""] {
+  margin-left: 10px; /* 与输入框的间距 */
+  font-size: smaller; /* 减小字体大小 */
+}
+
+
 </style>
