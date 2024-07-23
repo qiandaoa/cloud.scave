@@ -9,8 +9,8 @@
               <LoginOutlined /> <span>登陆账号：{{ userName }}</span>
              
             
-              <PhoneOutlined /><span>手机号: {{ phoneNumber }}</span>
-              <MailOutlined /><span class="email">邮箱: {{ email }}</span>
+              <PhoneOutlined /><span>手机号: {{ userData.telephone }}</span>
+              <MailOutlined /><span class="email">邮箱: {{ userData.email }}</span>
               <InsuranceOutlined /><span>安全设置 <span @click="showModal" style="margin-left: 150px;cursor: pointer;color: blue ;">修改密码</span></span>
              
               
@@ -69,21 +69,17 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { LoginOutlined,PhoneOutlined,MailOutlined ,InsuranceOutlined } from '@ant-design/icons-vue';
 import axios from 'axios';
 // 假设这是从后端获取的用户信息
 const userAvatar = ref('/avatar.jpg');
 
 const userName = localStorage.getItem('username')
-const phoneNumber = ref('13800138000');
-const email = ref('@example.com');
-const userData = ref([
-  { label: '详细资料1', value: '内容1' },
-  { label: '详细资料2', value: '内容2' },
-  // 更多数据...
-]);
-
+const userData=reactive({
+  email:'',
+  telephone:""
+})
 const saveConfiguration = () => {
   console.log('保存配置点击事件');
 };
@@ -110,6 +106,18 @@ const hideModal = () => {
 
 const id = localStorage.getItem('userId')
 console.log(id);
+
+onMounted(async()=>{
+  if(id){
+    try{
+      let res = await axios.get(`http://localhost:63760/api/user/${id}`)
+      console.log(res);
+      Object.assign(userData,res.data)
+    }catch(err){
+      console.log(err);
+    }
+  }
+})
 const submitPasswordChange = async (id) => {
   if (formState.value.newPassword === formState.value.oldPassword) {
     alert('新密码不能与旧密码相同！');
