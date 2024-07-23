@@ -7,83 +7,123 @@
             <a-avatar shape="cirle" size="128" :src="userAvatar" />
             <div class="user-details">
               <LoginOutlined /> <span>登陆账号：{{ userName }}</span>
-             
-            
+
+
               <PhoneOutlined /><span>手机号: {{ userData.telephone }}</span>
               <MailOutlined /><span class="email">邮箱: {{ userData.email }}</span>
-              <InsuranceOutlined /><span>安全设置 <span @click="showModal" style="cursor: pointer;color: blue ;">修改密码</span></span>
-              </div>
+              <InsuranceOutlined /><span>安全设置 <span @click="showModal"
+                  style="cursor: pointer;color: blue ;">修改密码</span></span>
+            </div>
           </div>
         </a-card>
       </a-col>
+
       <a-col :span="14">
         <a-card :bordered="false" title="用户资料" style="min-height: 200px;">
-          <div class="data-item">
-  <div class="input-group">
-    <label>昵称:</label>
-    <input type="text"  class="custom-input" v-model="userData.nickName">
-    <label for="">昵称不作登陆使用</label>
-  </div>
-  <div class="input-group">
-    <label>手机号:</label>
-    <input type="text"  class="custom-input" v-model="userData.telephone" >
-    <label for="">手机号不能重复</label>
-  </div>
-  <div class="input-group">
-    <label>邮箱:</label>
-    <input type="text"  class="custom-input" v-model="userData.email">
-  </div>
 
-</div>
+          <div class="data-item">
+            <div class="input-group">
+              <label>昵称:</label>
+              <input type="text" class="custom-input" v-model="edituserData.nickName">
+              <label for="">昵称不作登陆使用</label>
+            </div>
+            <div class="input-group">
+              <label>手机号:</label>
+              <input type="text" class="custom-input" :class="{ error: telephoneError }" v-model="edituserData.telephone"
+                @blur="validateTelephone(edituserData.telephone)">
+              <label for="">手机号不能重复</label>
+              <div v-if="telephoneError" class="error-message">请输入正确的11位手机号</div>
+            </div>
+            <div class="input-group">
+              <label>邮箱:</label>
+              <input type="text" class="custom-input" v-model="edituserData.email">
+            </div>
+          </div>
           <div class="action-buttons">
-            <a-button type="primary" @click="saveConfiguration">保存配置</a-button>
+            <a-button type="primary" @click="saveConfiguration(edituserData.id)">保存配置</a-button>
           </div>
         </a-card>
+
       </a-col>
+
     </a-row>
   </div>
   <transition name="fade">
-      <div class="modal" v-if="isModalVisible">
-        <div class="modal-content">
-          <h3>修改密码</h3>
-          <form @submit.prevent="submitPasswordChange(id)">
-            <div class="form-group">
-              <label for="oldPassword">旧密码</label>
-              <input type="password"  id="oldPassword" v-model="formState.oldPassword" required />
-            </div>
-            <div class="form-group">
-              <label for="newPassword">新密码</label>
-              <input type="password" id="newPassword" v-model="formState.newPassword" required />
-            </div>
-            <div class="form-group">
-              <label for="confirmPassword">确认新密码</label>
-              <input type="password" id="confirmPassword" v-model="formState.confirmNewPassword" required />
-            </div>
-            <button type="submit" style="margin-left: 30px;">提交</button>
-            <button type="button" @click="hideModal" style="margin-left: 100px;" >取消</button>
-          </form>
-        </div>
+    <div class="modal" v-if="isModalVisible">
+      <div class="modal-content">
+        <h3>修改密码</h3>
+        <form @submit.prevent="submitPasswordChange(id)">
+          <div class="form-group">
+            <label for="oldPassword">旧密码</label>
+            <input type="password" id="oldPassword" v-model="formState.oldPassword" required />
+          </div>
+          <div class="form-group">
+            <label for="newPassword">新密码</label>
+            <input type="password" id="newPassword" v-model="formState.newPassword" required />
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">确认新密码</label>
+            <input type="password" id="confirmPassword" v-model="formState.confirmNewPassword" required />
+          </div>
+          <button type="submit" style="margin-left: 30px;">提交</button>
+          <button type="button" @click="hideModal" style="margin-left: 100px;">取消</button>
+        </form>
       </div>
-    </transition>
+    </div>
+  </transition>
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
-import { LoginOutlined,PhoneOutlined,MailOutlined ,InsuranceOutlined } from '@ant-design/icons-vue';
+import { nextTick, onMounted, reactive, ref } from 'vue';
+import { LoginOutlined, PhoneOutlined, MailOutlined, InsuranceOutlined } from '@ant-design/icons-vue';
 import axios from 'axios';
 // 假设这是从后端获取的用户信息
 const userAvatar = ref('/avatar.jpg');
 
 const userName = localStorage.getItem('username')
-const userData=reactive({
-  email:'',
-  telephone:"",
-  nickName:"",
+const userData = reactive({
+  email: '',
+  telephone: "",
+  nickName: "",
 })
+const edituserData = reactive({
 
-const saveConfiguration = () => {
-  console.log('保存配置点击事件');
+  email: '',
+  telephone: "",
+  nickName: "",
+})
+const telephoneError = ref(false); // 用于跟踪手机号验证状态
+
+const validateTelephone = (value) => {
+  const reg = /^1[3-9]\d{9}$/;
+  if (!reg.test(value)) {
+    telephoneError.value = true;
+  } else {
+    telephoneError.value = false;
+  }
 };
+const saveConfiguration = async (id) => {
+    if(telephoneError.value){
+      alert('请输入正确的11位手机号')
+      return
+    }
+  // console.log(id);
+  
+    if (confirm('确定保存修改后的个人信息吗？')) {
+      try {
+        let res = await axios.put(`http://localhost:63760/api/UserUpdate/${id}`, edituserData)
+        console.log(res.data);
+        location.reload()
+
+      } catch (err) {
+        console.log(err);
+      }
+    
+  }
+
+}
+
+
 const isModalVisible = ref(false);
 const formState = ref({
   oldPassword: "",
@@ -106,15 +146,16 @@ const hideModal = () => {
 
 
 const id = localStorage.getItem('userId')
-console.log(id);
+// console.log(id);
 
-onMounted(async()=>{
-  if(id){
-    try{
+onMounted(async () => {
+  if (id) {
+    try {
       let res = await axios.get(`http://localhost:63760/api/user/${id}`)
       console.log(res);
-      Object.assign(userData,res.data)
-    }catch(err){
+      Object.assign(edituserData, res.data)
+      Object.assign(userData, res.data)
+    } catch (err) {
       console.log(err);
     }
   }
@@ -132,22 +173,22 @@ const submitPasswordChange = async (id) => {
   }
 
   // 如果所有验证都通过，执行密码修改逻辑
-  try{
-    let res = await axios.put(`http://localhost:63760/api/modify/${id}`,{
-     
-        newPassword: formState.value.newPassword,
-        confirmNewPassword: formState.value.confirmNewPassword
-      
+  try {
+    let res = await axios.put(`http://localhost:63760/api/modify/${id}`, {
+
+      newPassword: formState.value.newPassword,
+      confirmNewPassword: formState.value.confirmNewPassword
+
     })
 
     console.log(res.data);
-  }catch(err){
+  } catch (err) {
     console.log(err);
   }
-  
+
   hideModal(); // 成功后关闭模态框
-  };
-  
+};
+
 </script>
 
 <style scoped>
@@ -159,49 +200,62 @@ const submitPasswordChange = async (id) => {
   /* right: 16px; */
   margin-left: 80px;
 
- 
+
 }
 
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
 
-.email{
+.email {
   margin-left: 2px;
-  
+
 }
 
 
 .data-item {
   display: flex;
-  flex-direction: column; /* 改为垂直排列 */
+  flex-direction: column;
+  /* 改为垂直排列 */
   margin-bottom: 8px;
 }
 
 .data-item .input-group {
   display: flex;
-  align-items: center; /* 文本和输入框垂直居中 */
+  align-items: center;
+  /* 文本和输入框垂直居中 */
   margin-bottom: 8px;
 }
 
 .data-item .input-group:last-child {
-  margin-bottom: 0; /* 最后一个数据项不需要底部间距 */
+  margin-bottom: 0;
+  /* 最后一个数据项不需要底部间距 */
 }
 
 .data-item .input-group label {
-  width: 100px; /* 固定宽度的标签 */
-  text-align: right; /* 标签右对齐 */
-  margin-right: 8px; /* 标签和输入框之间的间距 */
+  width: 100px;
+  /* 固定宽度的标签 */
+  text-align: right;
+  /* 标签右对齐 */
+  margin-right: 8px;
+  /* 标签和输入框之间的间距 */
 }
 
 
-:where(.css-dev-only-do-not-override-19iuou).ant-avatar{
+:where(.css-dev-only-do-not-override-19iuou).ant-avatar {
   width: 100px;
   height: 100px;
 }
-.user-details{
+
+.user-details {
   margin-top: 15px;
-  
+
   font-size: 13.5px;
 }
-.user-details > *:not(.anticon)::after {
+
+.user-details>*:not(.anticon)::after {
   content: '';
   display: block;
   width: 100%;
@@ -209,6 +263,7 @@ const submitPasswordChange = async (id) => {
   margin-top: 8px;
   margin-bottom: 8px;
 }
+
 .modal {
   position: fixed;
   top: 0;
@@ -222,33 +277,47 @@ const submitPasswordChange = async (id) => {
 }
 
 .modal-content {
-  width: 30%; /* 调整宽度以适应更大的模态框 */
-  max-width: 400px; /* 设置最大宽度限制 */
+  width: 30%;
+  /* 调整宽度以适应更大的模态框 */
+  max-width: 400px;
+  /* 设置最大宽度限制 */
   background-color: white;
-  padding: 30px; /* 增加内边距 */
+  padding: 30px;
+  /* 增加内边距 */
   border-radius: 5px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  display: flex; /* 使用Flex布局 */
-  flex-direction: column; /* 垂直堆叠元素 */
-  align-items: center; /* 居中对齐 */
+  display: flex;
+  /* 使用Flex布局 */
+  flex-direction: column;
+  /* 垂直堆叠元素 */
+  align-items: center;
+  /* 居中对齐 */
 }
 
 .form-group {
-  display: flex; /* 使用Flex布局 */
-  align-items: center; /* 垂直居中对齐 */
+  display: flex;
+  /* 使用Flex布局 */
+  align-items: center;
+  /* 垂直居中对齐 */
   margin-bottom: 20px;
-  width: 100%; /* 使表单组占据整个宽度 */
+  width: 100%;
+  /* 使表单组占据整个宽度 */
 }
 
 .form-group label {
-  width: 100px; /* 设置label的固定宽度 */
-  text-align: right; /* 右对齐label */
-  margin-right: 10px; /* 在label和input之间添加间距 */
+  width: 100px;
+  /* 设置label的固定宽度 */
+  text-align: right;
+  /* 右对齐label */
+  margin-right: 10px;
+  /* 在label和input之间添加间距 */
 }
 
 .form-group input {
-  flex-grow: 1; /* 输入框占据剩余的空间 */
+  flex-grow: 1;
+  /* 输入框占据剩余的空间 */
 }
+
 /* 添加按钮样式以使其更美观 */
 button[type="submit"],
 button[type="button"] {
@@ -276,29 +345,39 @@ button[type="button"]:hover {
 .fade-leave-to {
   opacity: 0;
 }
+
 .input-group input[type="text"] {
-  width: 100px; /* 或者你希望的任何其他宽度 */
+  width: 100px;
+  /* 或者你希望的任何其他宽度 */
 }
+
 .custom-input {
-  width: 200px; /* 或者你希望的任何其他宽度 */
+  width: 200px;
+  /* 或者你希望的任何其他宽度 */
   border: 1px solid #ccc;
   padding: 5px 10px;
   border-radius: 4px;
 }
+
 .input-group input[type="text"][data-v-11bde6a2] {
-    width: 200px;
+  width: 200px;
 }
+
 /* 使输入框和标签在一行中对齐并设置标签颜色为灰色 */
 .input-group {
   display: flex;
-  align-items: center; /* 垂直居中对齐 */
+  align-items: center;
+  /* 垂直居中对齐 */
   /* gap: 5px; 间隔 */
-  margin-bottom: 10px; /* 每个输入组下方的间距 */
+  margin-bottom: 10px;
+  /* 每个输入组下方的间距 */
 }
 
 .input-group label {
-  color: gray; /* 将标签颜色设置为灰色 */
-  flex-shrink: 0; /* 防止标签在容器缩小时缩小 */
+  color: gray;
+  /* 将标签颜色设置为灰色 */
+  flex-shrink: 0;
+  /* 防止标签在容器缩小时缩小 */
 }
 
 /* 保持输入框宽度一致 */
@@ -306,9 +385,9 @@ button[type="button"]:hover {
 
 /* 额外的标签应该紧挨着输入框 */
 .input-group label[for=""] {
-  margin-left: 10px; /* 与输入框的间距 */
-  font-size: smaller; /* 减小字体大小 */
+  margin-left: 10px;
+  /* 与输入框的间距 */
+  font-size: smaller;
+  /* 减小字体大小 */
 }
-
-
 </style>
