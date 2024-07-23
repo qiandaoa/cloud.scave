@@ -13,7 +13,7 @@ import {
 } from '@ant-design/icons-vue'
 import axios from 'axios'
 import {useUserStore} from '../store/user.js'
-
+import AddUserModal from '../components/AddModal.vue'
 let UserDatas = reactive([])
 const useStore = useUserStore()
 
@@ -31,13 +31,21 @@ onMounted(async () => {
   //   })
  const res =  await useStore.fetchUserDate()
  const user=res.data
+//  originnaTotal= user.length //记录原始长度
 //  console.log(user);
  user.forEach(item => {
-   UserDatas.push(item)
- });
+  
+    UserDatas.push(item)
 
+  
+ });
+//  let total=originnaTotal
 })
 
+const addUserModalRef=ref(null)
+const showModals=()=>{
+  addUserModalRef.value.show()
+}
 // 搜索关键词
 let Findkeyword = ref('');
 
@@ -53,13 +61,13 @@ let ModalData=reactive({
       nickName: "",
       email: "",
       telephone: "",
-      
+      remark:""
    }
 )
 
 //分页
 let current1 = ref(1);
-let pageSize = 5;
+let pageSize = 10
 //排列顺序按照isactived来进行排列
 let currentPageData = computed(() => {
   const filteredData = UserDatas.filter(item => !item.isDeleted).sort((a,b)=>{
@@ -126,6 +134,7 @@ let UserEdit = async (id) => {
       nickName: res.data.nickName,
       email: res.data.email,
       telephone: res.data.telephone,
+      remark:res.data.remark
     }
     showModal.value=true
   }catch(err){
@@ -171,7 +180,8 @@ let ButtonSubmit = async (id) => {
       nickName: ModalData.nickName,
       email: ModalData.email,
       telephone: ModalData.telephone,
-      
+      remark:ModalData.remark
+
     } )
     console.log(res);
     showModal.value=!showModal.value
@@ -232,7 +242,8 @@ const formatItemCreateAt=(item)=>{
     </div>
   </div>
   <div class="button-wrap-UserAdd">
-    <a-button type="primary" id="AddButton" :icon="h(PlusOutlined)" @click="AddButton"> 添加</a-button>
+    <a-button type="primary" id="AddButton" :icon="h(PlusOutlined)" @click="showModals"> 添加</a-button>
+    <AddUserModal ref="addUserModalRef" />
   </div>
   <div class="table-wrap">
     <table class="Usertable">
@@ -245,6 +256,7 @@ const formatItemCreateAt=(item)=>{
         
         <th>是否启用</th>
         <th>创建时间</th>
+        <th>备注</th>
         <th>操作</th>
       </tr>
       <tr v-for="(item, index) in currentPageData" :key="item.id">
@@ -259,6 +271,7 @@ const formatItemCreateAt=(item)=>{
           </a-space>
         </td>
         <td>{{ formatItemCreateAt(item) }}</td>
+        <td>{{ item.remark }}</td>
         <td>
           <a-button type="primary" id="EditButton" :icon="h(EditOutlined)"
             @click="UserEdit(item.id)"></a-button>
@@ -308,10 +321,18 @@ const formatItemCreateAt=(item)=>{
                   </td>
                 </tr>
                 <tr>
-                  <th>手机</th>
+                  <th>手机号</th>
                   <td>
                     <a-space direction="vertical">
-                      <a-input v-model:value="ModalData.telephone" placeholder="请输入手机" />
+                      <a-input v-model:value="ModalData.telephone" placeholder="请输入手机号" />
+                    </a-space>
+                  </td>
+                </tr>
+                <tr>
+                  <th>备注</th>
+                  <td>
+                    <a-space direction="vertical">
+                      <a-input v-model:value="ModalData.remark" placeholder="请输入备注" />
                     </a-space>
                   </td>
                 </tr>
