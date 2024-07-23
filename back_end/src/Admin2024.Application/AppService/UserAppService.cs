@@ -27,7 +27,10 @@ public class UserAppService : IUserAppService
         {
             return ReturnResult<User>.Error("用户名或密码错误!");
         }
-
+        if (loginUser.IsActived == false)
+        {
+            return ReturnResult<User>.Error("用户处于禁用状态,请联系管理员!");
+        }
         // 若是存在，取出该用户名的盐，与进行登录操作的用户输入的密码哈希
         var salt = loginUser.Salt;
         var hashLoginDtoPassword = PasswordHelper.HashPassword(user.Password, salt);

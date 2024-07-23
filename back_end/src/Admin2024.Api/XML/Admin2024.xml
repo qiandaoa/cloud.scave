@@ -4,6 +4,42 @@
         <name>Admin2024.Api</name>
     </assembly>
     <members>
+        <member name="M:Admin2024.Api.RoleController.GetAllRole(Admin2024.EntityFramework.Helps.BaseParameters)">
+            <summary>
+            获取全部角色 keywords表示关键字 pageindex表示页数 pagesize表示每页的内容数量
+            </summary>
+            <param name="baseParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.RoleController.GetRoleById(System.Guid)">
+            <summary>
+            获取指定id的角色
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.RoleController.PostRole(Admin2024.Application.Contracts.RoleApplication.Dto.RoleCreateInfoDto)">
+            <summary>
+            添加角色
+            </summary>
+            <param name="roleCreateInfoDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.RoleController.DeleteRole(System.Guid)">
+            <summary>
+            删除角色（软删除）
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.RoleController.UpdateRole(System.Guid,Admin2024.Application.Contracts.RoleApplication.Dto.RoleUpdateInfoDto)">
+            <summary>
+            修改角色信息
+            </summary>
+            <param name="id"></param>
+            <param name="roleUpdateInfoDto"></param>
+            <returns></returns>
+        </member>
         <member name="M:Admin2024.Api.UserController.GetUser">
             <summary>
             获取全部用户列表

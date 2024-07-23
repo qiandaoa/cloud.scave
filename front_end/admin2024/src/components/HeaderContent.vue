@@ -35,7 +35,7 @@
                             </a-menu-item>
                             <!-- 个人中心菜单项 -->
                             <a-menu-item>
-                               <router-link to="/userinfo" class="a" >个人中心</router-link>
+                                <router-link to="/userinfo" class="a">个人中心</router-link>
                             </a-menu-item>
                             <!-- 分割线 -->
                             <hr>
@@ -50,12 +50,12 @@
         </div>
         <!-- 标签页区域 -->
         <div class="tabs">
-            <a-tabs v-model:activeKey="activeKey" ref="tabsRef" hide-add type="editable-card" @edit="onEdit" @change="handleTabsChange"   >
+            <a-tabs v-model:activeKey="activeKey" ref="tabsRef" hide-add type="editable-card" @edit="onEdit"
+                @change="handleTabsChange">
                 <!-- 循环生成标签页 -->
-                <a-tab-pane v-for="pane in tabArr"  :key="pane.key" :tab="pane.title"  :closable="
-        pane.title !== '工作台' && pane.title !== '仪表盘'
-    "></a-tab-pane>
-               
+                <a-tab-pane v-for="pane in tabArr" :key="pane.key" :tab="pane.title" :closable="pane.title !== '工作台' && pane.title !== '仪表盘'
+                    "></a-tab-pane>
+
             </a-tabs>
         </div>
     </div>
@@ -64,7 +64,7 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { useRouterStore } from '../store/router';
-import { nextTick, watch, computed,ref, onMounted } from 'vue';
+import { nextTick, watch, computed, ref, onMounted } from 'vue';
 import { useRoute, onBeforeRouteUpdate, useRouter, RouterLink } from 'vue-router';
 import { FundTwoTone } from '@ant-design/icons-vue';
 
@@ -78,7 +78,7 @@ const routerStore = useRouterStore();
 const { tabArr, activeKey } = storeToRefs(routerStore);
 
 
-const username=localStorage.getItem('username');
+const username = localStorage.getItem('username');
 // 获取当前路由对象
 const route = useRoute();
 
@@ -133,8 +133,8 @@ const remove = targetKey => {
             tabsRef.value.$forceUpdate(); // 强制更新 a-tabs 组件
         }
         console.log('DOM updated after removing tab:', tabArr.value);
-       // 新增：保存更新后的标签页状态到 localStorage
-      
+        // 新增：保存更新后的标签页状态到 localStorage
+
     });
 };
 
@@ -147,9 +147,9 @@ const onEdit = (targetKey, action) => {
 
 // 当标签页切换时触发的事件处理函数
 const handleTabsChange = key => {
-      routerStore.changeActiveRoute(key);
-        routerStore.selectKeys = [key];
-        
+    routerStore.changeActiveRoute(key);
+    routerStore.selectKeys = [key];
+
 };
 
 // 登出功能
@@ -214,9 +214,10 @@ const handleLogout = () => {
 .a:hover {
     color: blue;
 }
+
 /* .username {
     margin-left: -22px; /* 添加适当的间距 */
-    /* line-height: 48px; /* 使文本垂直居中，与头像高度相同 */
-    /* font-size: 18px; */
-/* } */  
+/* line-height: 48px; /* 使文本垂直居中，与头像高度相同 */
+/* font-size: 18px; */
+/* } */
 </style>
