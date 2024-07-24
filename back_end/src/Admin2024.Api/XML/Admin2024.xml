@@ -236,5 +236,26 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Admin2024.Api.Controller.UseRoleController.DeleteUseRole(Admin2024.Application.Contracts.UserApplication.Dto.DelUseRoleDto)">
+            <summary>
+            删除用户角色
+            </summary>
+            <param name="deluseRoleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UseRoleController.CreateUseRole(Admin2024.Application.Contracts.UserApplication.Dto.CreateUseRoleDto)">
+            <summary>
+            用户的角色选择
+            </summary>
+            <param name="createRoleDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UseRoleController.PagingGetRole(Admin2024.Application.Contracts.UserApplication.Dto.PagingRoleDto)">
+            <summary>
+            分页查询
+            </summary>
+            <param name="pagingRoleDto"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>
