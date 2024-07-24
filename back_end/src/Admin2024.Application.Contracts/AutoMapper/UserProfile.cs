@@ -17,5 +17,7 @@ public class UserProfile : Profile
 
         CreateMap<UserUpdateInfoDto,User>();
         CreateMap<UserCreateInfoDto, User>();
+
+        CreateMap<AvatarDto, User>().ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => src.Avatar));
     }
 }

@@ -1,9 +1,10 @@
+using Admin2024.Domain.DomainServices.Interface;
 using Admin2024.Domain.Interfaces;
 using Admin2024.Domain.System;
 using Admin2024.Instructions;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace Admin2024.Domain.DomainServices;
+namespace Admin2024.Domain.DomainServices.Services;
 public class RoleDomainService : IRoleDomainService
 {
     private readonly IRepository<Role> _roleRep;

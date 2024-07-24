@@ -3,9 +3,12 @@ using System.Text;
 using Admin2024.Api.Extension;
 using Admin2024.Application.AppService;
 using Admin2024.Application.Contracts.AutoMapper;
+using Admin2024.Application.Contracts.PermissionApplication.Interface;
 using Admin2024.Application.Contracts.RoleApplication.Interface;
 using Admin2024.Application.Contracts.UserApplication.Interface;
 using Admin2024.Domain.DomainServices;
+using Admin2024.Domain.DomainServices.Interface;
+using Admin2024.Domain.DomainServices.Services;
 using Admin2024.Domain.Interfaces;
 using Admin2024.Domain.ObjectValue;
 using Admin2024.EntityFramework;
@@ -24,6 +27,7 @@ public class Startup
     }
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        app.UseStaticFiles();
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
@@ -60,7 +64,9 @@ public class Startup
         services.AddScoped(typeof(IUseRoleServices), typeof(UseRoleServices));
        
         services.AddScoped(typeof(IOperationServices), typeof(OperationServices));
-        services.AddScoped(typeof(IPermissionAppServices),typeof(PermissionServices));
+        services.AddScoped(typeof(IPermissionAppService),typeof(PermissionAppService));
+        services.AddScoped(typeof(IResourceDomainService), typeof(ResourceDomainService));
+        services.AddScoped(typeof(IPermissionDomainService), typeof(PermissionDomainService));
 
         services.AddScoped<IUseRoleAppService,UseRoleAppService>();
 

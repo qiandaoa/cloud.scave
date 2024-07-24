@@ -1,6 +1,6 @@
 using Admin2024.Domain.System;
 
-namespace Admin2024.Domain.DomainServices;
+namespace Admin2024.Domain.DomainServices.Interface;
 
 public interface IAuthServices
 {

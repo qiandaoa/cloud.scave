@@ -1,5 +1,6 @@
 using Admin2024.Application.Contracts.RoleApplication.Interface;
 using Admin2024.Domain.DomainServices;
+using Admin2024.Domain.DomainServices.Interface;
 using Admin2024.Instructions;
 
 namespace Admin2024.Application.AppService;

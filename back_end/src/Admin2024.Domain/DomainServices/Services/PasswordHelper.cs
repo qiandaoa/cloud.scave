@@ -2,7 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Schema;
 
-namespace Admin2024.Domain.DomainServices;
+namespace Admin2024.Domain.DomainServices.Services;
 
 public class PasswordHelper
 {

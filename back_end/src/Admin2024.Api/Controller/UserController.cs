@@ -6,7 +6,7 @@ using Admin2024.EntityFramework.Helps;
 using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-namespace Admin2024.Api;
+namespace Admin2024.Api.Controller;
 [ApiController]
 [Route("/api/[controller]")]
 public class UserController : ControllerBase

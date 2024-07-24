@@ -1,8 +1,7 @@
 
 using Admin2024.Domain.System;
 using Admin2024.Instructions;
-
-namespace Admin2024.Domain.DomainServices;
+namespace Admin2024.Domain.DomainServices.Interface;
 
 public interface IUserDomainService
 {

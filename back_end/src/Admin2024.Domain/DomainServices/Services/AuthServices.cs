@@ -1,12 +1,13 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Admin2024.Domain.DomainServices.Interface;
 using Admin2024.Domain.ObjectValue;
 using Admin2024.Domain.System;
 using Microsoft.IdentityModel.Tokens;
 
 
-namespace Admin2024.Domain.DomainServices;
+namespace Admin2024.Domain.DomainServices.Services;
 
 public class AuthServices : IAuthServices
 {
