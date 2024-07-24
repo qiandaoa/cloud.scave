@@ -18,7 +18,7 @@ let UserDatas = reactive([])
 const useStore = useUserStore()
 let Findkeyword = ref('');
 let originalData = reactive([]);
-
+let page = reactive();
 
 
 onMounted(async () => {
@@ -89,9 +89,7 @@ let currentPageData = computed(() => {
   const end = start + pageSize;
   return filteredAndSortedData.value.slice(start, end);
 });
-let onChange = () => {
-  // console.log(current1.value);
-}
+
 // 修改状态  给后端发送请求来更改是否启用的状态
 let State = async (id) => {
   // UserDatas.IsActive = !UserDatas.IsActive;
@@ -217,6 +215,12 @@ const formatDateTime = (isoString) => {
 const formatItemCreateAt = (item) => {
   return formatDateTime(item.createAt);
 }
+const onChange = () => {
+  if (page && Number(page)) {
+    current1.value = Number(page);
+  }
+  page = '';
+}
 </script>
 
 <template>
@@ -277,8 +281,9 @@ const formatItemCreateAt = (item) => {
     </table>
   </div>
   <div class="Page">
-    <a-pagination v-model:current="current1" show-quick-jumper :total="filteredAndSortedDataLength"
-      @change="onChange" />
+    <a-pagination v-model:current="current1" :total="filteredAndSortedDataLength" />
+    <input type="text" v-model="page">
+    <button type="button" @click="onChange">跳转</button>
   </div>
   <!-- 编辑添加模态框 -->
   <div v-if="showModal" class="modal-wrap">
@@ -519,11 +524,33 @@ h1 {
 }
 
 .Page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-top: 10px;
   padding: 10px;
   border: 2px solid #fbfbfb;
   text-align: center;
   height: 60px;
+}
+
+.Page input,
+.Page button {
+  border-radius: 3px;
+  background-color: white;
+  text-align: center;
+  border: 2px solid rgb(240, 240, 240);
+}
+
+.Page input {
+  width: 40px;
+  height: 25px;
+  margin: 20px;
+}
+
+.Page button {
+  width: 50px;
+  height: 25px;
 }
 
 .button-wrap .Button-wrap-Find-Reset {
