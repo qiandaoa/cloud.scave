@@ -2,8 +2,8 @@
     <div>
         <div class="role-list-container">
             <span class="role-name">角色名称</span>
-            <input type="text" class="input-text"  v-model="Findkeyword" placeholder="角色名称">
-            <button type="button" class="search-button"   @click="Search">
+            <input type="text" class="input-text" v-model="Findkeyword" placeholder="角色名称">
+            <button type="button" class="search-button" @click="Search">
                 <SearchOutlined /> 搜索
             </button>
             <button type="button" class="reset-button" @click="Reset">
@@ -31,15 +31,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for=" (item,index) in currentPageData" :key="item.id">
+                    <tr v-for=" (item, index) in currentPageData" :key="item.id">
                         <td>
                             <input type="checkbox" name="" id="">
                         </td>
                         <td class="tdcenter">{{ index + 1 + (current.value - 1) * pageSize }}</td>
                         <td>{{ item.roleName }}</td>
                         <td>{{ item.remark }}</td>
-                        <td>{{formatItemCreateAt(item) }}</td>
-                        <td class="tdcenter">   
+                        <td>{{ formatItemCreateAt(item) }}</td>
+                        <td class="tdcenter">
                             <button type="button" class="blue" @click="Edit(item.id)">
                                 <EditOutlined />
                             </button>
@@ -55,8 +55,9 @@
             </table>
         </div>
         <div class="role-list-container pagination">
-            <a-pagination v-model:current="current" :total="tabArr.length" :pageSize="pageSize" show-quick-jumper
-                @change="" />
+            <a-pagination v-model:current="current" :total="tabArr.length" :pageSize="pageSize" />
+            <span>第</span><input type="text" v-model="page"><span>页</span>
+            <button type="button" @click="onChange">跳转</button>
         </div>
     </div>
 
@@ -68,12 +69,14 @@
             <table>
                 <tr>
                     <td><span style="color: red;">*</span> 角色名称</td>
-                    <td class="td370"><input type="text" name="username" class="input-text" v-model="formState.roleName" required>
+                    <td class="td370"><input type="text" name="username" class="input-text" v-model="formState.roleName"
+                            required>
                     </td>
                 </tr>
                 <tr>
                     <td><span style="color: red;">*</span> 备注</td>
-                    <td class="td370"><input type="text" name="encode" class="input-text" v-model="formState.remark" required>
+                    <td class="td370"><input type="text" name="encode" class="input-text" v-model="formState.remark"
+                            required>
                     </td>
                 </tr>
                 <div>
@@ -88,7 +91,7 @@
 
 
 <script setup lang="js">
-import { ref, reactive, computed,onMounted } from 'vue';
+import { ref, reactive, computed, onMounted } from 'vue';
 import {
     SearchOutlined,
     SyncOutlined,
@@ -103,13 +106,14 @@ import axios from 'axios';
 let display = ref(false);
 let interior1 = ref(false);
 let interior2 = ref(false);
-let Findkeyword=ref('')
-let formState=reactive({
-    id:'',
-    roleName:'',
-    remark:''
+let Findkeyword = ref('')
+let formState = reactive({
+    id: '',
+    roleName: '',
+    remark: ''
 })
 // 分页
+let page = ref();
 const pageSize = 5;
 const current = ref(1);
 const filteredTabArr = computed(() => {
@@ -120,14 +124,25 @@ const currentPageData = computed(() => {
     const end = start + pageSize;
     return filteredTabArr.value.slice(start, end);
 });
-let tabArr = reactive([]);
+//快速跳转页面
+function onChange() {
+    if (page.value && Number(page.value) && page.value <= Math.ceil(tabArr.length / pageSize)) {
+        current.value = Number(page.value);
+    } else {
+        alert('请输入正确的页码')
+    }
+    page = '';
+}
+
+
 
 //页面加载获取列表
+let tabArr = reactive([]);
 onMounted(async () => {
     try {
         const res = await axios.get('http://localhost:63760/api/role');
         console.log(res);
-        const filterDate=res.data.filter(item=>!item.isDeleted)
+        const filterDate = res.data.filter(item => !item.isDeleted)
         tabArr.push(...filterDate); // 假设 res.data 是一个数组
     } catch (err) {
         console.log(err);
@@ -137,19 +152,19 @@ onMounted(async () => {
 // 分页改变时的处理函数
 
 
-let Search = async()=>{
-        let keywords=Findkeyword.value.trim()
-    try{
-        if(keywords){
-        let res = await axios.get(`http://localhost:63760/api/Role?keywords=${keywords}`)
-        console.log(res);
-        tabArr.splice(0, tabArr.length, ...res.data); // 清空并填充新的搜索结果
-        
-        }else{
+let Search = async () => {
+    let keywords = Findkeyword.value.trim()
+    try {
+        if (keywords) {
+            let res = await axios.get(`http://localhost:63760/api/Role?keywords=${keywords}`)
+            console.log(res);
+            tabArr.splice(0, tabArr.length, ...res.data); // 清空并填充新的搜索结果
+
+        } else {
             alert('请输入关键字')
         }
-      
-    }catch(err){
+
+    } catch (err) {
         console.log(err);
     }
 }
@@ -157,7 +172,7 @@ let Search = async()=>{
 //重置页面
 function Reset() {
     // console.log('重置');
-     Findkeyword.value=""
+    Findkeyword.value = ""
     fetchRoles()
 };
 
@@ -168,79 +183,79 @@ function Add() {
         roleName: '',
         remark: ''
     });
-    
+
 };
 
 function BatchDelete() {
     console.log('批量删除');
 };
 
-let Edit = async(id)=>{
-    try{
-        let res =await axios.get(`http://localhost:63760/api/Role/${id}`)
+let Edit = async (id) => {
+    try {
+        let res = await axios.get(`http://localhost:63760/api/Role/${id}`)
         console.log(res);
-        
-        formState={
-            id:res.data.id,
-            roleName:res.data.roleName,
-            remark:res.data.remark
+
+        formState = {
+            id: res.data.id,
+            roleName: res.data.roleName,
+            remark: res.data.remark
         }
-        display.value=true;
-    }catch(err){
+        display.value = true;
+    } catch (err) {
         console.log(err);
     }
 }
-let Delete = async(id) => {
-  console.log(id);
-  if(confirm(`确定将id为${id}的数据标记为已删除吗？`)){
-    try{
-      let res = await axios.delete(`http://localhost:63760/api/Role/${id}`)
-      const index = tabArr.findIndex(item => item.id === id);
-      if (index !== -1) {
-        tabArr.splice(index, 1);
-      }
-      console.log(res);
-    }catch(err){
-      console.log(err);
+let Delete = async (id) => {
+    console.log(id);
+    if (confirm(`确定将id为${id}的数据标记为已删除吗？`)) {
+        try {
+            let res = await axios.delete(`http://localhost:63760/api/Role/${id}`)
+            const index = tabArr.findIndex(item => item.id === id);
+            if (index !== -1) {
+                tabArr.splice(index, 1);
+            }
+            console.log(res);
+        } catch (err) {
+            console.log(err);
+        }
     }
-  }
 };
 function cancel() {
     display.value = false;
     interior1.value = false;
     interior2.value = false;
 
-  
+
 }
-let confirm = async (id)=> {
+let confirm = async (id) => {
     // console.log(id);
-    try{
+    try {
         console.log(formState.id);
-        
-        if(formState.id){
+
+        if (formState.id) {
             //编辑
-            let res = await axios.put(`http://localhost:63760/api/role/${formState.id}`,{
-                roleName:formState.roleName,
-                remark:formState.remark
+            let res = await axios.put(`http://localhost:63760/api/role/${formState.id}`, {
+                roleName: formState.roleName,
+                remark: formState.remark
             })
-                // 找到需要更新的元素，并更新其属性
-                const index = tabArr.findIndex(item => item.id === formState.id);
+            // 找到需要更新的元素，并更新其属性
+            const index = tabArr.findIndex(item => item.id === formState.id);
             if (index !== -1) {
                 tabArr[index].roleName = formState.roleName;
                 tabArr[index].remark = formState.remark;
             }
-            
-        }else{
-           let res = await axios.post('http://localhost:63760/api/role',{
-                roleName:formState.roleName,
-                remark:formState.remark
-            })
-        await fetchRoles();
 
-            
+        } else {
+            let res = await axios.post('http://localhost:63760/api/role', {
+                roleName: formState.roleName,
+                remark: formState.remark
+            })
+            await fetchRoles();
+
+
         }
-        display.value=false;
-    }catch(err){
+        display.value = false;
+    } catch (err) {
         console.log(err);
     }
 }
@@ -256,20 +271,20 @@ const fetchRoles = async () => {
     }
 }
 const formatDateTime = (isoString) => {
-  const date = new Date(isoString);
-  const formatter = new Intl.DateTimeFormat('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-  });
-  return formatter.format(date);
+    const date = new Date(isoString);
+    const formatter = new Intl.DateTimeFormat('zh-CN', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+    });
+    return formatter.format(date);
 };
-const formatItemCreateAt=(item)=>{
-  return formatDateTime(item.createAt);
+const formatItemCreateAt = (item) => {
+    return formatDateTime(item.createAt);
 }
 
 // 分页改变时的处理函数
@@ -321,7 +336,21 @@ const formatItemCreateAt=(item)=>{
 }
 
 .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+}
+
+.pagination input,
+.pagination button {
+    width: 50px;
+    height: 30px;
+    margin: 0 10px;
+    border: 2px solid rgb(240, 240, 240);
+    border-radius: 3px;
+    text-align: center;
+    background-color: white;
 }
 
 .search-button,

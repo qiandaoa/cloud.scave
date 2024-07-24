@@ -2,6 +2,7 @@
 using Admin2024.Application.Contracts.RoleApplication.Dto;
 using Admin2024.Application.Contracts.RoleApplication.Interface;
 using Admin2024.Domain.DomainServices;
+using Admin2024.Domain.DomainServices.Interface;
 using Admin2024.Domain.Interfaces;
 using Admin2024.Domain.System;
 using Admin2024.EntityFramework.Helps;
@@ -10,8 +11,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Admin2024.Api;
-
+namespace Admin2024.Api.Controller;
+[ApiController]
+[Route("api/[controller]")]
 public class RoleController : ControllerBase
 {
 
@@ -43,15 +45,11 @@ public class RoleController : ControllerBase
   public async Task<ReturnResult<List<Role>>> GetAllRole([FromQuery]BaseParameters baseParameters)
   {
     var roleList = await _roleRep.GetAllRole();
-    var keywords = baseParameters.keywords.Trim();
-
-    // 进行角色名称关键字搜索
+    var keywords = baseParameters.keywords;
     if(!string.IsNullOrEmpty(keywords)){
       var fileRole = roleList.Data.Where(r => r.RoleName.Contains(keywords)).ToList();
       return ReturnResult<List<Role>>.Success(fileRole);
     }
-
-    // 返回全部角色
     return ReturnResult<List<Role>>.Success(roleList.Data);
   }
 

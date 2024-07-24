@@ -1,7 +1,11 @@
-@url =  https://localhost:63759
+@url =  http://localhost:63760
 
+###
 GET {{url}}/api/user
 Accept: application/json
+
+###
+GET {{url}}/api/role HTTP/1.1
 
 ###
 GET {{url}}/api/user/0afa952f-381a-49de-a874-59521a90e44e HTTP/1.1
