@@ -1,3 +1,4 @@
+
 using Admin2024.Application.Contracts.RoleApplication.Dto;
 using Admin2024.Application.Contracts.RoleApplication.Interface;
 using Admin2024.Domain.DomainServices;
@@ -10,10 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Admin2024.Api;
-[ApiController]
-[Route("/api/[controller]")]
+
 public class RoleController : ControllerBase
 {
+
   private readonly IRoleAppService _roleRep;
   private readonly IRolePermissionAssignDomainService _rolePer;
   public RoleController(IRoleAppService roleRep, IRolePermissionAssignDomainService rolePer)
@@ -111,5 +112,6 @@ public class RoleController : ControllerBase
   {
     return await _rolePer.RemoveRolePermission(roleId, perId);
   }
+
 
 }

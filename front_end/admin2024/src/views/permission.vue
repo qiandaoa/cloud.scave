@@ -2,12 +2,12 @@
     <div class="el">
         <div class="el-left">
             <a-menu class="el-left-menu">
-                <a-menu-item key="1" disabled>
+                <a-menu-item  disabled  >
                     角色名称
                 </a-menu-item>
-                <a-menu-item key="2">
-                    系统管理员
-                </a-menu-item>
+                <a-menu-item  v-for="item in filteredRoles" :key="item.id">
+                    {{ item.roleName }}
+                </a-menu-item>  
             </a-menu>
         </div>
         <div class="el-right">
@@ -43,10 +43,13 @@
 
 
 <script setup>
-import { reactive } from "vue";
+import { reactive,onMounted,computed,ref } from "vue";
+import axios from "axios";
 import {
     SearchOutlined,
 } from '@ant-design/icons-vue';
+let Rolearr=reactive([])
+let filteredRoles=ref([])
 let tabArr = reactive([
     {
         id: 1,
@@ -62,7 +65,23 @@ let tabArr = reactive([
     }
 
 ])
+
+onMounted(async () => {
+  try {
+    let res = await axios.get('http://localhost:63760/api/role');
+    Rolearr = res.data;
+    // console.log(Rolearr);    
+    filteredRoles.value = Rolearr.filter(item=>!item.isDeleted);
+    console.log(filteredRoles.value);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// 定义一个计算属性来过滤 Rolearr，使其依赖于 Rolearr
+
 </script>
+
 
 <style scoped>
 .el,
@@ -141,9 +160,12 @@ let tabArr = reactive([
     cursor: pointer;
 }
 
-.el-right .el-right-table input[type=checkbox]:checked,
+/* .el-right .el-right-table input[type=checkbox]:checked,
 .el-right .el-right-table input[type=checkbox]:checked+span {
     color: blue;
     accent-color: blue;
+} */
+:where(.css-dev-only-do-not-override-19iuou).ant-menu-light .ant-menu-item-selected {
+    background-color: #fff;
 }
 </style>
