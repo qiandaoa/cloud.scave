@@ -54,7 +54,7 @@ Content-Type: application/json
 }
 
 ### 添加用户角色
-POST {{url}}/api/Role/createuserole HTTP/1.1
+POST {{url}}/api/UseRole/createuserole HTTP/1.1
 Content-Type: application/json
 
 {
@@ -63,7 +63,7 @@ Content-Type: application/json
 }
 
 ### 删除用户角色
-Post {{url}}/api/Role/deleteuserole HTTP/1.1
+Post {{url}}/api/UseRole/deleteuserole HTTP/1.1
 Content-Type: application/json
 
 {
@@ -72,7 +72,7 @@ Content-Type: application/json
 
 ### 对角色用户的分页查询 
 
-Post {{url}}/api/Role/pagingRole HTTP/1.1
+Post {{url}}/api/UseRole/pagingRole HTTP/1.1
 Content-Type: application/json
 
 {

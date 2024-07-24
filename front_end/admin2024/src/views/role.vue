@@ -2,8 +2,8 @@
     <div>
         <div class="role-list-container">
             <span class="role-name">角色名称</span>
-            <input type="text" class="input-text" placeholder="角色名称">
-            <button type="button" class="search-button" @click="Search">
+            <input type="text" class="input-text"  v-model="Findkeyword" placeholder="角色名称">
+            <button type="button" class="search-button"   @click="Search">
                 <SearchOutlined /> 搜索
             </button>
             <button type="button" class="reset-button" @click="Reset">
@@ -25,21 +25,21 @@
                         </td>
                         <td class="td50 tdcenter">序号</td>
                         <td class="td330">角色名称</td>
-                        <td class="td330">角色编码</td>
+                        <td class="td330">备注</td>
                         <td class="td230">创建时间</td>
                         <td class="td230 tdcenter">操作</td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for=" item in currentPageData" :key="item.id">
+                    <tr v-for=" (item,index) in currentPageData" :key="item.id">
                         <td>
                             <input type="checkbox" name="" id="">
                         </td>
-                        <td class="tdcenter">{{ item.id }}</td>
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.encode }}</td>
-                        <td>{{ item.createTime }}</td>
-                        <td class="tdcenter">
+                        <td class="tdcenter">{{ index + 1 + (current.value - 1) * pageSize }}</td>
+                        <td>{{ item.roleName }}</td>
+                        <td>{{ item.remark }}</td>
+                        <td>{{formatItemCreateAt(item) }}</td>
+                        <td class="tdcenter">   
                             <button type="button" class="blue" @click="Edit(item.id)">
                                 <EditOutlined />
                             </button>
@@ -56,7 +56,7 @@
         </div>
         <div class="role-list-container pagination">
             <a-pagination v-model:current="current" :total="tabArr.length" :pageSize="pageSize" show-quick-jumper
-                @change="onChange" />
+                @change="" />
         </div>
     </div>
 
@@ -68,17 +68,17 @@
             <table>
                 <tr>
                     <td><span style="color: red;">*</span> 角色名称</td>
-                    <td class="td370"><input type="text" name="username" class="input-text" v-model="name" required>
+                    <td class="td370"><input type="text" name="username" class="input-text" v-model="formState.roleName" required>
                     </td>
                 </tr>
                 <tr>
-                    <td><span style="color: red;">*</span> 角色编码</td>
-                    <td class="td370"><input type="text" name="encode" class="input-text" v-model="encode" required>
+                    <td><span style="color: red;">*</span> 备注</td>
+                    <td class="td370"><input type="text" name="encode" class="input-text" v-model="formState.remark" required>
                     </td>
                 </tr>
                 <div>
                     <button type="button" class="cancel-button" @click="cancel">取消</button>
-                    <button type="submit" class="confirm-button" @click="confirm">确认</button>
+                    <button type="submit" class="confirm-button" @click="confirm(id)">确认</button>
                 </div>
             </table>
         </div>
@@ -87,8 +87,8 @@
 
 
 
-<script setup lang="ts">
-import { ref, reactive, computed } from 'vue';
+<script setup lang="js">
+import { ref, reactive, computed,onMounted } from 'vue';
 import {
     SearchOutlined,
     SyncOutlined,
@@ -97,128 +97,183 @@ import {
     DeleteOutlined,
     PlusCircleOutlined
 } from '@ant-design/icons-vue';
+import axios from 'axios';
 
 // 创建响应式状态
 let display = ref(false);
 let interior1 = ref(false);
 let interior2 = ref(false);
-let name = ref();
-let encode = ref();
+let Findkeyword=ref('')
+let formState=reactive({
+    id:'',
+    roleName:'',
+    remark:''
+})
+// 分页
 const pageSize = 5;
-const current = ref(Number(1));
-
+const current = ref(1);
+const filteredTabArr = computed(() => {
+    return tabArr.filter(item => !item.isDeleted);
+});
 const currentPageData = computed(() => {
     const start = (current.value - 1) * pageSize;
     const end = start + pageSize;
-    return tabArr.slice(start, end);
+    return filteredTabArr.value.slice(start, end);
 });
+let tabArr = reactive([]);
+
+//页面加载获取列表
+onMounted(async () => {
+    try {
+        const res = await axios.get('http://localhost:63760/api/role');
+        console.log(res);
+        const filterDate=res.data.filter(item=>!item.isDeleted)
+        tabArr.push(...filterDate); // 假设 res.data 是一个数组
+    } catch (err) {
+        console.log(err);
+    }
+});
+
 // 分页改变时的处理函数
-function onChange(pageNumber: number) {
-    current.value = pageNumber;
-};
 
-let tabArr = reactive([
-    {
-        id: 1,
-        name: '管理员',
-        encode: 'admin',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 2,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 3,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 4,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 5,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 6,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 7,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 8,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 9,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-    {
-        id: 10,
-        name: '用户',
-        encode: 'user',
-        createTime: '2022-01-01',
-    },
-]);
-function Search() {
-    console.log('搜索');
-};
 
+let Search = async()=>{
+        let keywords=Findkeyword.value.trim()
+    try{
+        if(keywords){
+        let res = await axios.get(`http://localhost:63760/api/Role?keywords=${keywords}`)
+        console.log(res);
+        tabArr.splice(0, tabArr.length, ...res.data); // 清空并填充新的搜索结果
+        
+        }else{
+            alert('请输入关键字')
+        }
+      
+    }catch(err){
+        console.log(err);
+    }
+}
+
+//重置页面
 function Reset() {
-    console.log('重置');
+    // console.log('重置');
+     Findkeyword.value=""
+    fetchRoles()
 };
 
 function Add() {
     console.log('添加');
     display.value = true;
-    interior1.value = true;
+    Object.assign(formState, {
+        roleName: '',
+        remark: ''
+    });
+    
 };
 
 function BatchDelete() {
     console.log('批量删除');
 };
 
-function Edit(id) {
-    console.log(`编辑`);
-    display.value = true;
-    interior2.value = true;
-};
-
-function Delete(id) {
-    console.log(`删除`);
+let Edit = async(id)=>{
+    try{
+        let res =await axios.get(`http://localhost:63760/api/Role/${id}`)
+        console.log(res);
+        
+        formState={
+            id:res.data.id,
+            roleName:res.data.roleName,
+            remark:res.data.remark
+        }
+        display.value=true;
+    }catch(err){
+        console.log(err);
+    }
+}
+let Delete = async(id) => {
+  console.log(id);
+  if(confirm(`确定将id为${id}的数据标记为已删除吗？`)){
+    try{
+      let res = await axios.delete(`http://localhost:63760/api/Role/${id}`)
+      const index = tabArr.findIndex(item => item.id === id);
+      if (index !== -1) {
+        tabArr.splice(index, 1);
+      }
+      console.log(res);
+    }catch(err){
+      console.log(err);
+    }
+  }
 };
 function cancel() {
     display.value = false;
     interior1.value = false;
     interior2.value = false;
-    encode.value = '';
-    name.value = '';
-}
-function confirm() {
-    if (encode.value && name.value) {
-        cancel();
-    }
 
+  
 }
+let confirm = async (id)=> {
+    // console.log(id);
+    try{
+        console.log(formState.id);
+        
+        if(formState.id){
+            //编辑
+            let res = await axios.put(`http://localhost:63760/api/role/${formState.id}`,{
+                roleName:formState.roleName,
+                remark:formState.remark
+            })
+                // 找到需要更新的元素，并更新其属性
+                const index = tabArr.findIndex(item => item.id === formState.id);
+            if (index !== -1) {
+                tabArr[index].roleName = formState.roleName;
+                tabArr[index].remark = formState.remark;
+            }
+            
+        }else{
+           let res = await axios.post('http://localhost:63760/api/role',{
+                roleName:formState.roleName,
+                remark:formState.remark
+            })
+        await fetchRoles();
+
+            
+        }
+        display.value=false;
+    }catch(err){
+        console.log(err);
+    }
+}
+// 定义一个新的方法用于获取角色数据
+const fetchRoles = async () => {
+    try {
+        const res = await axios.get('http://localhost:63760/api/role');
+        console.log(res);
+        const filterDate = res.data.filter(item => !item.isDeleted);
+        tabArr.splice(0, tabArr.length, ...filterDate); // 清空并重新填充数据
+    } catch (err) {
+        console.log(err);
+    }
+}
+const formatDateTime = (isoString) => {
+  const date = new Date(isoString);
+  const formatter = new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  });
+  return formatter.format(date);
+};
+const formatItemCreateAt=(item)=>{
+  return formatDateTime(item.createAt);
+}
+
+// 分页改变时的处理函数
+
 </script>
 
 

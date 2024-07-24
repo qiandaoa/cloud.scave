@@ -3,6 +3,7 @@ using System.Text;
 using Admin2024.Api.Extension;
 using Admin2024.Application.AppService;
 using Admin2024.Application.Contracts.AutoMapper;
+using Admin2024.Application.Contracts.RoleApplication.Interface;
 using Admin2024.Application.Contracts.UserApplication.Interface;
 using Admin2024.Domain.DomainServices;
 using Admin2024.Domain.Interfaces;
@@ -55,13 +56,20 @@ public class Startup
         services.AddScoped(typeof(IAuthServices), typeof(AuthServices));
         services.AddScoped(typeof(IUserDomainService), typeof(UserDomainService));
         services.AddScoped(typeof(IUserAppService), typeof(UserAppService));
+
         services.AddScoped(typeof(IUseRoleServices), typeof(UseRoleServices));
        
         services.AddScoped(typeof(IOperationServices), typeof(OperationServices));
         services.AddScoped(typeof(IPermissionAppServices),typeof(PermissionServices));
 
-        services.AddScoped<IRoleAppService, RoleAppService>();
+        services.AddScoped<IUseRoleAppService,UseRoleAppService>();
 
+
+
+        services.AddScoped(typeof(IRoleDomainService), typeof(RoleDomainService));
+        services.AddScoped(typeof(IRoleAppService), typeof(RoleAppService));
+        services.AddScoped(typeof(IRolePermissionAssignAppService), typeof(RolePermissionAssignAppService));
+        services.AddScoped(typeof(IRolePermissionAssignDomainService),typeof(RolePermissionAssignDomainService));
 
     }
 }

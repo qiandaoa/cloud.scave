@@ -5,15 +5,15 @@
                 <a-button type="primary" class="collapse-button" @click="toggleSiderCollapse">
                     {{ isSiderCollapsed ? '展开菜单' : '折叠菜单' }}
                 </a-button>
-                <SildeMenu :isSiderCollapsed="isSiderCollapsed" ></SildeMenu>
+                <SildeMenu :isSiderCollapsed="isSiderCollapsed"></SildeMenu>
             </div>
         </a-layout-sider>
         <a-layout>
             <div class="headerstyle">
-                 <a-layout-header  :style="headerStyle">
-                <HeaderContent></HeaderContent>
-            </a-layout-header>
-        </div>
+                <a-layout-header :style="headerStyle">
+                    <HeaderContent></HeaderContent>
+                </a-layout-header>
+            </div>
             <a-layout-content :style="contentStyle">
                 <router-view></router-view>
             </a-layout-content>
@@ -23,7 +23,7 @@
 <script setup>
 import SildeMenu from './SildeMenu.vue';
 import HeaderContent from './HeaderContent.vue';
-import { h, ref, reactive,watch } from 'vue'
+import { h, ref, reactive, watch } from 'vue'
 import {
     MailOutlined,
     CalendarOutlined,
@@ -40,7 +40,7 @@ let isSiderCollapsed = ref(false); // 控制sider折叠状态
 // 动态调整contentStyle的paddingLeft
 watch(isSiderCollapsed, (newVal) => {
     contentStyle.paddingLeft = '64px';
-  
+
 });
 const toggleSiderCollapse = () => {
     isSiderCollapsed.value = !isSiderCollapsed.value;
@@ -73,19 +73,22 @@ const toggleSiderCollapse = () => {
 .ant-layout-sider {
     height: 100vh;
 }
+
 .sider-content {
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding-top: 16px; /* 添加顶部填充以避免按钮与顶部边界重叠 */
+    padding-top: 16px;
+    /* 添加顶部填充以避免按钮与顶部边界重叠 */
 }
 
 .collapse-button {
-    margin-bottom: 16px; /* 为按钮与菜单之间留出一些空间 */
-}
-.headerstyle{
-    height: 100px;
-    
+    margin-bottom: 16px;
+    /* 为按钮与菜单之间留出一些空间 */
 }
 
+.headerstyle {
+    height: 100px;
+
+}
 </style>

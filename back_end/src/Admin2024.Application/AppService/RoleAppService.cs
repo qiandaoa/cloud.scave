@@ -1,46 +1,75 @@
-using Admin2024.Application.Contracts;
-using Admin2024.Application.Contracts.UserApplication.Dto;
-using Admin2024.Application.Contracts.UserApplication.Interface;
+
+using Admin2024.Application.Contracts.RoleApplication.Dto;
+using Admin2024.Application.Contracts.RoleApplication.Interface;
 using Admin2024.Domain.DomainServices;
 using Admin2024.Domain.System;
 using Admin2024.Instructions;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using AutoMapper;
 
 namespace Admin2024.Application.AppService;
-  //由于未知前端需要的，所以返回string；
-public class RoleAppService:IRoleAppService
-{    
-   
-    private  readonly IUseRoleServices useRoleServices;
-    public RoleAppService( IUseRoleServices _roleServices)
+public class RoleAppService : IRoleAppService
+{
+    private readonly IRoleDomainService _roleDomainService;
+    private readonly IMapper _mapper;
+    public RoleAppService(IRoleDomainService roleDomainService, IMapper mapper)
     {
-      
-      useRoleServices = _roleServices;
+      _roleDomainService = roleDomainService;
+      _mapper = mapper;
     }
-
-    public async Task<ReturnResult<string>> DeleteUseRole(DelUseRoleDto deluseRoleId)
+    // 添加角色
+    public async Task<ReturnResult<Role>> AddRole(RoleCreateInfoDto input)
     {
-       var getVal=await useRoleServices.DeleteUseRole(deluseRoleId.UseroleId);
-       return  ReturnResult<string>.Success(getVal.Message);
+        // 判断角色名称是否为空
+        if(string.IsNullOrEmpty(input.RoleName)){
+          return ReturnResult<Role>.Error("角色名称不能为空");
+        }
+        if(_roleDomainService.GetByRoleName(input.RoleName) != null){
+          return ReturnResult<Role>.Error("角色已存在");
+        }
+
+        var roleDto = _mapper.Map<RoleCreateInfoDto,Role>(input);
+        await _roleDomainService.AddRole(roleDto);
+        return ReturnResult<Role>.Success(roleDto);
     }
 
-    public async Task<ReturnResult<List<UserRole>>> PagingGetRole(PagingRoleDto pagingRoleDto)
+    // 删除角色
+    public async Task<ReturnResult<Role>> DeleteRole(Guid roleId)
     {
-        var getVal= await useRoleServices.PagingUserRole(pagingRoleDto.PageNumber, pagingRoleDto.PageSize);      
-           return getVal;
-        
-       
+        var role = await _roleDomainService.GetRoleById(roleId);
+        if(role == null){
+          return ReturnResult<Role>.Error("角色不存在");
+        }
+        await _roleDomainService.DeleteRole(roleId);
+        return ReturnResult<Role>.Success("删除成功");
+    }
+
+    // 获取全部角色
+    public async Task<ReturnResult<List<Role>>> GetAllRole()
+    {
+        var roles = await _roleDomainService.GetAllRole();
+        return ReturnResult<List<Role>>.Success(roles.Data);
     }
 
 
-
-
-    //用户角色选择
-    public async Task<ReturnResult<string>> SelectRole(CreateUseRoleDto createUseRoleDto)
-    {  
-        var getnew= await useRoleServices.CreateUseRole(createUseRoleDto.userid,createUseRoleDto.roleid);
-        return  ReturnResult<string>.Success(getnew.Message);
+    // 获取指定id角色
+    public Task<ReturnResult<Role>> GetRoleById(Guid id)
+    {
+        var role = _roleDomainService.GetRoleById(id);
+        if(role == null){
+          return Task.FromResult(ReturnResult<Role>.Error("角色不存在"));
+        }
+        return role;
     }
 
-   
+    // 修改角色
+    public async Task<ReturnResult<Role>> UpdateRole(Guid roleId, RoleUpdateInfoDto input)
+    {
+       var role = _mapper.Map<RoleUpdateInfoDto,Role>(input);
+       var roleUpdate = await _roleDomainService.UpdateRole(roleId,role);
+       if(!roleUpdate.IsSuccess){
+         return ReturnResult<Role>.Error("修改失败");
+       }
+       var roleDto = _mapper.Map<Role>(roleUpdate.Data);
+       return ReturnResult<Role>.Success(roleDto);
+    }
 }

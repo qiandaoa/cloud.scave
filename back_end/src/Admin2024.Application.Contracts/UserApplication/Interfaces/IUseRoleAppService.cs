@@ -4,7 +4,7 @@ using Admin2024.Domain.System;
 
 namespace Admin2024.Application.Contracts.UserApplication.Interface;
 
-public interface IRoleAppService
+public interface IUseRoleAppService
 {   
     
      //用户角色选择

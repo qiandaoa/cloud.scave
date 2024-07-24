@@ -12,70 +12,82 @@ import {
   CloseOutlined
 } from '@ant-design/icons-vue'
 import axios from 'axios'
-import {useUserStore} from '../store/user.js'
+import { useUserStore } from '../store/user.js'
 import AddUserModal from '../components/AddModal.vue'
 let UserDatas = reactive([])
 const useStore = useUserStore()
+let Findkeyword = ref('');
+let originalData = reactive([]);
 
 
 
 onMounted(async () => {
-  // await axios.get('https://localhost:63759/api/user')
-  //   .then(res => {
-  //     console.log(res.data);
-  //     res.data.forEach(item => {
-  //       UserDatas.push(item)
-  //     });
-  //     var a = res.data;
-  //     console.log(a[0].id);
-  //   })
- const res =  await useStore.fetchUserDate()
- const user=res.data
-//  originnaTotal= user.length //记录原始长度
-//  console.log(user);
- user.forEach(item => {
-  
-    UserDatas.push(item)
 
-  
- });
-//  let total=originnaTotal
+  const res = await useStore.fetchUserDate()
+  const user = res.data
+
+  originalData.push(...user);
+  // 将原始数据复制到 UserDatas
+  UserDatas.push(...originalData);
+  //  let total=originnaTotal
 })
 
-const addUserModalRef=ref(null)
-const showModals=()=>{
+const addUserModalRef = ref(null)
+const showModals = () => {
   addUserModalRef.value.show()
 }
 // 搜索关键词
-let Findkeyword = ref('');
 
 // 搜索按钮
-let Find = () => {
-  console.log(Findkeyword.value);
+let Find = async () => {
+  let keywords = Findkeyword.value.trim()
+  try {
+    if (keywords) {
+      let res = await axios.get(`http://localhost:63760/api/GetAllUsers?keywords=${keywords}`)
+      console.log(res);
+      // tabArr.splice(0, tabArr.length, ...res.data); // 清空并填充新的搜索结果
+      UserDatas.splice(0, UserDatas.length);
+      res.data.forEach(item => {
+        UserDatas.push(item)
+      });
+
+    } else {
+      UserDatas.splice(0, UserDatas.length);
+      UserDatas.push(...originalData);
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 
 
-let ModalData=reactive({
-      username: "",
-      nickName: "",
-      email: "",
-      telephone: "",
-      remark:""
-   }
+let ModalData = reactive({
+  username: "",
+  nickName: "",
+  email: "",
+  telephone: "",
+  remark: ""
+}
 )
 
 //分页
 let current1 = ref(1);
 let pageSize = 10
 //排列顺序按照isactived来进行排列
-let currentPageData = computed(() => {
-  const filteredData = UserDatas.filter(item => !item.isDeleted).sort((a,b)=>{
-    return b.isActived-a.isActived
+let filteredAndSortedData = computed(() => {
+  return UserDatas.filter(item => !item.isDeleted).sort((a, b) => {
+    return b.isActived - a.isActived;
   });
+});
+const filteredAndSortedDataLength = computed(() => filteredAndSortedData.value.length);
+
+// 分页
+let currentPageData = computed(() => {
   const start = (current1.value - 1) * pageSize;
   const end = start + pageSize;
-  return filteredData.slice(start, end);
+  return filteredAndSortedData.value.slice(start, end);
 });
 let onChange = () => {
   // console.log(current1.value);
@@ -83,78 +95,76 @@ let onChange = () => {
 // 修改状态  给后端发送请求来更改是否启用的状态
 let State = async (id) => {
   // UserDatas.IsActive = !UserDatas.IsActive;
-  const index=UserDatas.findIndex(item=>item.id==id);
-  if(index === -1){
+  const index = UserDatas.findIndex(item => item.id == id);
+  if (index === -1) {
     console.log('没有找到该用户');
     return
   }
   const user = UserDatas[index]
   console.log(user.isActived);
-  try{
-    const isActive= user.isActived;
-  // console.log(isActive);
+  try {
+    const isActive = user.isActived;
+    // console.log(isActive);
     let res = await axios.put(`http://localhost:63760/api/actived/${id}?or=${isActive}`)
-    if(res.status===200){
+    if (res.status === 200) {
       console.log(res);
-      UserDatas[index].isActived=isActive
-    }else{
-      console.log('请求失败',res.status);
+      UserDatas[index].isActived = isActive
+    } else {
+      console.log('请求失败', res.status);
     }
-  }catch(err){
+  } catch (err) {
     console.log(err);
   }
 }
 
 // 重置按钮
-let Reset = () => {
-  console.log("重置");
-}
-// 用户选择角色的下拉菜单
-
-// 添加按钮
-let AddButton = () => {
-  console.log("添加");
-  showModal.value=!showModal.value
-  ModalData = reactive({
-    username: "",
-    nickName: "",
-    email: "",
-    telephone: "",
-    id: undefined,
-  });
-};
-// 编辑
-let UserEdit = async (id) => {
-  try{
-    let res = await axios.get(`http://localhost:63760/api/User/${id}`)
-    // console.log(res.data);
-    ModalData={
-      id: id,
-      username: res.data.username,
-      nickName: res.data.nickName,
-      email: res.data.email,
-      telephone: res.data.telephone,
-      remark:res.data.remark
-    }
-    showModal.value=true
-  }catch(err){
+let Reset = async () => {
+  Findkeyword.value = "";
+  // console.log("重置");s
+  try {
+    const res = await useStore.fetchUserDate();
+    const user = res.data;
+    // 清空并用原始数据重新填充
+    originalData.splice(0, originalData.length);
+    originalData.push(...user);
+    // 使用原始数据填充 UserDatas
+    UserDatas.splice(0, UserDatas.length);
+    UserDatas.push(...originalData);
+  } catch (err) {
     console.log(err);
   }
-  
+}
+
+// 编辑
+let UserEdit = async (id) => {
+  try {
+    let res = await axios.get(`http://localhost:63760/api/User/${id}`)
+    // 不再重新定义 ModalData，而是更新现有的 ModalData
+    ModalData.id = id;
+    ModalData.username = res.data.username;
+    ModalData.nickName = res.data.nickName;
+    ModalData.email = res.data.email;
+    ModalData.telephone = res.data.telephone;
+    ModalData.remark = res.data.remark;
+    showModal.value = true;
+  } catch (err) {
+    console.log(err);
+  }
+
 };
 //删除并重新排序
 
-let UserDelete = async(id) => {
+let UserDelete = async (id) => {
   console.log(id);
-  if(confirm(`确定将id为${id}的数据标记为已删除吗？`)){
-    try{
+  if (confirm(`确定将id为${id}的数据标记为已删除吗？`)) {
+    try {
       let res = await axios.delete(`http://localhost:63760/api/User/${id}`)
       const index = UserDatas.findIndex(item => item.id === id);
       if (index !== -1) {
         UserDatas[index].isDeleted = true;
       }
       console.log(res);
-    }catch(err){
+    } catch (err) {
       console.log(err);
     }
   }
@@ -169,39 +179,26 @@ else {
   document.body.style.overflow = '';
 }
 
-// 模态框表单的提交功能
-let ButtonSubmit = async (id) => {
-  console.log(id);
-  try{
-    // console.log(ModalData);
-    if(id){
-      let res = await axios.put(`http://localhost:63760/api/UserUpdate/${id}`,{
-      username: ModalData.username,
-      nickName: ModalData.nickName,
-      email: ModalData.email,
-      telephone: ModalData.telephone,
-      remark:ModalData.remark
-
-    } )
-    console.log(res);
-    showModal.value=!showModal.value
-    setTimeout(() => {
+// 模态框提交功能
+const ButtonSubmit = async (id) => {
+  try {
+    if (id) {
+      await axios.put(`http://localhost:63760/api/user/${id}`, ModalData);
       const index = UserDatas.findIndex(item => item.id === id);
       if (index !== -1) {
         UserDatas[index] = { ...UserDatas[index], ...ModalData };
       }
-    }, 0);
-    }else{
-      //实现添加
+      showModal.value = false;
+    } else {
+      // 实现添加功能
     }
- 
-  }catch(err){
-    console.log(err);
+  } catch (err) {
+    console.error('提交错误:', err);
   }
-  }
+};
 
 let Cancel = () => {
-  showModal.value=!showModal.value
+  showModal.value = !showModal.value
 }
 //更改时间格式 更加直观
 const formatDateTime = (isoString) => {
@@ -217,7 +214,7 @@ const formatDateTime = (isoString) => {
   });
   return formatter.format(date);
 };
-const formatItemCreateAt=(item)=>{
+const formatItemCreateAt = (item) => {
   return formatDateTime(item.createAt);
 }
 </script>
@@ -253,7 +250,7 @@ const formatItemCreateAt=(item)=>{
         <th>昵称</th>
         <th>邮箱</th>
         <th>电话</th>
-        
+
         <th>是否启用</th>
         <th>创建时间</th>
         <th>备注</th>
@@ -273,16 +270,15 @@ const formatItemCreateAt=(item)=>{
         <td>{{ formatItemCreateAt(item) }}</td>
         <td>{{ item.remark }}</td>
         <td>
-          <a-button type="primary" id="EditButton" :icon="h(EditOutlined)"
-            @click="UserEdit(item.id)"></a-button>
-          <a-button type="primary" id="DeleteButton" :icon="h(DeleteOutlined)"
-            @click="UserDelete(item.id)"></a-button>
+          <a-button type="primary" id="EditButton" :icon="h(EditOutlined)" @click="UserEdit(item.id)"></a-button>
+          <a-button type="primary" id="DeleteButton" :icon="h(DeleteOutlined)" @click="UserDelete(item.id)"></a-button>
         </td>
       </tr>
     </table>
   </div>
   <div class="Page">
-    <a-pagination v-model:current="current1" show-quick-jumper :total="UserDatas.length" @change="onChange" />
+    <a-pagination v-model:current="current1" show-quick-jumper :total="filteredAndSortedDataLength"
+      @change="onChange" />
   </div>
   <!-- 编辑添加模态框 -->
   <div v-if="showModal" class="modal-wrap">
@@ -380,9 +376,11 @@ const formatItemCreateAt=(item)=>{
   margin: 200px;
   height: 70px;
 }
+
 #ButtonSubmit[data-v-5ccf79a5] {
-  background-color:blue;
+  background-color: blue;
 }
+
 h1 {
   font-size: 40px;
   /* 设置较大的字体大小 */
