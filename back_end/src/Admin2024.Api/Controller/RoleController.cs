@@ -1,42 +1,28 @@
+
 using Admin2024.Application.Contracts.RoleApplication.Dto;
+using Admin2024.Application.Contracts.RoleApplication.Interface;
+using Admin2024.Domain.DomainServices;
+using Admin2024.Domain.DomainServices.Interface;
 using Admin2024.Domain.Interfaces;
 using Admin2024.Domain.System;
 using Admin2024.EntityFramework.Helps;
+using Admin2024.Instructions;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Admin2024.Api;
+namespace Admin2024.Api.Controller;
 [ApiController]
-[Route("/api/[controller]")]
+[Route("api/[controller]")]
 public class RoleController : ControllerBase
 {
-  private readonly IRepository<Role> _repRole;
-  private readonly IMapper _mapper;
-  public RoleController(IRepository<Role> repRole,IMapper mapper)
-  {
-    _repRole = repRole;
-    _mapper = mapper;
-  }
 
-  /// <summary>
-  /// 获取全部角色
-  /// </summary>
-  /// <param name="baseParameters"></param>
-  /// <returns></returns>
-  [HttpGet]
-  public ActionResult<List<Role>> GetAllRole([FromQuery]BaseParameters baseParameters)
+  private readonly IRoleAppService _roleRep;
+  private readonly IRolePermissionAssignDomainService _rolePer;
+  public RoleController(IRoleAppService roleRep, IRolePermissionAssignDomainService rolePer)
   {
-    var roles = _repRole.Table;
-    var keywords = baseParameters.keywords;
-
-    // 进行角色名称关键字搜索
-    if(!string.IsNullOrEmpty(keywords)){
-      roles = roles.Where(x => 
-         x.RoleName.Contains(keywords)
-      );
-    }
-    return Ok(roles);
+    _roleRep = roleRep;
+    _rolePer = rolePer;
   }
 
   /// <summary>
@@ -45,71 +31,85 @@ public class RoleController : ControllerBase
   /// <param name="id"></param>
   /// <returns></returns>
   [HttpGet("{id}")]
-  public async Task<ActionResult<Role>> GetRoleById(Guid id)
+  public async Task<ReturnResult<Role>> GetRoleById(Guid id)
   {
-    var role = await _repRole.GetByIdAsync(id);
-    if(role == null){
-      return NotFound();
+    return await _roleRep.GetRoleById(id);
+  }
+
+  /// <summary>
+  /// 获取全部角色
+  /// </summary>
+  /// <param name="baseParameters"></param>
+  /// <returns></returns>
+  [HttpGet]
+  public async Task<ReturnResult<List<Role>>> GetAllRole([FromQuery]BaseParameters baseParameters)
+  {
+    var roleList = await _roleRep.GetAllRole();
+    var keywords = baseParameters.keywords;
+    if(!string.IsNullOrEmpty(keywords)){
+      var fileRole = roleList.Data.Where(r => r.RoleName.Contains(keywords)).ToList();
+      return ReturnResult<List<Role>>.Success(fileRole);
     }
-    return Ok(role);
+    return ReturnResult<List<Role>>.Success(roleList.Data);
   }
 
   /// <summary>
   /// 添加角色
   /// </summary>
-  /// <param name="roleCreateInfoDto"></param>
+  /// <param name="input"></param>
   /// <returns></returns>
   [HttpPost]
-  public async Task<IActionResult> PostRole(RoleCreateInfoDto roleCreateInfoDto)
+  public async Task<ReturnResult<Role>> AddRole(RoleCreateInfoDto input)
   {
-    var IsExist = await _repRole.Table.FirstOrDefaultAsync(x => x.RoleName == roleCreateInfoDto.RoleName);
-    if(IsExist != null){
-      return Ok("该角色已存在，请勿重复添加");
-    }
-    var role = _mapper.Map<Role>(roleCreateInfoDto);
-    var newRole = await _repRole.AddAsync(role);
-    if(newRole == null){
-      return Ok("添加失败");
-    }
-    var roleDto = _mapper.Map<Role>(newRole);
-    return Ok(roleDto);
+    return await _roleRep.AddRole(input);
   }
 
   /// <summary>
-  /// 删除角色（软删除）
+  /// 删除角色(软删除)
   /// </summary>
   /// <param name="id"></param>
   /// <returns></returns>
   [HttpDelete("{id}")]
-  public async Task<IActionResult> DeleteRole(Guid id)
+  public async Task<ReturnResult<Role>> DeleteRole(Guid id)
   {
-    var role = await _repRole.GetByIdAsync(id);
-    if(role == null){
-      return NotFound();
-    }
-    await _repRole.DeleteAsync(id);
-    return Ok(role);
+    return await _roleRep.DeleteRole(id);
   }
 
   /// <summary>
-  /// 修改角色信息
+  /// 修改角色
   /// </summary>
   /// <param name="id"></param>
-  /// <param name="roleUpdateInfoDto"></param>
+  /// <param name="input"></param>
   /// <returns></returns>
   [HttpPut("{id}")]
-  public async Task<IActionResult> UpdateRole(Guid id, RoleUpdateInfoDto roleUpdateInfoDto)
+  public async Task<ReturnResult<Role>> UpdateRole(Guid id, RoleUpdateInfoDto input)
   {
-    var role = await _repRole.GetByIdAsync(id);
-    if(role == null){
-      return Ok("查找不到角色，修改失败");
-    }
-    _mapper.Map(roleUpdateInfoDto, role);
-    var updateRole = await _repRole.UpdateAsync(role);
-    if(updateRole == null){
-      return Ok("修改失败");
-    }
-    var roleDto = _mapper.Map<Role>(role);
-    return Ok(roleDto);
+    return await _roleRep.UpdateRole(id, input);
   }
+
+  /// <summary>
+  /// 给角色分配权限
+  /// </summary>
+  /// <param name="roleId"></param>
+  /// <param name="perId"></param>
+  /// <returns></returns>
+  [HttpPost("/api/RolePerAssign")]
+  public async Task<ReturnResult<string>> AssignRolePermission(Guid roleId, Guid perId)
+  {
+    return await _rolePer.AssignRolePermission(roleId, perId);
+  }
+  
+  /// <summary>
+  /// 移除角色权限
+  /// </summary>
+  /// <param name="roleId"></param>
+  /// <param name="perId"></param>
+  /// <returns></returns>
+  [HttpDelete("/api/RolePerAssign/")]
+  public async Task<ReturnResult<string>> RemoveRolePermission(Guid roleId, Guid perId)
+  {
+    return await _rolePer.RemoveRolePermission(roleId, perId);
+  }
+
+
 }

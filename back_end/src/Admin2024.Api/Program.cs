@@ -12,7 +12,7 @@ public class Program
     {
         return Host.CreateDefaultBuilder(args) // 添加Autofac工厂服务
         .ConfigureWebHostDefaults(webBuilder => {
-            webBuilder.UseStartup<Startup>();
+            webBuilder.UseStartup<Startup>().UseWebRoot("wwwroot");
         });
     }
 }
