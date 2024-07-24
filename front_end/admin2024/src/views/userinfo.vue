@@ -4,7 +4,7 @@
       <a-col :span="8">
         <a-card :bordered="false" title="个人信息">
           <div class="user-info">
-            <a-avatar shape="cirle" size="128" :src="userAvatar" />
+            <AvatarUploader :action="yourActionURL" @update:imageUrl="handleImageUrlUpdate" />
             <div class="user-details">
               <LoginOutlined /> <span>登陆账号：{{ userName }}</span>
 
@@ -77,6 +77,7 @@
 import { nextTick, onMounted, reactive, ref } from 'vue';
 import { LoginOutlined, PhoneOutlined, MailOutlined, InsuranceOutlined } from '@ant-design/icons-vue';
 import axios from 'axios';
+import  AvatarUploader  from '../components/AvatarUploader.vue' 
 // 假设这是从后端获取的用户信息
 const userAvatar = ref('/avatar.jpg');
 
@@ -93,7 +94,9 @@ const edituserData = reactive({
   nickName: "",
 })
 const telephoneError = ref(false); // 用于跟踪手机号验证状态
-
+const handleImageUrlUpdate = imageUrl => {
+  console.log('Updated image URL:', imageUrl);
+};
 const validateTelephone = (value) => {
   const reg = /^1[3-9]\d{9}$/;
   if (!reg.test(value)) {
