@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 <?xml version="1.0"?>
 <doc>
     <assembly>
@@ -365,3 +366,266 @@
     </members>
 </doc>
 >>>>>>> 01de6ba46236f76d2fef975014a2d0f789cd0a6d
+=======
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Admin2024.Api</name>
+    </assembly>
+    <members>
+        <member name="M:Admin2024.Api.Controller.AvatarController.UploadFile(System.Guid,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            更新头像和上传头像,可能还有bug，需要测试
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.AvatarController.GetAvatar(System.Guid)">
+            <summary>
+            获取用户头像。上传git时,请将wwwroot下的imgs一起上传。图片访问地址https://localhost:63759/+图片名称
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.permissionController.GetAllPermission(Admin2024.EntityFramework.Helps.BaseParameters)">
+            <summary>
+            获取全部权限
+            </summary>
+            <param name="baseParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.permissionController.AddPermission(Admin2024.Application.Contracts.PermissionApplication.Dto.PerCreateInfoDto)">
+            <summary>
+            新增权限
+            </summary>
+            <param name="perCreateInfoDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.permissionController.DeletePermission(System.Guid)">
+            <summary>
+            移除权限
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.permissionController.UpdatePermission(System.Guid,Admin2024.Application.Contracts.PermissionApplication.Dto.PerUpdateInfoDto)">
+            <summary>
+            修改权限
+            </summary>
+            <param name="id"></param>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.permissionController.GetAllResource(Admin2024.EntityFramework.Helps.BaseParameters)">
+            <summary>
+            获取全部资源
+            </summary>
+            <param name="baseParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.permissionController.AddResource(Admin2024.Application.Contracts.PermissionApplication.Dto.ResCreateInfoDto)">
+            <summary>
+            创建资源权限
+            </summary>
+            <param name="resCreateInfoDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.permissionController.DeleteResource(System.Guid)">
+            <summary>
+            删除资源权限
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.permissionController.UpdateResource(System.Guid,Admin2024.Application.Contracts.PermissionApplication.Dto.ResUpdateInfoDto)">
+            <summary>
+            修改资源权限
+            </summary>
+            <param name="id"></param>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.permissionController.GetAllOperation(Admin2024.EntityFramework.Helps.BaseParameters)">
+            <summary>
+            获取全部操作
+            </summary>
+            <param name="baseParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.permissionController.AddOperation(Admin2024.Application.Contracts.PermissionApplication.Dto.OperCreateInfoDto)">
+            <summary>
+            添加操作权限
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.permissionController.DeleteOperation(System.Guid)">
+            <summary>
+            删除操作权限
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.permissionController.UpdateOperation(System.Guid,Admin2024.Application.Contracts.PermissionApplication.Dto.OperUpdateInfoDto)">
+            <summary>
+            修改操作权限
+            </summary>
+            <param name="id"></param>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.RoleController.GetRoleById(System.Guid)">
+            <summary>
+            获取指定id的角色
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.RoleController.GetAllRole(Admin2024.EntityFramework.Helps.BaseParameters)">
+            <summary>
+            获取全部角色
+            </summary>
+            <param name="baseParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.RoleController.AddRole(Admin2024.Application.Contracts.RoleApplication.Dto.RoleCreateInfoDto)">
+            <summary>
+            添加角色
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.RoleController.DeleteRole(System.Guid)">
+            <summary>
+            删除角色(软删除)
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.RoleController.UpdateRole(System.Guid,Admin2024.Application.Contracts.RoleApplication.Dto.RoleUpdateInfoDto)">
+            <summary>
+            修改角色
+            </summary>
+            <param name="id"></param>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.RoleController.AssignRolePermission(System.Guid,System.Guid)">
+            <summary>
+            给角色分配权限
+            </summary>
+            <param name="roleId"></param>
+            <param name="perId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.RoleController.RemoveRolePermission(System.Guid,System.Guid)">
+            <summary>
+            移除角色权限
+            </summary>
+            <param name="roleId"></param>
+            <param name="perId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UserController.GetUser">
+            <summary>
+            获取全部用户列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UserController.GetUserById(System.Guid)">
+            <summary>
+            获取指定id的用户
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UserController.GetAllUser(Admin2024.EntityFramework.Helps.BaseParameters)">
+            <summary>
+            获取全部用户列表、进行关键字搜索、 分页
+            </summary>
+            <param name="baseParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UserController.AddUser(Admin2024.Application.Contracts.UserApplication.Dto.UserCreateInfoDto)">
+            <summary>
+            添加用户
+            </summary>
+            <param name="userCreateInfoDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UserController.UserLogin(Admin2024.Application.Contracts.UserApplication.Dto.LoginDto)">
+            <summary>
+            处理用户登录请求
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UserController.RegisterAccount(Admin2024.Application.Contracts.UserApplication.Dto.RegisterDto)">
+            <summary>
+            注册用户
+            </summary>
+            <param name="info"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UserController.VerifyPassword(System.Guid,Admin2024.Application.Contracts.UserApplication.Dto.VerifyPasswordDto)">
+            <summary>
+            修改密码之前要对旧密码经行一次验证
+            </summary>
+            <param name="id"></param>
+            <param name="oldPasswordDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UserController.ModifyPassword(System.Guid,Admin2024.Application.Contracts.UserApplication.Dto.ModifyPasswordDto)">
+            <summary>
+            修改密码
+            </summary>
+            <param name="id"></param>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UserController.Actived(System.Guid,System.Boolean)">
+            <summary>
+            是否启用
+            </summary>
+            <param name="id"></param>
+            <param name="or"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UserController.UpdateUser(System.Guid,Admin2024.Application.Contracts.UserApplication.Dto.UserUpdateInfoDto)">
+            <summary>
+            修改用户信息
+            </summary>
+            <param name="id"></param>
+            <param name="userUpdateInfoDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UserController.DeleteUser(System.Guid)">
+            <summary>
+            删除用户（软删除）
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UseRoleController.DeleteUseRole(Admin2024.Application.Contracts.UserApplication.Dto.DelUseRoleDto)">
+            <summary>
+            删除用户角色
+            </summary>
+            <param name="deluseRoleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UseRoleController.CreateUseRole(Admin2024.Application.Contracts.UserApplication.Dto.CreateUseRoleDto)">
+            <summary>
+            用户的角色选择
+            </summary>
+            <param name="createRoleDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UseRoleController.PagingGetRole(Admin2024.Application.Contracts.UserApplication.Dto.PagingRoleDto)">
+            <summary>
+            分页查询
+            </summary>
+            <param name="pagingRoleDto"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
+>>>>>>> 219f94df2fedbbb72bd86ec352d771bcf3c50de7
