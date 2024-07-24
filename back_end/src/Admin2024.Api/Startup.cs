@@ -50,12 +50,26 @@ public class Startup
             opt.UseNpgsql(_configuration.GetConnectionString("pg"));
         });
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped(typeof(IToolRepository<>), typeof(ToolRepository<>));
+     
+
         services.AddScoped(typeof(IAuthServices), typeof(AuthServices));
         services.AddScoped(typeof(IUserDomainService), typeof(UserDomainService));
         services.AddScoped(typeof(IUserAppService), typeof(UserAppService));
+
+        services.AddScoped(typeof(IUseRoleServices), typeof(UseRoleServices));
+       
+        services.AddScoped(typeof(IOperationServices), typeof(OperationServices));
+        services.AddScoped(typeof(IPermissionAppServices),typeof(PermissionServices));
+
+        services.AddScoped<IUseRoleAppService,UseRoleAppService>();
+
+
+
         services.AddScoped(typeof(IRoleDomainService), typeof(RoleDomainService));
         services.AddScoped(typeof(IRoleAppService), typeof(RoleAppService));
         services.AddScoped(typeof(IRolePermissionAssignAppService), typeof(RolePermissionAssignAppService));
         services.AddScoped(typeof(IRolePermissionAssignDomainService),typeof(RolePermissionAssignDomainService));
+
     }
 }
