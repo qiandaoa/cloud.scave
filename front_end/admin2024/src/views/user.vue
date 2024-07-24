@@ -18,7 +18,6 @@ let UserDatas = reactive([])
 const useStore = useUserStore()
 let Findkeyword = ref('');
 let originalData = reactive([]);
-let page = reactive();
 
 
 onMounted(async () => {
@@ -73,8 +72,9 @@ let ModalData = reactive({
 )
 
 //分页
+let page = ref();
 let current1 = ref(1);
-let pageSize = 10
+let pageSize = 10;
 //排列顺序按照isactived来进行排列
 let filteredAndSortedData = computed(() => {
   return UserDatas.filter(item => !item.isDeleted).sort((a, b) => {
@@ -89,7 +89,15 @@ let currentPageData = computed(() => {
   const end = start + pageSize;
   return filteredAndSortedData.value.slice(start, end);
 });
-
+//分页快速跳转
+const onChange = () => {
+  if (page.value && Number(page.value) && page.value <= Math.ceil(UserDatas.length / pageSize)) {
+    current1.value = Number(page.value);
+  } else {
+    alert('请输入正确的页码');
+  }
+  page.value = '';
+}
 // 修改状态  给后端发送请求来更改是否启用的状态
 let State = async (id) => {
   // UserDatas.IsActive = !UserDatas.IsActive;
@@ -215,12 +223,7 @@ const formatDateTime = (isoString) => {
 const formatItemCreateAt = (item) => {
   return formatDateTime(item.createAt);
 }
-const onChange = () => {
-  if (page && Number(page)) {
-    current1.value = Number(page);
-  }
-  page = '';
-}
+
 </script>
 
 <template>
@@ -282,7 +285,7 @@ const onChange = () => {
   </div>
   <div class="Page">
     <a-pagination v-model:current="current1" :total="filteredAndSortedDataLength" />
-    <input type="text" v-model="page">
+    <span>第</span><input type="text" v-model="page"><span>页</span>
     <button type="button" @click="onChange">跳转</button>
   </div>
   <!-- 编辑添加模态框 -->
@@ -536,21 +539,13 @@ h1 {
 
 .Page input,
 .Page button {
+  width: 50px;
+  height: 30px;
+  margin: 0 10px;
   border-radius: 3px;
   background-color: white;
   text-align: center;
   border: 2px solid rgb(240, 240, 240);
-}
-
-.Page input {
-  width: 40px;
-  height: 25px;
-  margin: 20px;
-}
-
-.Page button {
-  width: 50px;
-  height: 25px;
 }
 
 .button-wrap .Button-wrap-Find-Reset {

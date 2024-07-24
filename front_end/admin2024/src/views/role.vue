@@ -56,7 +56,7 @@
         </div>
         <div class="role-list-container pagination">
             <a-pagination v-model:current="current" :total="tabArr.length" :pageSize="pageSize" />
-            <input type="text" v-model="page">
+            <span>第</span><input type="text" v-model="page"><span>页</span>
             <button type="button" @click="onChange">跳转</button>
         </div>
     </div>
@@ -107,13 +107,13 @@ let display = ref(false);
 let interior1 = ref(false);
 let interior2 = ref(false);
 let Findkeyword = ref('')
-let page = reactive();
 let formState = reactive({
     id: '',
     roleName: '',
     remark: ''
 })
 // 分页
+let page = ref();
 const pageSize = 5;
 const current = ref(1);
 const filteredTabArr = computed(() => {
@@ -126,15 +126,18 @@ const currentPageData = computed(() => {
 });
 //快速跳转页面
 function onChange() {
-    if (page && Number(page)) {
-        current.value = Number(page);
+    if (page.value && Number(page.value) && page.value <= Math.ceil(tabArr.length / pageSize)) {
+        current.value = Number(page.value);
+    } else {
+        alert('请输入正确的页码')
     }
     page = '';
 }
 
-let tabArr = reactive([]);
+
 
 //页面加载获取列表
+let tabArr = reactive([]);
 onMounted(async () => {
     try {
         const res = await axios.get('http://localhost:63760/api/role');
@@ -341,22 +344,13 @@ const formatItemCreateAt = (item) => {
 
 .pagination input,
 .pagination button {
+    width: 50px;
+    height: 30px;
+    margin: 0 10px;
     border: 2px solid rgb(240, 240, 240);
     border-radius: 3px;
     text-align: center;
     background-color: white;
-}
-
-.pagination input {
-    width: 40px;
-    height: 25px;
-    margin: 0 10px;
-}
-
-.pagination button {
-    width: 50px;
-    height: 25px;
-    margin: 0 10px;
 }
 
 .search-button,
