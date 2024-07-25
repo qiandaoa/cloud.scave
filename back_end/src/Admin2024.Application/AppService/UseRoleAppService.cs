@@ -24,12 +24,14 @@ public class UseRoleAppService:IUseRoleAppService
       _dbContext = dbContext;
     }
 
+    // 移除用户角色
     public async Task<ReturnResult<string>> DeleteUseRole(DelUseRoleDto deluseRoleId)
     {
        var getVal=await useRoleServices.DeleteUseRole(deluseRoleId.UseroleId);
        return  ReturnResult<string>.Success(getVal.Message);
     }
 
+    // 获取用户角色列表（连表）
     public List<UserWithRole> GetUserWithRole()
     {
         var useRoleList = _dbContext.Users
@@ -55,7 +57,7 @@ public class UseRoleAppService:IUseRoleAppService
         return useRoleList;
     }
 
-
+    // 获取用户角色列表（分页）
     public async Task<ReturnResult<List<UserRole>>> PagingGetRole(PagingRoleDto pagingRoleDto)
     {
         var getVal= await useRoleServices.PagingUserRole(pagingRoleDto.PageNumber, pagingRoleDto.PageSize);      
@@ -63,9 +65,6 @@ public class UseRoleAppService:IUseRoleAppService
         
        
     }
-
-
-
 
     //用户角色选择
     public async Task<ReturnResult<string>> SelectRole(CreateUseRoleDto createUseRoleDto)

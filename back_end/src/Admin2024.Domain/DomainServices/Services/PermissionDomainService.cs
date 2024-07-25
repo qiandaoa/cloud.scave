@@ -1,3 +1,4 @@
+using System.Globalization;
 using Admin2024.Domain.DomainServices.Interface;
 using Admin2024.Domain.Interfaces;
 using Admin2024.Domain.System;
@@ -19,8 +20,8 @@ public class PermissionDomainService : IPermissionDomainService
     /// <returns></returns>
     public async Task<ReturnResult<Permission>> AddPermission(Permission permission)
     {
-       var operIsExist = _perRep.Table.FirstOrDefault(p => p.OperationId == permission.OperationId);
-       if(operIsExist != null){
+       var IsExist = GetPermissionByName(permission.PermissionName);
+       if(IsExist != null){
          return ReturnResult<Permission>.Error("该权限已存在");
        }
        var perCreate = await _perRep.AddAsync(permission);
