@@ -44,7 +44,7 @@ const handleResize = () => {
 
 // 组件挂载时，监听窗口尺寸变化
 onMounted(() => {
-  window.addEventListener('resize', handleResize);
+ 
 });
 
 // 组件卸载时，移除窗口尺寸变化的监听
@@ -63,6 +63,8 @@ const selectKeys = ref([activeKey.value]);
 
 // Logo图片源
 const logoSrc = ref('/remove.photos-removed-background (1).png');
+
+
 
 // 菜单点击事件处理器
 const handleMenuClick = ({ key }) => {
