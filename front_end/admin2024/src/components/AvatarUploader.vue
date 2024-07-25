@@ -17,7 +17,7 @@
     <div v-else>
       <loading-outlined v-if="loading"></loading-outlined>
       <plus-outlined v-else></plus-outlined>
-      <div class="ant-upload-text">Upload</div>
+      <div class="ant-upload-text">点击更新你的头像</div>
     </div>
   </a-upload>
 </div>
@@ -44,6 +44,7 @@ onMounted(async () => {
           let res = await axios.get(`http://localhost:63760/api/avatar/${id}`)
           console.log(res);
           imageUrl.value = res.data;
+        
         }catch(err){
           console.log(err);
         }
@@ -62,6 +63,8 @@ const imageUrl = ref('');
 const handleChange = info => {
 if (info.file.status === 'uploading') {
   loading.value = true;
+  alert('头像获取成功')
+  location.reload()
   return;
 }
 if (info.file.status === 'done') {

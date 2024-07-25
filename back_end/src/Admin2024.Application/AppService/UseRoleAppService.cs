@@ -40,7 +40,7 @@ public class UseRoleAppService:IUseRoleAppService
                 role => role.Id,
                 (ur, role) => new UserWithRole
                 {
-                    Userld = ur.user.Id,
+                    UserId = ur.user.Id,
                     RoleId = role.Id,
                     Username = ur.user.Username,
                     Nickname = ur.user.NickName,
@@ -48,7 +48,8 @@ public class UseRoleAppService:IUseRoleAppService
                     Email = ur.user.Email,
                     Telephone = ur.user.Telephone,
                     RoleName = role.RoleName,
-                    RoleRemark = role.Remark
+                    RoleRemark = role.Remark,
+                    IsActived = ur.user.IsActived
                 })
             .ToList(); 
         return useRoleList;

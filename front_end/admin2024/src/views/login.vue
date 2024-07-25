@@ -79,6 +79,7 @@ async function btnSub() {
         if (res.status === 200) {
             // 登录成功
             console.log('登录成功');
+            // location.reload()
             // 从服务器响应中获取的token存储到本地t
             useStore.user.token = res.data.data.data;
             // 将 Token 存储到 LocalStorage，以保持用户的登录状态
