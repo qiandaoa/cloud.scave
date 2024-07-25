@@ -3,6 +3,7 @@ using Admin2024.Application.Contracts.UserApplication.Dto;
 using Admin2024.Application.Contracts.UserApplication.Interface;
 using Admin2024.Domain.System;
 using Admin2024.EntityFramework;
+using Admin2024.EntityFramework.Helps;
 using Admin2024.EntityFramework.Repositories;
 using Admin2024.Instructions;
 using Microsoft.AspNetCore.Mvc;
@@ -60,10 +61,19 @@ public class UseRoleController : ControllerBase
          
      }
 
+     /// <summary>
+     /// 用户角色的连表查询(带模糊查询)
+     /// </summary>
+     /// <returns></returns>
      [HttpGet]
-     public IActionResult GetUseRole()
+     public IActionResult GetUseRole([FromQuery]BaseParameters baseParameters)
      {
         var list = _useRoleAppService.GetUserWithRole();
+        var keywords = baseParameters.keywords;
+        if(!string.IsNullOrEmpty(keywords)){
+            var filer = list.FirstOrDefault(u => u.Username.Contains(keywords));
+            return Ok(filer);
+        }
         return Ok(list);
      }
 

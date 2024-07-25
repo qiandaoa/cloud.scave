@@ -3,9 +3,12 @@ using Admin2024.Application.Contracts.PermissionApplication.Interface;
 using Admin2024.Domain.DomainServices.Interface;
 
 using Admin2024.Domain.System;
+using Admin2024.EntityFramework;
+using Admin2024.EntityFramework.Repositories;
 using Admin2024.Instructions;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Admin2024.Application.AppService;
 public class PermissionAppService : IPermissionAppService
@@ -14,14 +17,16 @@ public class PermissionAppService : IPermissionAppService
      private readonly IOperationServices _ope;
      private readonly IResourceDomainService _res;
      private readonly IMapper _mapper;
+     private readonly AdminDbContext _dbContext;
 
      public PermissionAppService(IPermissionDomainService per, IOperationServices ope, 
-         IResourceDomainService res, IMapper mapper)
+         IResourceDomainService res, IMapper mapper,AdminDbContext dbContext)
      {
          _per = per;
          _ope = ope;
          _res = res;
          _mapper = mapper;
+         _dbContext = dbContext;
      }
 
      /// <summary>
@@ -95,6 +100,30 @@ public class PermissionAppService : IPermissionAppService
     {
         var perList = await _per.GetAllPermission();
         return ReturnResult<List<Permission>>.Success(perList.Data);
+    }
+    /// <summary>
+    /// 连表查询权限
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public List<PermissionRepository> GetPermissionList()
+    {
+        var perList = _dbContext.Resource
+            .Join(_dbContext.Permission,resource => resource.Id,
+                  per => per.ResourceId,
+                  (resource,per) => new {resource,per})
+            .Join(_dbContext.Operation,op => op.per.OperationId,
+                   operation => operation.Id,
+                   (op,operation) => new PermissionRepository
+                   {
+                     ResourceId = op.resource.Id,
+                     ResourceName = op.resource.ResourceName,
+                     OperationId = operation.Id,
+                     OperationName = operation.OperationName,
+                     Remark = op.per.Remark
+                   }
+            ).ToList();
+        return perList;
     }
     /// <summary>
     /// 添加权限
@@ -202,4 +231,7 @@ public class PermissionAppService : IPermissionAppService
         var resDto = _mapper.Map<Resource>(resUpdate.Data);
         return ReturnResult<Resource>.Success(resDto);
     }
+
+    
+
 }

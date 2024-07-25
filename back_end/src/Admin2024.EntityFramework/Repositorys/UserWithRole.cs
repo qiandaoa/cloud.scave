@@ -1,7 +1,7 @@
 namespace Admin2024.EntityFramework.Repositories;
 public class UserWithRole
 {
-  public Guid  Userld { get; set; }
+  public Guid  UserId { get; set; }
   public Guid RoleId { get; set; }
   public string Username { get; set; }
   public string Nickname { get; set; }

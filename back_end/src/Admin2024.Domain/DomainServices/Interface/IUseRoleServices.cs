@@ -4,7 +4,7 @@ using Admin2024.Instructions;
 namespace Admin2024.Domain.DomainServices.Interface;
 public interface IUseRoleServices
 {
-     Task<ReturnResult<UserRole>> CreateUseRole(Guid useId,Guid roleId);
+      Task<ReturnResult<UserRole>> CreateUseRole(Guid useId,Guid roleId);
 
       Task<ReturnResult<UserRole>> DeleteUseRole(Guid useRoleId);
 

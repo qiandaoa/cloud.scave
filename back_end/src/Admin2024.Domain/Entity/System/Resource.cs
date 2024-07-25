@@ -4,5 +4,4 @@ public class Resource : BaseEntity
 {
     public string ResourceName { get; set; } = null!;
     public string? Description { get; set; }
-    public ICollection<Permission> Permissions { get;set;}
 }

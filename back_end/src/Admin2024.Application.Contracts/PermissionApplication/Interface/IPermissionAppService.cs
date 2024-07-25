@@ -1,5 +1,6 @@
 using Admin2024.Application.Contracts.PermissionApplication.Dto;
 using Admin2024.Domain.System;
+using Admin2024.EntityFramework.Repositories;
 using Admin2024.Instructions;
 
 namespace Admin2024.Application.Contracts.PermissionApplication.Interface;
@@ -15,6 +16,9 @@ public interface IPermissionAppService
 
   // 修改权限
   Task<ReturnResult<Permission>> UpdatePermission(Guid id, PerUpdateInfoDto input);
+
+  // 权限连表查询
+  List<PermissionRepository> GetPermissionList();
 
 //------------------------------------资源--------------------------------------- 
 
