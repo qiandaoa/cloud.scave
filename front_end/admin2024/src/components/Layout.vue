@@ -3,7 +3,8 @@
         <a-layout-sider :collapsed="isSiderCollapsed" style="height: 100vh;">
             <div class="sider-content">
                 <a-button type="primary" class="collapse-button" @click="toggleSiderCollapse">
-                    {{ isSiderCollapsed ? '展开菜单' : '折叠菜单' }}
+                    <MenuUnfoldOutlined  v-if="isSiderCollapsed" style="font-size: 20px;" />
+                    <MenuFoldOutlined  style="font-size: 20px;" v-else />
                 </a-button>
                 <SildeMenu :isSiderCollapsed="isSiderCollapsed"></SildeMenu>
             </div>
@@ -25,10 +26,8 @@ import SildeMenu from './SildeMenu.vue';
 import HeaderContent from './HeaderContent.vue';
 import { h, ref, reactive, watch } from 'vue'
 import {
-    MailOutlined,
-    CalendarOutlined,
-    AppstoreOutlined,
-    SettingOutlined,
+    MenuUnfoldOutlined,
+    MenuFoldOutlined 
 } from '@ant-design/icons-vue';
 let theme = ref('dark');
 let headerStyle = reactive({ background: '#fff', padding: 0 })
@@ -37,11 +36,11 @@ let contentStyle = reactive({ margin: '24px 16px', padding: '24px', background: 
 
 let isSiderCollapsed = ref(false); // 控制sider折叠状态
 
-// 动态调整contentStyle的paddingLeft
-watch(isSiderCollapsed, (newVal) => {
-    contentStyle.paddingLeft = '64px';
+// // 动态调整contentStyle的paddingLeft
+// watch(isSiderCollapsed, (newVal) => {
+//     // contentStyle.paddingLeft = '50px';
 
-});
+// });
 const toggleSiderCollapse = () => {
     isSiderCollapsed.value = !isSiderCollapsed.value;
 };
@@ -83,8 +82,11 @@ const toggleSiderCollapse = () => {
 }
 
 .collapse-button {
-    margin-bottom: 16px;
+    /* margin-bottom: 16px; */
+    background-color: transparent   ;
+    border: 1px solid rgb(0, 21, 41);
     /* 为按钮与菜单之间留出一些空间 */
+    box-shadow: none;
 }
 
 .headerstyle {

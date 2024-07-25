@@ -2,12 +2,12 @@
     <div class="el">
         <!-- //el-left 页面左侧代码布局 -->
         <div class="el-left">
-            <a-menu class="el-left-menu" @click="handleClick">
-                <a-menu-item key="0" disabled>
+            <a-menu class="el-left-menu"  @click="handleClick">
+                <a-menu-item disabled >
                     角色名称
                 </a-menu-item>
-                <a-menu-item key="1">
-                    系统管理员
+                <a-menu-item v-for="item in filteredRoles.values" :key="item.id">
+                    {{ item.roleName }}
                 </a-menu-item>
 
             </a-menu>
@@ -26,23 +26,23 @@
                 <tr>
                     <th><input type="checkbox" name="" id=""></th>
                     <th>用户账号</th>
-                    <th>用户名称</th>
-                    <th>性别</th>
+                    <th>用户昵称    </th>
+                    
                     <th>邮箱</th>
                     <th>是否启用</th>
                     <th>备注</th>
                 </tr>
                 <tr v-for="item in tabArr">
                     <td><input type="checkbox" name="" :id="item.id.toString()"></td>
-                    <td>{{ item.account }}</td>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.gender }}</td>
+                    <td>{{ item.username }}</td>
+                    <td>{{ item.nickName }}</td>
+                    
                     <td>{{ item.email }}</td>
                     <td>
-                        <div v-if="item.checked == true">
+                        <div v-if="item.isActived == true">
                             <CheckCircleFilled style="color: green;" />
                         </div>
-                        <div v-else-if="item.checked == false">
+                        <div v-else-if="item.isActived == false">
                             <CloseCircleFilled style="color: red;" />
                         </div>
                     </td>
@@ -73,28 +73,36 @@
 
 
 <script setup>
-import { ref, reactive } from "vue";
-
+import { ref, reactive,onMounted } from "vue";
+import axios from "axios";
 import {
     SearchOutlined,
     CheckCircleFilled,
     CloseCircleFilled
 } from '@ant-design/icons-vue';
+let rolename = reactive([])
+const filteredRoles=reactive([])
+
+onMounted(async () => {
+    try {
+    let res = await axios.get('http://localhost:63760/api/role');
+    let user = await axios.get('https://localhost:63759/api/user')
+    const users= user.data.filter(item=>!item.isDeleted);
+    console.log(users);
+    tabArr.value=users
+    rolename = res.data;
+    // console.log(Rolearr);    
+    filteredRoles.values = rolename.data.filter(item=>!item.isDeleted);
+    console.log(filteredRoles);
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 //模态框显示或隐藏
 let dialog = ref(false);
 //表格测试数据
-let tabArr = reactive([
-    {
-        id: 1,
-        account: 1111,
-        name: '系统管理员',
-        gender: '男',
-        email: '1111@163.com',
-        checked: true,
-        remark: ''
-    }
-])
+let tabArr = ref([])
 
 //模态框内固定表头的样式
 const columns = [

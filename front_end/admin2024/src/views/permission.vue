@@ -21,13 +21,13 @@
             <input type="text" placeholder="请输入关键字">
             <table class="el-right-table">
                 <tr>
-                    <th>#</th>
+                    <!-- <th>#</th> -->
                     <th>角色</th>
                     <th>权限列表</th>
                 </tr>
-                <tr v-for="item in tabArr">
-                    <td style="max-width: 5%;">{{ item.id }}</td>
-                    <td style="max-width: 25%;">{{ item.name }}</td>
+                <tr v-for="item in filteredRoles">
+                    <!-- <td style="max-width: 5%;">{{ item.id }}</td> -->
+                    <td style="max-width: 25%;">{{ item.roleName }}</td>
                     <td style="max-width: 70%;">
                         <input type="checkbox" value="浏览" name="" :id="item.id"><span>浏览</span>
                         <input type="checkbox" value="添加" name="" :id="item.id"><span>添加</span>
@@ -50,28 +50,13 @@ import {
 } from '@ant-design/icons-vue';
 let Rolearr=reactive([])
 let filteredRoles=ref([])
-let tabArr = reactive([
-    {
-        id: 1,
-        name: '管理员',
-    },
-    {
-        id: 2,
-        name: '用户',
-    },
-    {
-        id: 3,
-        name: '游客',
-    }
-
-])
 
 onMounted(async () => {
   try {
     let res = await axios.get('http://localhost:63760/api/role');
     Rolearr = res.data;
     // console.log(Rolearr);    
-    filteredRoles.value = Rolearr.filter(item=>!item.isDeleted);
+    filteredRoles.value = Rolearr.data.filter(item=>!item.isDeleted);
     console.log(filteredRoles.value);
   } catch (err) {
     console.log(err);

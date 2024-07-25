@@ -20,7 +20,7 @@
                         <a-space direction="vertical" :size="80">
                             <a-space wrap :size="32">
                                 <!-- 用户头像 -->
-                                <a-avatar :src="avatarSrc" :size="48">
+                                <a-avatar :src="imageUrl" :size="48">
                                 </a-avatar>
                                 <!-- <span class="username">{{ username }}</span> -->
                             </a-space>
@@ -66,12 +66,12 @@ import { storeToRefs } from 'pinia';
 import { useRouterStore } from '../store/router';
 import { nextTick, watch, computed, ref, onMounted } from 'vue';
 import { useRoute, onBeforeRouteUpdate, useRouter, RouterLink } from 'vue-router';
-import { FundTwoTone } from '@ant-design/icons-vue';
 
+import axios from 'axios';
 // 初始化Vue Router实例
 const router = useRouter();
 // 用户头像源地址
-const avatarSrc = '/avatar.jpg';
+const imageUrl = ref('');
 // 引用Pinia的路由状态存储
 const routerStore = useRouterStore();
 // 从状态存储中引用tabArr和activeKey
@@ -79,9 +79,25 @@ const { tabArr, activeKey } = storeToRefs(routerStore);
 
 
 const username = localStorage.getItem('username');
+const id = localStorage.getItem('userId')
 // 获取当前路由对象
 const route = useRoute();
 
+//获取头像
+onMounted(async () => {
+    let user = await axios.get(`http://localhost:63760/api/user/${id}`)
+    // console.log(user);
+
+  if (user.data.avatar) {
+        try{
+          let res = await axios.get(`http://localhost:63760/api/avatar/${id}`)
+        //   console.log(res);
+          imageUrl.value = res.data;
+        }catch(err){
+          console.log(err);
+        }
+      }
+})
 
 // 计算属性：根据当前路由生成面包屑数组
 const breadcrumbItems = computed(() => {
