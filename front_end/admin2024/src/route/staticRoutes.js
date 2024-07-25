@@ -54,6 +54,11 @@ export const routes = [
                 meta: { title: '用户角色', icon: () => h(ApartmentOutlined) }
             },
             {
+                path: '/menu',
+                component: () => import('../views/menu.vue'),
+                meta: { title: '菜单管理', icon: () => h(ApartmentOutlined) }
+            },
+            {
                 path: '/userinfo',
                 component: () => import("../views/userinfo.vue"),
                 meta: { title: '用户个人信息', hide: true }
