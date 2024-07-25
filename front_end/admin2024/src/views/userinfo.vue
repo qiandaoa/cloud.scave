@@ -4,7 +4,8 @@
       <a-col :span="8">
         <a-card :bordered="false" title="个人信息">
           <div class="user-info">
-            <AvatarUploader :action="yourActionURL" @update:imageUrl="handleImageUrlUpdate" />
+            <!-- <img :src="imageUrl"  alt="User Avatar" class="avatar"  @click="showAvatarUploader"  /> -->
+            <AvatarUploader   @update:imageUrl="handleImageUrlUpdate" style="" />
             <div class="user-details">
               <LoginOutlined /> <span>登陆账号：{{ userName }}</span>
 
@@ -79,8 +80,12 @@ import { LoginOutlined, PhoneOutlined, MailOutlined, InsuranceOutlined } from '@
 import axios from 'axios';
 import  AvatarUploader  from '../components/AvatarUploader.vue' 
 // 假设这是从后端获取的用户信息
-const userAvatar = ref('');
+const yourActionURL = ref('');
+const showAvatarUploaderFlag = ref(false);
 
+const showAvatarUploader = () => {
+  showAvatarUploaderFlag.value = true;
+};
 const userName = localStorage.getItem('username')
 const userData = reactive({
   email: '',
@@ -94,17 +99,7 @@ const edituserData = reactive({
   nickName: "",
 })
 const telephoneError = ref(false); // 用于跟踪手机号验证状态
-const handleImageUrlUpdate = imageUrl => {
-  console.log('Updated image URL:', imageUrl);
-};
-const validateTelephone = (value) => {
-  const reg = /^1[3-9]\d{9}$/;
-  if (!reg.test(value)) {
-    telephoneError.value = true;
-  } else {
-    telephoneError.value = false;
-  }
-};
+
 const saveConfiguration = async (id) => {
     if(telephoneError.value){
       alert('请输入正确的11位手机号')
@@ -158,11 +153,25 @@ onMounted(async () => {
       console.log(res);
       Object.assign(edituserData, res.data)
       Object.assign(userData, res.data)
+
+
     } catch (err) {
       console.log(err);
     }
   }
 })
+const imageUrl = ref('');
+const handleImageUrlUpdate = imageUrl => {
+  console.log('Updated image URL:', imageUrl);
+};
+const validateTelephone = (value) => {
+  const reg = /^1[3-9]\d{9}$/;
+  if (!reg.test(value)) {
+    telephoneError.value = true;
+  } else {
+    telephoneError.value = false;
+  }
+};
 const submitPasswordChange = async (id) => {
   if (formState.value.newPassword === formState.value.oldPassword) {
     alert('新密码不能与旧密码相同！');

@@ -1,38 +1,54 @@
 <template>
+  <div class="avatar-uploader-wrap" title="点击更换头像">
+
+  
   <a-upload
     v-model:file-list="fileList"
     name="avatar"
     list-type="picture-card"
     class="avatar-uploader"
     :show-upload-list="false"
-   :action="uploadAxios"
+    :action="uploadAxios"
     :before-upload="beforeUpload"
     @change="handleChange"
+    
   >
-    <img v-if="imageUrl" :src="imageUrl" alt="avatar" style="width: 100px;" />
+    <img v-if="imageUrl" :src="imageUrl" alt="avatar" class="avatar"  />
     <div v-else>
       <loading-outlined v-if="loading"></loading-outlined>
       <plus-outlined v-else></plus-outlined>
       <div class="ant-upload-text">Upload</div>
     </div>
   </a-upload>
+</div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
 import { message } from 'ant-design-vue';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import axios from 'axios';
 
 const id = localStorage.getItem('userId')
 
-const uploadAxios = axios.create({
-       baseURL: 'http://localhost:63760',
-       // 其他配置...
-   });
+const uploadAxios = `http://localhost:63760/api/Avatar/${id}`
 
 const emit = defineEmits(['update:imageUrl']);
 
+onMounted(async () => {
+  let user = await axios.get(`http://localhost:63760/api/user/${id}`)
+  console.log(user);
+
+  if (user.data.avatar) {
+        try{
+          let res = await axios.get(`http://localhost:63760/api/avatar/${id}`)
+          console.log(res);
+          imageUrl.value = res.data;
+        }catch(err){
+          console.log(err);
+        }
+      }
+})
 function getBase64(img, callback) {
 const reader = new FileReader();
 reader.addEventListener('load', () => callback(reader.result));
@@ -41,7 +57,7 @@ reader.readAsDataURL(img);
 
 const fileList = ref([]);
 const loading = ref(false);
-const imageUrl = ref('/avatar.jpg');
+const imageUrl = ref('');
 
 const handleChange = info => {
 if (info.file.status === 'uploading') {
@@ -75,16 +91,24 @@ return isJpgOrPng && isLt2M;
 </script>
 
 <style scoped>
-.avatar-uploader > .ant-upload {
-width: 128px;
-height: 128px;
+
+.avatar-uploader-wrap {
+  width: 90px;
+  height: 90px;
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-left: 40px;
 }
-.ant-upload-select-picture-card i {
-font-size: 32px;
-color: #999;
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  /* border-radius: 50%;   */
+  object-fit: cover;
 }
-.ant-upload-select-picture-card .ant-upload-text {
-margin-top: 8px;
-color: #666;
+:where(.css-dev-only-do-not-override-19iuou).ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select{
+  border-radius: 50%;
 }
+
 </style>
