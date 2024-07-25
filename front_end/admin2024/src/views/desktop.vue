@@ -3,7 +3,6 @@
       <a-layout-header :style="{ position: 'sticky', zIndex: 1, top: 0, background: '#fff' }">
         <a-row type="flex" justify="space-between" align="middle">
           <a-col :span="12">
-            <h2>工作台</h2>
           </a-col>
           <a-col :span="12">
             <a-menu theme="light" mode="horizontal" :style="{ lineHeight: '64px' }">
@@ -28,7 +27,8 @@
           </a-col>
           <a-col :xs="24" :sm="12" :md="8">
             <a-card title="销售趋势">
-              <div id="sales-chart" style="height: 200px;"></div>
+              <div id="sales-chart" style="height: 200px;">
+              </div>
             </a-card>
           </a-col>
           <a-col :xs="24" :sm="12" :md="8">

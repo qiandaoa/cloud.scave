@@ -3,20 +3,19 @@
         <a-row :gutter="16">
             <a-col :span="12">
                 <a-card>
-                    <a-statistic title="反馈" :value="data.useState" :precision="2" suffix="%"
-                        :value-style="{ color: '#3f8600' }" style="margin-right: 50px">
+                    <a-statistic title="用户总数" :value="useState.length" :precision="0" :value-style="{ color: 'blue' }"
+                        style="margin-right: 50px">
                         <template #prefix>
-                            <arrow-up-outlined />
+                            <UserOutlined />
                         </template>
                     </a-statistic>
                 </a-card>
             </a-col>
             <a-col :span="12">
                 <a-card>
-                    <a-statistic title="空闲" :value="data.useState" :precision="2" suffix="%" class="demo-class"
-                        :value-style="{ color: '#cf1322' }">
+                    <a-statistic title="活跃用户数" :value="useState.length" :precision="0" class="demo-class"
+                        :value-style="{ color: 'green' }">
                         <template #prefix>
-                            <arrow-down-outlined />
                         </template>
                     </a-statistic>
                 </a-card>
@@ -27,7 +26,7 @@
         <div class="dashboard-item1">
             <a-progress type="dashboard" :percent="data.useState1" :format="percent => `${percent}%`"
                 :stroke-color="{ '0%': '#108ee9', '100%': '#87d068' }" />
-            用户注册率
+            用户评论总数
         </div>
         <div class="dashboard-item2">
             <a-progress type="dashboard" :percent="data.useState2" :format="percent => `${percent}%`"
@@ -48,12 +47,13 @@
 </template>
 
 <script setup>
-import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons-vue';
-import { reactive } from 'vue';
+import { UserOutlined } from '@ant-design/icons-vue';
+import { reactive, onMounted } from 'vue';
+import axios from 'axios'
+
 /// 创建响应式数据
 let data = reactive([
     {
-        useState: '',
         useState1: '',
         useState2: '',
         useState3: '',
@@ -62,12 +62,28 @@ let data = reactive([
 ])
 // 定时器刷新数据
 setInterval(() => {
-    data.useState = Math.floor(Math.random() * 100)
-    data.useState1 = Math.floor(Math.random() * 100)
+    // data.useState1 = Math.floor(Math.random() * 100)
     data.useState2 = Math.floor(Math.random() * 100)
     data.useState3 = Math.floor(Math.random() * 100)
     data.useState4 = Math.floor(Math.random() * 100)
 }, 150)
+
+//获取用户数组长度
+let useState = reactive([])
+onMounted(() => {
+    axios.get('http://localhost:63760/api/User')
+        .then(data => {
+            useState.push(data)
+                console.log(data.data,{ length: data.data.length });
+            let uselength = data.data.length;
+            useState.length = uselength;
+            console.log(uselength);
+        })
+})
+//用户活跃数
+
+
+
 </script>
 
 <style scoped>
@@ -79,6 +95,7 @@ setInterval(() => {
     justify-content: center;
     flex-wrap: wrap;
     gap: 100px;
+
     .ant-progress-circle-trail {
         stroke: #3f8600;
         stroke-linecap: round;
@@ -104,6 +121,7 @@ setInterval(() => {
     margin-bottom: 50px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease-in-out;
+
     &:hover {
         transform: scale(1.1);
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
