@@ -45,9 +45,9 @@ public class OperationServices : IOperationServices
     }
 
     // 根据操作名称查找
-    public Operation? GetOperationByName(string poweName)
+    public Operation? GetOperationByName(string OperationName)
     {
-        var op = _ope.Table.FirstOrDefault(o => o.OperationName == poweName);
+        var op = _ope.Table.FirstOrDefault(o => o.OperationName == OperationName);
         return op;
     }
 

@@ -199,6 +199,8 @@ public class AdminDbContext : DbContext
         return base.SaveChangesAsync(cancellationToken);
     }
 
+    
+    
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Role { get; set; }
     public DbSet<Permission> Permission { get; set; }
