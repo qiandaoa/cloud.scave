@@ -2,7 +2,7 @@ using Admin2024.Domain;
 using Admin2024.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Admin2024.EntityFramework;
+namespace Admin2024.EntityFramework.Repositories;
 
 public class Repository<T> : IRepository<T> where T : BaseEntity
 {

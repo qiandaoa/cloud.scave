@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Admin2024.Domain\Admin2024.Domain.csproj" />
     <ProjectReference Include="..\Admin2024.Instructions\Admin2024.Instructions.csproj" />
+    <ProjectReference Include="..\Admin2024.EntityFramework\Admin2024.EntityFramework.csproj" />
   </ItemGroup>
 
   <ItemGroup>

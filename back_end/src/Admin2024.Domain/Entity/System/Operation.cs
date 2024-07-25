@@ -5,4 +5,5 @@ public class Operation : BaseEntity
     public string OperationName { get; set; } = null!;
 
     public string? Description { get; set; }
+    public ICollection<Permission> Permissions { get; set; }
 }

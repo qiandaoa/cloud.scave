@@ -7,7 +7,7 @@ using Admin2024.Instructions;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 
-
+namespace Admin2024.Application.AppService;
 public class PermissionAppService : IPermissionAppService
 {
      private readonly IPermissionDomainService _per;
@@ -42,10 +42,10 @@ public class PermissionAppService : IPermissionAppService
     /// <exception cref="NotImplementedException"></exception>
     public async Task<ReturnResult<OperCreateInfoDto>> AddOperation(OperCreateInfoDto input)
     {
-        if(string.IsNullOrEmpty(input.poweName)){
+        if(string.IsNullOrEmpty(input.OperationName)){
             return ReturnResult<OperCreateInfoDto>.Error("操作名称不能为空");
         }
-        if(_ope.GetOperationByName(input.poweName) != null){
+        if(_ope.GetOperationByName(input.OperationName) != null ){
             return ReturnResult<OperCreateInfoDto>.Error("该操作已存在");
         }
         
