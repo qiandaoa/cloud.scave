@@ -35,6 +35,25 @@ public class permissionController : ControllerBase
   }
 
   /// <summary>
+  /// 连表查询权限
+  /// </summary>
+  /// <param name="baseParameters"></param>
+  /// <returns></returns>
+  [HttpGet("api/perList")]
+  public IActionResult GetPerList([FromQuery] BaseParameters baseParameters)
+  {
+    var perList = _per.GetPermissionList();
+    var keywords = baseParameters.keywords;
+        if(!string.IsNullOrEmpty(keywords)){
+            var filer = perList.FirstOrDefault(p => 
+                p.ResourceName.Contains(keywords) ||
+                p.OperationName.Contains(keywords)||
+                p.PermissionDes.Contains(keywords));
+            return Ok(filer);
+        }
+    return Ok(perList);
+  }
+  /// <summary>
   /// 新增权限
   /// </summary>
   /// <param name="perCreateInfoDto"></param>

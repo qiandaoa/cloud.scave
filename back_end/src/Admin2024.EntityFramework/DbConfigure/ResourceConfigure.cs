@@ -11,7 +11,7 @@ public class ResourceConfigure : BaseEntityConfigure<Resource>
     {
         base.Configure(builder);
 
-        builder.Property(e => e.ResourceName).HasColumnName("resource_id");
+        builder.Property(e => e.ResourceName).HasColumnName("resource_name");
 
         builder.Property(e => e.Description).HasColumnName("description");
     }

@@ -24,6 +24,8 @@ public class UseRoleServices:IUseRoleServices
         roleRep=_roleRep;
         toolRepository=_toolRepository;
     }
+
+    // 用户选择角色
     public async Task<ReturnResult<UserRole>> CreateUseRole(Guid useId,Guid roleId)
     {
        
@@ -51,6 +53,7 @@ public class UseRoleServices:IUseRoleServices
         return ReturnResult<UserRole>.Success(res);
     }
 
+    // 移除用户角色
     public async Task<ReturnResult<UserRole>> DeleteUseRole(Guid useRoleId)
     {
         var fondExit=await repository.GetByIdAsync(useRoleId);
