@@ -79,7 +79,7 @@ import { LoginOutlined, PhoneOutlined, MailOutlined, InsuranceOutlined } from '@
 import axios from 'axios';
 import  AvatarUploader  from '../components/AvatarUploader.vue' 
 // 假设这是从后端获取的用户信息
-const userAvatar = ref('/avatar.jpg');
+const userAvatar = ref('');
 
 const userName = localStorage.getItem('username')
 const userData = reactive({

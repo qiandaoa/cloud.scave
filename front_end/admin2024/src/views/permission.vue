@@ -71,7 +71,7 @@ onMounted(async () => {
     let res = await axios.get('http://localhost:63760/api/role');
     Rolearr = res.data;
     // console.log(Rolearr);    
-    filteredRoles.value = Rolearr.filter(item=>!item.isDeleted);
+    filteredRoles.value = Rolearr.data.filter(item=>!item.isDeleted);
     console.log(filteredRoles.value);
   } catch (err) {
     console.log(err);

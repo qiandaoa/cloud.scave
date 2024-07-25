@@ -5,7 +5,7 @@
     list-type="picture-card"
     class="avatar-uploader"
     :show-upload-list="false"
-    :action="dynamicAction"
+   :action="uploadAxios"
     :before-upload="beforeUpload"
     @change="handleChange"
   >
@@ -22,9 +22,14 @@
 import { ref } from 'vue';
 import { message } from 'ant-design-vue';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons-vue';
+import axios from 'axios';
+
 const id = localStorage.getItem('userId')
 
-const dynamicAction = `http://localhost:63760/api/Avatar/${id}`;
+const uploadAxios = axios.create({
+       baseURL: 'http://localhost:63760',
+       // 其他配置...
+   });
 
 const emit = defineEmits(['update:imageUrl']);
 
@@ -36,7 +41,7 @@ reader.readAsDataURL(img);
 
 const fileList = ref([]);
 const loading = ref(false);
-const imageUrl = ref('../public/avatar.jpg');
+const imageUrl = ref('/avatar.jpg');
 
 const handleChange = info => {
 if (info.file.status === 'uploading') {
