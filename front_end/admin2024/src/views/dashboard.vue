@@ -57,7 +57,7 @@ onMounted(() => {
             {
                 name: '用户活跃度',
                 type: 'pie',
-                radius: '50%'
+                radius: '70%'
             }
         ]
     })
@@ -70,15 +70,13 @@ onMounted(() => {
                         data: [
                             { value: item.isActived, name: '活跃用户' },
                             { value: item.isActived, name: '非活跃用户' }
+
                         ]
                     }]
                 })
             })
         })
-})
-// 销毁echarts实例
-onUnmounted(() => {
-    echarts.dispose(echartsRef.value)
+        onUnmounted(() => { })  //销毁
 })
 
 //获取用户数组长度
