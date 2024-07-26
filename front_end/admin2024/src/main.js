@@ -14,6 +14,5 @@ import { pinia } from './store';
 // 使用App组件创建vue实例
 let app = createApp(App);
 
-
 // 使用路由中间件、antdv组件库
 app.use(pinia).use(router).use(antdv).mount('#app');
