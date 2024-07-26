@@ -6,21 +6,25 @@
                     <a-statistic title="用户总数" :value="useState.length" :precision="0" :value-style="{ color: 'blue' }"
                         style="margin-right: 50px">
                         <template #prefix>
-                            <UserOutlined />
+                            <TeamOutlined />
                         </template>
                     </a-statistic>
                 </a-card>
             </a-col>
             <a-col :span="12">
                 <a-card>
-                    <a-statistic title="活跃用户数" :value="useState.length" :precision="0" class="demo-class"
+                    <a-statistic title="活跃用户数" :value="isActiveds.length" :precision="0" class="demo-class"
                         :value-style="{ color: 'green' }">
                         <template #prefix>
+                            <SmileOutlined />
                         </template>
                     </a-statistic>
                 </a-card>
             </a-col>
         </a-row>
+    </div>
+    <div class="cc" style="width: 100vw; height: 400px; margin-top: 50px; margin-left: 50px; background-color: #f5f5f5; ">
+        <VEchart :options="options" style="width: 100%; height: 400px" :auto-resize="true" />
     </div>
     <div class="dashboard">
         <div class="dashboard-item1">
@@ -47,11 +51,29 @@
 </template>
 
 <script setup>
-import { UserOutlined } from '@ant-design/icons-vue';
+import { TeamOutlined, SmileOutlined } from '@ant-design/icons-vue';
 import { reactive, onMounted } from 'vue';
 import axios from 'axios'
 
-/// 创建响应式数据
+//引入echarts
+import VEchart from 'vue-echarts'
+
+//使用echarts
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/legend'
+import 'echarts/lib/component/title'
+import 'echarts/lib/component/markPoint'
+import 'echarts/lib/component/markLine'
+import 'echarts/lib/component/dataZoom'
+
+//导入渲染器
+import { use } from 'echarts/core'
+import { CanvasRenderer } from 'echarts/renderers'
+use(CanvasRenderer)
+
+
+// 创建响应式数据
 let data = reactive([
     {
         useState1: '',
@@ -60,28 +82,51 @@ let data = reactive([
         useState4: ''
     }
 ])
+
 // 定时器刷新数据
 setInterval(() => {
-    // data.useState1 = Math.floor(Math.random() * 100)
     data.useState2 = Math.floor(Math.random() * 100)
     data.useState3 = Math.floor(Math.random() * 100)
     data.useState4 = Math.floor(Math.random() * 100)
-}, 150)
+}, 1500)
 
 //获取用户数组长度
 let useState = reactive([])
+let isActiveds = reactive([])
 onMounted(() => {
     axios.get('http://localhost:63760/api/User')
         .then(data => {
+            // 用户总数
             useState.push(data)
-                console.log(data.data,{ length: data.data.length });
             let uselength = data.data.length;
             useState.length = uselength;
-            console.log(uselength);
+            // 用户活跃数
+            data.data.forEach(item => {
+                if (item.isActived == true) {
+                    isActiveds.push(item.isActived)
+                }
+            });
         })
 })
-//用户活跃数
 
+let options = {
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
+        }
+    },
+    legend: {
+        data: ['用户评论总数', '用户操作频率', '用户反馈率', '用户活跃数']
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    }
+}
+    
 
 
 </script>

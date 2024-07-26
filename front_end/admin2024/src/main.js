@@ -11,7 +11,6 @@ import { router } from './route';
 
 import { pinia } from './store';
 
-
 // 使用App组件创建vue实例
 let app = createApp(App);
 
