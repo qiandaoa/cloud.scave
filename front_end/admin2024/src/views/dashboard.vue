@@ -83,11 +83,12 @@ onMounted(() => {
             data.data.forEach(item => {
                 let uselength = data.data.length;
                 let tureUser=isActiveds.length;
+                let falseUser=uselength-tureUser;
                 myChart.setOption({
                     series: [{
                         data: [
-                            { value: uselength, name: '用户总数' },
-                            { value: tureUser, name: '活跃用户' }
+                            { value: tureUser, name: '活跃用户' },
+                            { value: falseUser, name: '非活跃用户' }
                         ]
                     }]
                 })
