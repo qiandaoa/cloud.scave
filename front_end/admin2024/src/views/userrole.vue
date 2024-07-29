@@ -122,13 +122,35 @@ onMounted(async () => {
         // 获取用户数据
         const resuser = await axios.get(`http://localhost:63760/api/user`);
         user.value = resuser.data;
-        // console.log(user);
+        // console.log(users);
         // 获取角色数据
         const res = await axios.get('http://localhost:63760/api/UseRole');
         data.value= res.data;
-        // console.log(data);
-
-  
+        // console.log(data); 
+        let delres = await axios.post(`http://localhost:63760/api/UseRole/pagingRole`,
+         {
+  pageNumber: 0,
+  pageSize: 0
+        }
+    )
+    
+//删除  获取后端的isdeleted状态然后引用到我的users数组  通过更改delres的isdeleted来改   因为已经有好多数组了 我要晕啦 help
+// 假设 delres 是一个包含数据的响应对象
+delres.data.data.forEach(delItem => {
+    // 使用 findIndex 查找用户在 users 数组中的位置
+    
+    const userIndex = users.findIndex(users => users.userId === delItem.userId);
+    
+    console.log(delItem.userId);//查找不到
+    // 检查是否找到了用户
+    if (userIndex !== -1) {
+        // 更新找到的用户对象的 isDeleted 属性
+        users[userIndex].isDeleted = delItem.isDeleted;
+    } else {
+        // 如果没有找到用户，可以打印警告或采取其他措施
+        // console.warn(`User with userId ${delItem.userId} not found in the users array.`);
+    }
+});
         data.value.forEach(item => {
             // 添加角色
             if (!roles.find(r => r.roleId === item.roleId)) {
@@ -142,7 +164,7 @@ onMounted(async () => {
                     username: item.username,
                     nickname: item.nickname,
                     avatar: item.avatar,
-                    
+                    isDeleted:item.isDeleted,
                     email: item.email,
                     telephone: item.email,
                     roleRemark: item.roleRemark,
@@ -155,6 +177,7 @@ onMounted(async () => {
                 users[userIndex].roles.push(item.roleId);
             }
         });
+        // console.log(filteredUsers);
     const activeUser=user.value.filter(user=>!user.isDeleted
 )
     combinedData = activeUser.map(user => {
@@ -180,7 +203,7 @@ onMounted(async () => {
     
     // 将处理后的用户列表赋值给 filteredUsers
     combinedData.values = combinedData
-    console.log(combinedData);
+    // console.log(combinedData);
 
         // 设置默认选中的角色并更新用户列表
         if (roles.length > 0) {
@@ -196,10 +219,12 @@ onMounted(async () => {
     }
 });
 
+
 // 更新过滤后的用户列表
 function updateFilteredUsers() {
+    // console.log(user);
     filteredUsers = users.filter(user => 
-        user.roles.includes(selectedRole.value)
+        user.roles.includes(selectedRole.value) && !user.isDeleted
     );
     console.log(filteredUsers);
 }
@@ -210,27 +235,25 @@ nextTick(()=>{
 })    
 }
 const Del=async(id)=>{
-    let res = await axios.post(`http://localhost:63760/api/UseRole/pagingRole`,{
-        
-  pageNumber: 0,
-  pageSize: 0
-})
-console.log(res);
+    
+    
+
     let userroleid=res.data.data.find(item=>item.userId===id)
-    console.log(userroleid.id);
-    if(userroleid){
-        try{
-            let res = await axios.post(`http://localhost:63760/api/UseRole/deleteuserole`,
-                {useroleId: userroleid.id}
-            )
-            if(res.status===200){
-                alert('删除成功')
-            }
-        }catch(err){
-                console.log(err);
-        }
+    console.log(userroleid);
+    // if(userroleid){
+    //     try{
+    //         let res = await axios.post(`http://localhost:63760/api/UseRole/deleteuserole`,
+    //             {useroleId: userroleid.id}
+    //         )
+    //         console.log(res);
+    //         if(res.status===200){
+                
+    //         }
+    //     }catch(err){
+    //             console.log(err);
+    //     }
     }
-}
+
 const  design = async (id)=>{
     console.log(selectedRole.value);
     console.log(id);
@@ -273,74 +296,75 @@ function handleClick(role) {
 
 // 模态框相关代码
 //这是用来抓取数据// ...
-const fetchData = async () => {
-    try {
-        // 获取用户数据
-        const resuser = await axios.get(`http://localhost:63760/api/user`);
-        user.value = resuser.data;
+// const fetchData = async () => {
+//     try {
+//         // 获取用户数据
+//         const resuser = await axios.get(`http://localhost:63760/api/user`);
+//         user.value = resuser.data;
         
-        // 获取角色数据
-        const res = await axios.get('http://localhost:63760/api/UseRole');
-        data.value = res.data;
+//         // 获取角色数据
+//         const res = await axios.get('http://localhost:63760/api/UseRole');
+//         data.value = res.data;
         
-        // 重置 roles 和 users 数组
-        roles = reactive([]);
-        users = reactive([]);
+//         // 重置 roles 和 users 数组
+//         roles = reactive([]);
+//         users = reactive([]);
 
-        // 处理数据
-        data.value.forEach(item => {
-            // 添加角色
-            if (!roles.find(r => r.roleId === item.roleId)) {
-                roles.push({ roleId: item.roleId, roleName: item.roleName });
-            }
+//         // 处理数据
+//         data.value.forEach(item => {
+//             // 添加角色
+//             if (!roles.find(r => r.roleId === item.roleId)) {
+//                 roles.push({ roleId: item.roleId, roleName: item.roleName });
+//             }
 
-            // 添加或更新用户
-            if (!users.find(u => u.userId === item.userId)) {
-                users.push({
-                    userId: item.userId,
-                    username: item.username,
-                    nickname: item.nickname,
-                    avatar: item.avatar,
-                    email: item.email,
-                    telephone: item.email,
-                    roleRemark: item.roleRemark,
-                    isActived: item.isActived,
-                    roles: [item.roleId]
-                });
-            } else {
-                const userIndex = users.findIndex(u => u.userId === item.userId);
-                users[userIndex].roles.push(item.roleId);
-            }
-        });
+//             // 添加或更新用户
+//             if (!users.find(u => u.userId === item.userId)) {
+//                 users.push({
+//                     userId: item.userId,
+//                     username: item.username,
+//                     nickname: item.nickname,
+//                     avatar: item.avatar,
+//                     email: item.email,
+//                     isDeleted:item.isDeleted,
+//                     telephone: item.email,
+//                     roleRemark: item.roleRemark,
+//                     isActived: item.isActived,
+//                     roles: [item.roleId]
+//                 });
+//             } else {
+//                 const userIndex = users.findIndex(u => u.userId === item.userId);
+//                 users[userIndex].roles.push(item.roleId);
+//             }
+//         });
 
-        // 重新构建 combinedData
-        combinedData = user.value.filter(user => !user.isDeleted).map(user => {
-            const rolesForUser = data.value.filter(roles => roles.userId === user.id);
-            return {
-                ...user,
-                roles: rolesForUser.map(role => ({
-                    roleId: role.roleId,
-                    roleName: role.roleName
-                }))
-            };
-        });
+//         // 重新构建 combinedData
+//         combinedData = user.value.filter(user => !user.isDeleted).map(user => {
+//             const rolesForUser = data.value.filter(roles => roles.userId === user.id);
+//             return {
+//                 ...user,
+//                 roles: rolesForUser.map(role => ({
+//                     roleId: role.roleId,
+//                     roleName: role.roleName
+//                 }))
+//             };
+//         });
 
-        // 确保每个用户至少有一个角色
-        combinedData.forEach(user => {
-            if (user.roles.length === 0) {
-                user.roles.push({ roleId: null, roleName: '游客' });
-            }
-        });
+//         // 确保每个用户至少有一个角色
+//         combinedData.forEach(user => {
+//             if (user.roles.length === 0) {
+//                 user.roles.push({ roleId: null, roleName: '游客' });
+//             }
+//         });
 
-        // 更新过滤后的用户列表
-        updateFilteredUsers();
+//         // 更新过滤后的用户列表
+//         updateFilteredUsers();
 
-        // 确保视图更新
-        await nextTick();
-    } catch (err) {
-        console.error('Failed to fetch data:', err);
-    }
-};
+//         // 确保视图更新
+//         await nextTick();
+//     } catch (err) {
+//         console.error('Failed to fetch data:', err);
+//     }
+// };
 
 </script>
  

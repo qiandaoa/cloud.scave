@@ -1,3 +1,5 @@
+using Microsoft.Net.Http.Headers;
+
 namespace Admin2024.EntityFramework.Repositories;
 public class UserWithRole
 {
@@ -12,5 +14,5 @@ public class UserWithRole
   public string RoleName { get; set; }
   public string RoleRemark { get; set; }
   public bool IsActived { get; set; }
-  
+  public bool IsDeleted {get;set;}
 }

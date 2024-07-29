@@ -25,10 +25,10 @@ public class UseRoleAppService:IUseRoleAppService
     }
 
     // 移除用户角色
-    public async Task<ReturnResult<string>> DeleteUseRole(DelUseRoleDto deluseRoleId)
+    public async Task<ReturnResult<UserRole>> DeleteUseRole(DelUseRoleDto deluseRoleId)
     {
        var getVal=await useRoleServices.DeleteUseRole(deluseRoleId.UseroleId);
-       return  ReturnResult<string>.Success(getVal.Message);
+       return  getVal;
     }
 
     // 获取用户角色列表（连表）
@@ -51,7 +51,8 @@ public class UseRoleAppService:IUseRoleAppService
                     Telephone = ur.user.Telephone,
                     RoleName = role.RoleName,
                     RoleRemark = role.Remark,
-                    IsActived = ur.user.IsActived
+                    IsActived = ur.user.IsActived,
+                    IsDeleted = ur.user.IsDeleted
                 })
             .ToList(); 
         return useRoleList;
