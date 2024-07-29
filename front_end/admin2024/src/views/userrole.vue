@@ -35,6 +35,7 @@
                     <th>邮箱</th>
                     <th>是否启用</th>
                     <th>备注</th>
+                    <th>操作</th>
                 </tr>
                 <!-- 用户数据行 -->
                 <tr v-for="user in filteredUsers" :key="user.userId">
@@ -52,6 +53,7 @@
                         </div>
                     </td>
                     <td>{{ user.roleRemark }}</td>
+                    <td><a-button @click="()=>Del(user.userId)">删除</a-button></td>
                 </tr>
             </table>
         </div>
@@ -78,10 +80,20 @@
                 <td>{{ item.remark }}</td>
                 <td>
           <a-space direction="vertical" style="margin-left: 20px;" >
-            <a-switch v-model:checked="item.isActived" size="small" @click="State(item.id)" />
+            <a-switch v-model:checked="item.isActived" size="small" @click="State(item.id)" disabled />
           </a-space>
         </td> 
-        <td>{{ item.role ? item.role.roleName : '-' }}</td> <!-- 如果没有角色信息，则显示破折号 -->
+        <td>
+          <!-- 使用 v-for 遍历 roles 数组 -->
+          <template v-for="(role, index) in item.roles" :key="index">
+              <span >{{ role.roleName }}</span><br>
+            </template>   
+        </td>
+        <td>
+            <a-button @click="design(item.id)">
+            分配角色
+            </a-button> 
+        </td>
             </tr>
         </table>
    </a-modal>
@@ -96,12 +108,13 @@ import { SearchOutlined, CheckCircleFilled, CloseCircleFilled, FundTwoTone } fro
 // 定义引用变量
 let roles = reactive([]); // 存储所有角色
 let users = reactive([]); // 存储所有用户
-let filteredUsers = ref([]); // 存储根据角色筛选后的用户
+let filteredUsers = reactive([]); // 存储根据角色筛选后的用户
 let selectedRole = ref(null); // 当前选中的角色
 let dialogVisible=ref(false)
 const user = ref([]); // 单个用户数据
 let data=ref([])
-const combinedData=reactive([]);
+let combinedData=reactive([]);
+
 
 
 onMounted(async () => {
@@ -129,6 +142,7 @@ onMounted(async () => {
                     username: item.username,
                     nickname: item.nickname,
                     avatar: item.avatar,
+                    
                     email: item.email,
                     telephone: item.email,
                     roleRemark: item.roleRemark,
@@ -141,28 +155,40 @@ onMounted(async () => {
                 users[userIndex].roles.push(item.roleId);
             }
         });
-//            // 立即合并 user 和 data
-//    const combinedDataPrepared = [
-//             ...user.value.map(userItem => ({...userItem, role: data.value.roleName})), // 为用户数据添加role属性
-//             ...data.value.map(roleItem => ({...roleItem})) // 保持角色数据不变
-//         ];
+    const activeUser=user.value.filter(user=>!user.isDeleted
+)
+    combinedData = activeUser.map(user => {
+        
+        const rolesForUser = data.value.filter(roles => roles.userId === user.id);
+        
+        return {
+            ...user,
+            roles: rolesForUser.map(role => ({
+                roleId: role.roleId,
+                roleName: role.roleName
+            }))
+        };
+    });
+   
+    combinedData.forEach(user => {
+        if (user.roles.length === 0) {
+            user.roles.push({ roleId: null, roleName: '游客' });
+        }
+    });
 
-//         // 使用Set来去除重复的项（如果有基于ID的唯一性）
-//         const uniqueCombinedData = Array.from(new Map(combinedDataPrepared.map(item => [item.id, item])).values());
-
-//         // 更新 combinedData
-//         combinedData= uniqueCombinedData;
-
-//         console.log(combinedData);
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!错误的
+ 
+    
+    // 将处理后的用户列表赋值给 filteredUsers
+    combinedData.values = combinedData
+    console.log(combinedData);
 
         // 设置默认选中的角色并更新用户列表
         if (roles.length > 0) {
             selectedRole.value = roles[0].roleId;
-            nextTick(() => {
-                updateFilteredUsers();
-            });
+          updateFilteredUsers()
         }
+        await nextTick()
+
 
         // 初始化过滤后的用户列表
     } catch (err) {
@@ -172,9 +198,10 @@ onMounted(async () => {
 
 // 更新过滤后的用户列表
 function updateFilteredUsers() {
-    filteredUsers.value = users.filter(user => 
+    filteredUsers = users.filter(user => 
         user.roles.includes(selectedRole.value)
     );
+    console.log(filteredUsers);
 }
 
 function Add(params) {
@@ -182,6 +209,58 @@ nextTick(()=>{
     dialogVisible.value=true
 })    
 }
+const Del=async(id)=>{
+    let res = await axios.post(`http://localhost:63760/api/UseRole/pagingRole`,{
+        
+  pageNumber: 0,
+  pageSize: 0
+})
+console.log(res);
+    let userroleid=res.data.data.find(item=>item.userId===id)
+    console.log(userroleid.id);
+    if(userroleid){
+        try{
+            let res = await axios.post(`http://localhost:63760/api/UseRole/deleteuserole`,
+                {useroleId: userroleid.id}
+            )
+            if(res.status===200){
+                alert('删除成功')
+            }
+        }catch(err){
+                console.log(err);
+        }
+    }
+}
+const  design = async (id)=>{
+    console.log(selectedRole.value);
+    console.log(id);
+    const user=combinedData.find(item=>item.id===id)
+    let roleName=user.roles.map(roles=>roles.roleName)
+    console.log(roleName);
+    // 检查角色名称数组中是否包含 '游客'
+    if (roleName.includes('游客')) {
+        try{
+            let res = await axios.post(`http://localhost:63760/api/UseRole/createuserole`,{   
+             userid: id,
+             roleid: selectedRole.value
+            })
+            if(res.status===200){
+                alert('分配成功')
+                dialogVisible.value=false
+                // await onMounted()
+                await fetchData()
+            }else{
+                console.log(res.message);
+            }
+            
+        }catch(err){
+            console.log(err);
+        }
+
+    } else {
+        alert('该用户已经有角色了,请联系超级管理员进行分配')
+    }
+} 
 // 角色点击事件处理器
 function handleClick(role) {
     if (!role || typeof role !== 'object') {
@@ -193,7 +272,75 @@ function handleClick(role) {
 }
 
 // 模态框相关代码
-// ...
+//这是用来抓取数据// ...
+const fetchData = async () => {
+    try {
+        // 获取用户数据
+        const resuser = await axios.get(`http://localhost:63760/api/user`);
+        user.value = resuser.data;
+        
+        // 获取角色数据
+        const res = await axios.get('http://localhost:63760/api/UseRole');
+        data.value = res.data;
+        
+        // 重置 roles 和 users 数组
+        roles = reactive([]);
+        users = reactive([]);
+
+        // 处理数据
+        data.value.forEach(item => {
+            // 添加角色
+            if (!roles.find(r => r.roleId === item.roleId)) {
+                roles.push({ roleId: item.roleId, roleName: item.roleName });
+            }
+
+            // 添加或更新用户
+            if (!users.find(u => u.userId === item.userId)) {
+                users.push({
+                    userId: item.userId,
+                    username: item.username,
+                    nickname: item.nickname,
+                    avatar: item.avatar,
+                    email: item.email,
+                    telephone: item.email,
+                    roleRemark: item.roleRemark,
+                    isActived: item.isActived,
+                    roles: [item.roleId]
+                });
+            } else {
+                const userIndex = users.findIndex(u => u.userId === item.userId);
+                users[userIndex].roles.push(item.roleId);
+            }
+        });
+
+        // 重新构建 combinedData
+        combinedData = user.value.filter(user => !user.isDeleted).map(user => {
+            const rolesForUser = data.value.filter(roles => roles.userId === user.id);
+            return {
+                ...user,
+                roles: rolesForUser.map(role => ({
+                    roleId: role.roleId,
+                    roleName: role.roleName
+                }))
+            };
+        });
+
+        // 确保每个用户至少有一个角色
+        combinedData.forEach(user => {
+            if (user.roles.length === 0) {
+                user.roles.push({ roleId: null, roleName: '游客' });
+            }
+        });
+
+        // 更新过滤后的用户列表
+        updateFilteredUsers();
+
+        // 确保视图更新
+        await nextTick();
+    } catch (err) {
+        console.error('Failed to fetch data:', err);
+    }
+};
 
 </script>
  
