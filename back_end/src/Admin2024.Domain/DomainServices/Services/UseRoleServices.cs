@@ -61,13 +61,16 @@ public class UseRoleServices:IUseRoleServices
         {
            return ReturnResult<UserRole>.Error("删除的目标不存在");
         }
-        fondExit.IsDeleted=true;
-        var getMsg=await repository.UpdateAsync(fondExit);
-        if(getMsg!=null)
-        {
-           return ReturnResult<UserRole>.Success(getMsg);
+        if(fondExit.IsDeleted == true){
+          return ReturnResult<UserRole>.Error("目标已被删除");
         }
-        return ReturnResult<UserRole>.Error("删除失败");
+        await repository.DeleteAsync(useRoleId);
+        return ReturnResult<UserRole>.Success(fondExit);
+        // if(getMsg!=null)
+        // {
+        //    return ReturnResult<UserRole>.Success(getMsg);
+        // }
+        // return ReturnResult<UserRole>.Error("删除失败");
        
     }
 

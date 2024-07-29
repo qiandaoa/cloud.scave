@@ -25,9 +25,9 @@ public class UseRoleAppService:IUseRoleAppService
     }
 
     // 移除用户角色
-    public async Task<ReturnResult<UserRole>> DeleteUseRole(DelUseRoleDto deluseRoleId)
+    public async Task<ReturnResult<UserRole>> DeleteUseRole(Guid id)
     {
-       var getVal=await useRoleServices.DeleteUseRole(deluseRoleId.UseroleId);
+       var getVal=await useRoleServices.DeleteUseRole(id);
        return  getVal;
     }
 
@@ -45,6 +45,7 @@ public class UseRoleAppService:IUseRoleAppService
                 role => role.Id,
                 (ur, role) => new UserWithRole
                 {
+                    Id = ur.userRole.Id,
                     UserId = ur.user.Id,
                     RoleId = role.Id,
                     Username = ur.user.Username,
@@ -55,7 +56,8 @@ public class UseRoleAppService:IUseRoleAppService
                     RoleName = role.RoleName,
                     RoleRemark = role.Remark,
                     IsActived = ur.user.IsActived,
-                    IsDeleted = ur.user.IsDeleted
+                    IsDeleted = ur.user.IsDeleted,
+                    UserRoleIsDeleted = ur.userRole.IsDeleted
                 })
             // join：第二个连接，连接上面的结果ur和角色表
             // (ur,role) => new UserRoleResult(...)：将用户表和角色表进行连接

@@ -12,7 +12,7 @@ public interface IUseRoleAppService
      Task<ReturnResult<string>> SelectRole(CreateUseRoleDto createUseRoleDto);
 
      //用户角色的删除
-     Task<ReturnResult<UserRole>> DeleteUseRole(DelUseRoleDto deluseRoleId);
+     Task<ReturnResult<UserRole>> DeleteUseRole(Guid id);
 
      //用户角色的查询
      Task<ReturnResult<List<UserRole>>> PagingGetRole(PagingRoleDto pagingRoleDto);
