@@ -53,7 +53,8 @@ public class UseRoleAppService:IUseRoleAppService
                     Email = ur.user.Email,
                     Telephone = ur.user.Telephone,
                     RoleName = role.RoleName,
-                    RoleRemark = role.Remark
+                    RoleRemark = role.Remark,
+                    IsActived = ur.user.IsActived
                 })
             // join：第二个连接，连接上面的结果ur和角色表
             // (ur,role) => new UserRoleResult(...)：将用户表和角色表进行连接

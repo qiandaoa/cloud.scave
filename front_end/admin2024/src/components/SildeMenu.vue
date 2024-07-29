@@ -7,7 +7,7 @@
     <span class="logo-text" v-if="!isSiderCollapsed">{{ logotext }}</span>
   </div>
   <!-- Ant Design的内联模式菜单 -->
-  <a-menu mode="inline" v-model:selectedKeys="selectKeys" :theme="theme" :items="menuArr" @click="handleMenuClick">
+  <a-menu mode="inline" v-model:selectedKeys="selectKeys"  v-model:openKeys="openKeys" :theme="theme" :items="menuArr" @click="handleMenuClick">
     <!-- 自定义菜单项模板 -->
     <template #item="{ item }">
       <a-menu-item :key="item.key">
@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useRouterStore } from '../store/router';
 import { storeToRefs } from 'pinia';
 import { MailOutlined, CalendarOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons-vue';
@@ -38,18 +38,22 @@ const isCollapsed = ref(window.innerWidth <= 768);
 let logotext = ref('云朵Admin');
 
 // 窗口尺寸改变时的处理函数
-const handleResize = () => {
-  isCollapsed.value = window.innerWidth <= 768;
-};
 
-// 组件挂载时，监听窗口尺寸变化
+
+// 用于跟踪应该打开的子菜单
+const openKeys = ref([]);
+
+// 在页面加载时读取本地存储中的打开的子菜单键
 onMounted(() => {
-  window.addEventListener('resize', handleResize);
+  const storedOpenKeys = localStorage.getItem('openMenuKeys');
+  if (storedOpenKeys) {
+    openKeys.value = JSON.parse(storedOpenKeys);
+  }
 });
 
-// 组件卸载时，移除窗口尺寸变化的监听
-onUnmounted(() => {
-  window.removeEventListener('resize', handleResize);
+// 在页面卸载前保存选中键到本地存储
+onBeforeUnmount(() => {
+  localStorage.setItem('openMenuKeys', JSON.stringify(openKeys.value));
 });
 
 // 引入路由状态管理器
@@ -64,10 +68,19 @@ const selectKeys = ref([activeKey.value]);
 // Logo图片源
 const logoSrc = ref('/remove.photos-removed-background (1).png');
 
+
+
 // 菜单点击事件处理器
-const handleMenuClick = ({ key }) => {
+const handleMenuClick = ({ key,eventKeyPath }) => {
   routerStore.changeActiveRoute(key);
   activeKey.value = key;
+    // 更新本地存储中的选中键
+    selectKeys.value = [key];
+  localStorage.setItem('selectedMenuKey', key);
+   // 如果点击的菜单项有子菜单，确保其打开
+   if (selectKeys && selectKeys.length > 1) {
+    openKeys.value = [selectKeys[0]];
+  }
 };
 
 // 监听活动键的变化，同步选中键

@@ -11,5 +11,6 @@ public class UserWithRole
   public string UseRemark { get; set; }
   public string RoleName { get; set; }
   public string RoleRemark { get; set; }
+  public bool IsActived { get; set; }
   
 }

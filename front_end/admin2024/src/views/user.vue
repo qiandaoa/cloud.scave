@@ -67,7 +67,8 @@ let ModalData = reactive({
   nickName: "",
   email: "",
   telephone: "",
-  remark: ""
+  remark: "",
+  avatar:"1"
 }
 )
 
@@ -152,6 +153,7 @@ let UserEdit = async (id) => {
     ModalData.email = res.data.email;
     ModalData.telephone = res.data.telephone;
     ModalData.remark = res.data.remark;
+    
     showModal.value = true;
   } catch (err) {
     console.log(err);
@@ -189,7 +191,7 @@ else {
 const ButtonSubmit = async (id) => {
   try {
     if (id) {
-      await axios.put(`http://localhost:63760/api/user/${id}`, ModalData);
+      await axios.put(`http://localhost:63760/api/UserUpdate/${id}`, ModalData);
       const index = UserDatas.findIndex(item => item.id === id);
       if (index !== -1) {
         UserDatas[index] = { ...UserDatas[index], ...ModalData };
