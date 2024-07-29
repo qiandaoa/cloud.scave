@@ -87,8 +87,8 @@ onMounted(() => {
                 myChart.setOption({
                     series: [{
                         data: [
-                            { value: tureUser, name: '活跃用户' },
-                            { value: falseUser, name: '非活跃用户' }
+                            { value:falseUser, name: '非活跃用户' },
+                            { value: tureUser, name: '活跃用户' }
                         ]
                     }]
                 })
