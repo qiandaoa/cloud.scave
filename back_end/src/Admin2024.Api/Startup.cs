@@ -12,6 +12,7 @@ using Admin2024.Domain.DomainServices.Services;
 using Admin2024.Domain.Interfaces;
 using Admin2024.Domain.ObjectValue;
 using Admin2024.EntityFramework;
+using Admin2024.EntityFramework.Repositories;
 using Autofac;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;

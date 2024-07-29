@@ -11,7 +11,7 @@ public class OperationConfigure : BaseEntityConfigure<Operation>
     {
         base.Configure(builder);
 
-        builder.Property(e => e.OperationName).HasColumnName("operation_id");
+        builder.Property(e => e.OperationName).HasColumnName("operation_name");
 
         builder.Property(e => e.Description).HasColumnName("description");
     }

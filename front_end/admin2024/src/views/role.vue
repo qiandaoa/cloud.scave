@@ -140,9 +140,9 @@ function onChange() {
 let tabArr = reactive([]);
 onMounted(async () => {
     try {
-        const res = await axios.get('http://localhost:63760/api/role');
-        console.log(res);
-        const filterDate = res.data.filter(item => !item.isDeleted)
+        const res = await axios.get('http://localhost:63760/api/Role');
+        // console.log(res.data.data);
+        const filterDate = res.data.data.filter(item => !item.isDeleted)
         tabArr.push(...filterDate); // 假设 res.data 是一个数组
     } catch (err) {
         console.log(err);
@@ -157,8 +157,8 @@ let Search = async () => {
     try {
         if (keywords) {
             let res = await axios.get(`http://localhost:63760/api/Role?keywords=${keywords}`)
-            console.log(res);
-            tabArr.splice(0, tabArr.length, ...res.data); // 清空并填充新的搜索结果
+            // console.log(res);
+            tabArr.splice(0, tabArr.length, ...res.data.data); // 清空并填充新的搜索结果
 
         } else {
             alert('请输入关键字')
@@ -193,12 +193,12 @@ function BatchDelete() {
 let Edit = async (id) => {
     try {
         let res = await axios.get(`http://localhost:63760/api/Role/${id}`)
-        console.log(res);
+        // console.log(res.data);
 
         formState = {
-            id: res.data.id,
-            roleName: res.data.roleName,
-            remark: res.data.remark
+            id: res.data.data.id,
+            roleName: res.data.data.roleName,
+            remark: res.data.data.$eventremark
         }
         display.value = true;
     } catch (err) {
@@ -213,8 +213,10 @@ let Delete = async (id) => {
             const index = tabArr.findIndex(item => item.id === id);
             if (index !== -1) {
                 tabArr.splice(index, 1);
+                await fetchRoles(current.value)
             }
-            console.log(res);
+          
+            // console.log(res);
         } catch (err) {
             console.log(err);
         }
@@ -260,11 +262,10 @@ let confirm = async (id) => {
     }
 }
 // 定义一个新的方法用于获取角色数据
-const fetchRoles = async () => {
+const fetchRoles = async (page = 1) => {
     try {
-        const res = await axios.get('http://localhost:63760/api/role');
-        console.log(res);
-        const filterDate = res.data.filter(item => !item.isDeleted);
+        const res = await axios.get(`http://localhost:63760/api/role?page=${page}`);
+        const filterDate = res.data.data.filter(item => !item.isDeleted);
         tabArr.splice(0, tabArr.length, ...filterDate); // 清空并重新填充数据
     } catch (err) {
         console.log(err);

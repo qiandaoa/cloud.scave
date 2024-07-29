@@ -20,6 +20,16 @@
         <member name="M:Admin2024.Api.Controller.permissionController.GetAllPermission(Admin2024.EntityFramework.Helps.BaseParameters)">
             <summary>
             获取全部权限
+<<<<<<< HEAD
+=======
+            </summary>
+            <param name="baseParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.permissionController.GetPerList(Admin2024.EntityFramework.Helps.BaseParameters)">
+            <summary>
+            连表查询权限
+>>>>>>> f834c9b67b365e3304a824c2110fa0838013253b
             </summary>
             <param name="baseParameters"></param>
             <returns></returns>
@@ -255,6 +265,12 @@
             分页查询
             </summary>
             <param name="pagingRoleDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Admin2024.Api.Controller.UseRoleController.GetUseRole(Admin2024.EntityFramework.Helps.BaseParameters)">
+            <summary>
+            用户角色的连表查询(带模糊查询)
+            </summary>
             <returns></returns>
         </member>
     </members>
