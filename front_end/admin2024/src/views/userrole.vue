@@ -53,7 +53,7 @@
                         </div>
                     </td>
                     <td>{{ user.roleRemark }}</td>
-                    <td><a-button @click="()=>Del(user.userId)">删除</a-button></td>
+                    <td><a-button @click="()=>Del(user.id)">删除</a-button></td>
                 </tr>
             </table>
         </div>
@@ -118,9 +118,10 @@ let combinedData=reactive([]);
 
 
 onMounted(async () => {
-    try {
+  try {
         // 获取用户数据
-        const resuser = await axios.get(`http://localhost:63760/api/user`);
+        const resuser = await axios.get(`http://localhost:63760/api/UseRole`);
+        console.log(resuser.data);
         user.value = resuser.data;
         // console.log(users);
         // 获取角色数据
@@ -128,35 +129,14 @@ onMounted(async () => {
         data.value= res.data;
         // console.log(data); 
         let delres = await axios.post(`http://localhost:63760/api/UseRole/pagingRole`,
-         {
-  pageNumber: 0,
-  pageSize: 0
-        }
-    )
+         {pageNumber: 0,pageSize: 0});
     
-//删除  获取后端的isdeleted状态然后引用到我的users数组  通过更改delres的isdeleted来改   因为已经有好多数组了 我要晕啦 help
-// 假设 delres 是一个包含数据的响应对象
-delres.data.data.forEach(delItem => {
-    // 使用 findIndex 查找用户在 users 数组中的位置
-    
-    const userIndex = users.findIndex(users => users.userId === delItem.userId);
-    
-    console.log(delItem.userId);//查找不到
-    // 检查是否找到了用户
-    if (userIndex !== -1) {
-        // 更新找到的用户对象的 isDeleted 属性
-        users[userIndex].isDeleted = delItem.isDeleted;
-    } else {
-        // 如果没有找到用户，可以打印警告或采取其他措施
-        // console.warn(`User with userId ${delItem.userId} not found in the users array.`);
-    }
-});
-        data.value.forEach(item => {
+
+    data.value.forEach(item => {
             // 添加角色
             if (!roles.find(r => r.roleId === item.roleId)) {
                 roles.push({ roleId: item.roleId, roleName: item.roleName });
             }
-           
             // 添加或更新用户
             if (!users.find(u => u.userId === item.userId)) {
                 users.push({
@@ -178,53 +158,44 @@ delres.data.data.forEach(delItem => {
             }
         });
         // console.log(filteredUsers);
-    const activeUser=user.value.filter(user=>!user.isDeleted
-)
-    combinedData = activeUser.map(user => {
+        const activeUser=user.value.filter(user=>!user.isDeleted)
+
+
+        combinedData = activeUser.map(user => {
         
-        const rolesForUser = data.value.filter(roles => roles.userId === user.id);
-        
-        return {
-            ...user,
-            roles: rolesForUser.map(role => ({
-                roleId: role.roleId,
-                roleName: role.roleName
-            }))
-        };
+            const rolesForUser = data.value.filter(roles => roles.userId === user.id);
+            
+            return {
+                ...user,
+                roles: rolesForUser.map(role => ({
+                    roleId: role.roleId,
+                    roleName: role.roleName
+                }))
+            };
     });
-   
-    combinedData.forEach(user => {
-        if (user.roles.length === 0) {
-            user.roles.push({ roleId: null, roleName: '游客' });
-        }
-    });
-
- 
-    
-    // 将处理后的用户列表赋值给 filteredUsers
-    combinedData.values = combinedData
-    // console.log(combinedData);
-
-        // 设置默认选中的角色并更新用户列表
-        if (roles.length > 0) {
-            selectedRole.value = roles[0].roleId;
-          updateFilteredUsers()
-        }
-        await nextTick()
-
-
-        // 初始化过滤后的用户列表
-    } catch (err) {
-        console.error('Failed to fetch data:', err);
+      
+    // 设置默认选中的角色并更新用户列表
+    if (roles.length > 0) {
+      selectedRole.value = roles[0].roleId;
+      updateFilteredUsers()
     }
-});
+    await nextTick()
+
+
+  // 初始化过滤后的用户列表
+  } catch (err) {
+        console.error('Failed to fetch data:', err);
+  }
+})
 
 
 // 更新过滤后的用户列表
-function updateFilteredUsers() {
-    // console.log(user);
-    filteredUsers = users.filter(user => 
-        user.roles.includes(selectedRole.value) && !user.isDeleted
+async function updateFilteredUsers() {
+    // let res = await axios.get('http://localhost:63760/api/UseRole');
+    // let list = res.data;
+    let list = user._rawValue;
+    filteredUsers = list.filter(user => 
+      user.roleId.includes(selectedRole.value) && user.userRoleIsDeleted==false
     );
     console.log(filteredUsers);
 }
@@ -235,24 +206,23 @@ nextTick(()=>{
 })    
 }
 const Del=async(id)=>{
-    
-    
-
-    let userroleid=res.data.data.find(item=>item.userId===id)
-    console.log(userroleid);
-    // if(userroleid){
-    //     try{
-    //         let res = await axios.post(`http://localhost:63760/api/UseRole/deleteuserole`,
-    //             {useroleId: userroleid.id}
-    //         )
-    //         console.log(res);
-    //         if(res.status===200){
-                
-    //         }
-    //     }catch(err){
-    //             console.log(err);
-    //     }
+  if(confirm('确定删除吗？')){
+        let deleteItem = await axios.delete(`http://localhost:63760/api/UseRole/${id}`);
+        if(deleteItem.status===200){
+            let item = filteredUsers.findIndex(item => item.id === id);
+            console.log(item);
+            if(item !== -1){
+                filteredUsers.splice(item, 1);
+            }
+            alert('删除成功')
+            
+        }else{
+            console.log(deleteItem.message);
+        }
+    }else{
+        alert('删除失败')
     }
+}
 
 const  design = async (id)=>{
     console.log(selectedRole.value);
