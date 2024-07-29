@@ -34,10 +34,13 @@ public class UseRoleAppService:IUseRoleAppService
     // 获取用户角色列表（连表）
     public List<UserWithRole> GetUserWithRole()
     {
-        var useRoleList = _dbContext.Users
+        var useRoleList = _dbContext.Users // 将用户表作为主表
             .Join(_dbContext.UserRoles, user => user.Id,
                 userRole => userRole.UserId,
                 (user, userRole) => new { user, userRole })
+            // join：第一个连接，连接用户角色表
+            // user => user.Id，userRole => userRole.UserId：表示连接条件，将user中的id和userRole中的roleId取出并进行对比
+            // (user, userRole) => new { user, userRole }：将user和userRole进行合并，生成一个新的对象
             .Join(_dbContext.Role, ur => ur.userRole.RoleId,
                 role => role.Id,
                 (ur, role) => new UserWithRole
@@ -52,6 +55,8 @@ public class UseRoleAppService:IUseRoleAppService
                     RoleName = role.RoleName,
                     RoleRemark = role.Remark
                 })
+            // join：第二个连接，连接上面的结果ur和角色表
+            // (ur,role) => new UserRoleResult(...)：将用户表和角色表进行连接
             .ToList(); 
         return useRoleList;
     }
