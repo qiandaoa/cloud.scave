@@ -51,7 +51,8 @@ public class UseRoleAppService:IUseRoleAppService
                     Telephone = ur.user.Telephone,
                     RoleName = role.RoleName,
                     RoleRemark = role.Remark,
-                    IsActived = ur.user.IsActived
+                    IsActived = ur.user.IsActived,
+                    IsDeleted = ur.user.IsDeleted
                 })
             .ToList(); 
         return useRoleList;
