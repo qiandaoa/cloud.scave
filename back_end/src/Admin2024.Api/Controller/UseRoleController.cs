@@ -28,10 +28,10 @@ public class UseRoleController : ControllerBase
     /// <param name="deluseRoleId"></param>
     /// <returns></returns>
      [HttpPost("deleteuserole")]
-        public async Task<IActionResult> DeleteUseRole([FromBody] DelUseRoleDto deluseRoleId)
+        public async Task<ReturnResult<UserRole>> DeleteUseRole([FromBody] DelUseRoleDto deluseRoleId)
         {
             var getmgs = await _useRoleAppService.DeleteUseRole(deluseRoleId);
-            return Ok(getmgs);
+            return getmgs;
         }
 
    
