@@ -37,46 +37,6 @@ import axios from 'axios'
 import * as echarts from 'echarts'
 // 获取echarts实例
 let echartsRef = ref(null)
-// 初始化echarts
-onMounted(() => {
-    let myChart = echarts.init(echartsRef.value)
-    // 配置echarts
-    myChart.setOption({
-        title: {
-            text: '用户活跃度',
-            left: 'center'
-        },
-        tooltip: {
-            trigger: 'item'
-        },
-        legend: {
-            orient: 'vertical',
-            left: 'left'
-        },
-        series: [
-            {
-                name: '用户活跃度',
-                type: 'pie',
-                radius: '70%'
-            }
-        ]
-    })
-    // 获取数据
-    axios.get('http://localhost:63760/api/User')
-        .then(data => {
-            data.data.forEach(item => {
-                myChart.setOption({
-                    series: [{
-                        data: [
-                            { value: item.isActived, name: '活跃用户' },
-                            { value: item.isActived, name: '非活跃用户' }
-                        ]
-                    }]
-                })
-            })
-        })
-        onUnmounted(() => { })  //销毁
-})
 
 //获取用户数组长度
 let useState = reactive([])
@@ -95,6 +55,45 @@ onMounted(() => {
                 }
             });
         })
+    let myChart = echarts.init(echartsRef.value)
+    // 配置echarts
+    myChart.setOption({
+        title: {
+            text: '用户活跃度',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left'
+        },
+        series: [
+            {
+                name: '用户活跃度',
+                type: 'pie',
+                radius: '80%'
+            }
+        ]
+    })
+    // 获取数据
+    axios.get('http://localhost:63760/api/User')
+        .then(data => {
+            data.data.forEach(item => {
+                let uselength = data.data.length;
+                let tureUser=isActiveds.length;
+                myChart.setOption({
+                    series: [{
+                        data: [
+                            { value: uselength, name: '用户总数' },
+                            { value: tureUser, name: '活跃用户' }
+                        ]
+                    }]
+                })
+            })
+        })
+    onUnmounted(() => { })  //销毁
 })
 </script>
 
