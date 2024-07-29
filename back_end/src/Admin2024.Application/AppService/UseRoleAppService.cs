@@ -54,7 +54,8 @@ public class UseRoleAppService:IUseRoleAppService
                     Telephone = ur.user.Telephone,
                     RoleName = role.RoleName,
                     RoleRemark = role.Remark,
-                    IsActived = ur.user.IsActived
+                    IsActived = ur.user.IsActived,
+                    IsDeleted = ur.user.IsDeleted
                 })
             // join：第二个连接，连接上面的结果ur和角色表
             // (ur,role) => new UserRoleResult(...)：将用户表和角色表进行连接
