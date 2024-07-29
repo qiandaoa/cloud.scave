@@ -70,7 +70,6 @@ onMounted(() => {
                         data: [
                             { value: item.isActived, name: '活跃用户' },
                             { value: item.isActived, name: '非活跃用户' }
-
                         ]
                     }]
                 })
