@@ -23,14 +23,14 @@ public class AvatarController : ControllerBase
   [HttpPost("{id}")]
    public async Task<IActionResult> UploadFile(Guid id, IFormFile avatar)
    {
-      if(avatar == null || avatar.Length == 0){
-        return Ok("未提供文件");
-      }
+       if(avatar == null || avatar.Length == 0){
+          return Ok("未提供文件");
+       }
        var entity = await _repo.GetByIdAsync(id); // 找出对应的id的数据
        if (entity == null){
            return Ok("查找不到用户，修改失败");
        }
-        var filePath = Path.Combine("wwwroot","Imgs", avatar.FileName); //将文件路径经行拼接
+        var filePath = Path.Combine("wwwroot","Imgs", id.ToString()+avatar.FileName); //将文件路径经行拼接
         // 确保文件夹存在
         var directoryPath = Path.GetDirectoryName(filePath);
         if (!Directory.Exists(directoryPath))
@@ -45,7 +45,7 @@ public class AvatarController : ControllerBase
 
         var Avatarentity = new AvatarDto()
         {
-            Avatar = Path.Combine("Imgs", avatar.FileName)
+            Avatar = Path.Combine("Imgs", id.ToString() + avatar.FileName)
         };
 
         _mapper.Map(Avatarentity, entity); // 映射
