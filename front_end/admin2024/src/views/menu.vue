@@ -156,7 +156,7 @@ const initializeMenuData = () => {
             status: true,
             children: [
                 {
-                    sort: 10,
+                    sort: 1,
                     key: 2,
                     name: '工作台',
                     permissions: '',
@@ -166,7 +166,7 @@ const initializeMenuData = () => {
                     status: true,
                 },
                 {
-                    sort: 20,
+                    sort: 2,
                     key: 3,
                     name: '仪表盘',
                     permissions: '',
@@ -178,7 +178,7 @@ const initializeMenuData = () => {
             ]
         },
         {
-            sort: 101,
+            sort: 2,
             key: 4,
             name: '系统管理',
             permissions: '',
@@ -188,7 +188,7 @@ const initializeMenuData = () => {
             status: true,
             children: [
                 {
-                    sort: 110,
+                    sort: 1,
                     key: 5,
                     name: '用户管理',
                     permissions: '',
@@ -198,7 +198,7 @@ const initializeMenuData = () => {
                     status: true,
                     children: [
                         {
-                            sort: 111,
+                            sort: 1,
                             key: 6,
                             name: '用户详细',
                             permissions: '',
@@ -213,7 +213,7 @@ const initializeMenuData = () => {
             ]
         },
         {
-            sort: 201,
+            sort: 3,
             key: 7,
             name: '角色管理',
             permissions: '',
@@ -223,7 +223,7 @@ const initializeMenuData = () => {
             status: true
         },
         {
-            sort: 301,
+            sort: 4,
             key: 8,
             name: '权限管理',
             permissions: '',
@@ -233,7 +233,7 @@ const initializeMenuData = () => {
             status: true
         },
         {
-            sort: 401,
+            sort: 5,
             key: 9,
             name: '用户角色',
             permissions: '',
@@ -243,7 +243,7 @@ const initializeMenuData = () => {
             status: true
         },
         {
-            sort: 501,
+            sort: 6,
             key: 10,
             name: '菜单管理',
             permissions: '',
