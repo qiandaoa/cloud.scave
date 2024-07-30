@@ -35,7 +35,7 @@
                         <td>
                             <input type="checkbox" name="" id="">
                         </td>
-                        <td class="tdcenter">{{ index + 1 + (current.value - 1) * pageSize }}</td>
+                        <td class="tdcenter">{{ index + 1}}</td>
                         <td>{{ item.roleName }}</td>
                         <td>{{ item.remark }}</td>
                         <td>{{ formatItemCreateAt(item) }}</td>
