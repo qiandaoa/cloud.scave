@@ -13,7 +13,7 @@
     @change="handleChange"
     
   >
-    <img v-if="imageUrl" :src="imageUrl" alt="avatar" class="avatar"  />
+    <img v-if="imageUrl" :src="imageUrl" sizes="36" alt="avatar" class="avatar"  />
     <div v-else>
       <loading-outlined v-if="loading"></loading-outlined>
       <plus-outlined v-else></plus-outlined>
@@ -30,12 +30,17 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import axios from 'axios';
 
 const id = localStorage.getItem('userId')
+console.log(id);
 
 const uploadAxios = `http://localhost:63760/api/Avatar/${id}`
 
 const emit = defineEmits(['update:imageUrl']);
 
 onMounted(async () => {
+  await fetchData()
+})
+
+const fetchData=async()=>{
   let user = await axios.get(`http://localhost:63760/api/user/${id}`)
   console.log(user);
 
@@ -49,7 +54,7 @@ onMounted(async () => {
           console.log(err);
         }
       }
-})
+}
 function getBase64(img, callback) {
 const reader = new FileReader();
 reader.addEventListener('load', () => callback(reader.result));
@@ -63,8 +68,8 @@ const imageUrl = ref('');
 const handleChange = info => {
 if (info.file.status === 'uploading') {
   loading.value = true;
-  alert('头像获取成功')
-  location.reload()
+  alert('头像获取成功，请刷新页面')
+  
   return;
 }
 if (info.file.status === 'done') {

@@ -1,5 +1,6 @@
 <template>
     <!-- 整体布局 -->
+    <a-spin :spinning="loading" style="margin-left: 500px; width: 50px;"></a-spin>
     <div class="el">
         <!-- 左侧角色菜单 -->
         <div class="el-left">
@@ -20,11 +21,11 @@
             <button type="button" class="el-right-button" style="background-color: rgb(24, 144, 255);" @click="Add">添加用户</button>
             <button type="button" class="el-right-button" style="background-color: rgb(255,73,73);" @click="cancels">全部取消</button>
             <!-- 搜索图标 -->
-            <span class="el-right-icon">
+            <span class="el-right-icon" @click="search">
                 <SearchOutlined />
             </span>
             <!-- 搜索输入框 -->
-            <input type="text" placeholder="请输入关键字">
+            <input type="text" placeholder="请输入关键字" v-model="Findkeyword">
             <!-- 用户表格 -->
             <table class="el-right-table">
                 <tr>
@@ -103,7 +104,7 @@
 
 <script setup>
 import { ref, reactive, onMounted, nextTick } from "vue";
-import axios from "axios";
+import axios, { all } from "axios";
 import { SearchOutlined, CheckCircleFilled, CloseCircleFilled, FundTwoTone } from '@ant-design/icons-vue';
 
 // 定义引用变量
@@ -115,13 +116,21 @@ let dialogVisible=ref(false)
 const user = ref([]); // 单个用户数据
 let data=ref([])
 let combinedData=reactive([]);
-
+// 添加 loading 变量
+const loading = ref(true);
+let Findkeyword=ref('')
 
 
 onMounted(async () => {
    await fetchData()
+   loading.value=false
 })
 
+//搜素
+const search=async()=>{
+    let Findkeywords=Findkeyword.value.trim()
+    console.log(Findkeywords);
+}
 
 // 更新过滤后的用户列表
 async function updateFilteredUsers() {
@@ -143,25 +152,11 @@ const Del=async(id)=>{
   if(confirm('确定删除吗？')){
         let deleteItem = await axios.delete(`http://localhost:63760/api/UseRole/${id}`);
         if(deleteItem.status===200){
-            let item = filteredUsers.findIndex(item => item.id === id);
-            console.log(item);
-            if(item !== -1){
-                filteredUsers.splice(item, 1);
-            }
-           
-                updateFilteredUsers()
-                await nextTick(()=>{
-                setTimeout(()=>{
-                    fetchData()
-                },0)
-            })
-            // if (roles.length > 0) {
-            //   handleClick(roles[0]);
-            // }
-            alert('删除成功')
-            
-            
-            
+            const currentRole = selectedRole.value;
+            await fetchData();  // 重新获取数据，确保界面显示最新状态
+            selectedRole.value = currentRole;  // 恢复当前角色选择
+            updateFilteredUsers();  // 更新过滤用户列表
+            alert('删除成功');            
         }else{
             console.log(deleteItem.message);
         }
@@ -169,6 +164,7 @@ const Del=async(id)=>{
         alert('删除失败')
     }
 }
+
 
 const  design = async (id)=>{
     console.log(selectedRole.value);
@@ -184,16 +180,13 @@ const  design = async (id)=>{
              roleid: selectedRole.value
             })
             if(res.status===200){
-                alert('分配成功')
-                dialogVisible.value=false
-                // await onMounted()
-                // location.reload()
-               await nextTick(()=>{
-                    setTimeout(()=>{
-                         fetchData()
-                    })
-                },0)
-                // await fetchData()
+                const currentRole = selectedRole.value;
+            await fetchData();  // 重新获取数据，确保界面显示最新状态
+            selectedRole.value = currentRole;  // 恢复当前角色选择
+            updateFilteredUsers();  // 更新过滤用户列表
+            alert('修改成功')
+            dialogVisible.value=false
+               
             }else{
                 console.log(res.message);
             }
@@ -203,7 +196,7 @@ const  design = async (id)=>{
         }
 
     } else {
-        alert('该用户已经有角色了,请联系超级管理员进行分配')
+        alert('分配角色失败')
     }
 } 
 // 角色点击事件处理器
@@ -260,6 +253,7 @@ let fetchData=async()=>{
         // const activeUser=user.value.filter(user=>!user.isDeleted)
         let alluser = await axios.get(`http://localhost:63760/api/User`)
         let allusers=alluser.data
+
         // 构建 combinedData
         combinedData = allusers.filter(user => !user.isDeleted)
   .map(user => {
@@ -275,24 +269,24 @@ let fetchData=async()=>{
     };
   })
   .filter(user => user !== null); // 过滤掉被标记为null的用户，即拥有至少一个userRoleIsDeleted为true的角色的用户
-    //   确保每个用户至少有一个角色
-        combinedData.forEach(user => {
+    
+            // 确保每个用户至少有一个角色
+            combinedData.forEach(user => {
             if (user.roles.length === 0) {
                 user.roles.push({ roleId: null, roleName: '游客' });
             }
         });
-        // 进一步过滤combinedData，移除所有与已删除用户相关的角色
-        // combinedData = combinedData.map(user => ({
-        // ...user,
-        // roles: user.roles.filter(role => !role.userRoleIsDeleted)
-        // }));
-      console.log(combinedData);
+// 再次过滤，确保每个用户至少有一个“游客”角色
+combinedData = combinedData.filter(user => 
+  user.roles.some(role => role.roleName === '游客')
+);
+    //   console.log(combinedData);
     // 设置默认选中的角色并更新用户列表
     if (roles.length > 0) {
       selectedRole.value = roles[0].roleId;
       updateFilteredUsers()
     }
-    await nextTick()
+    // await nextTick()
 
 
   // 初始化过滤后的用户列表
@@ -300,77 +294,6 @@ let fetchData=async()=>{
         console.error('Failed to fetch data:', err);
   }
 }
-// 模态框相关代码
-//这是用来抓取数据// ...
-// const fetchData = async () => {
-//     try {
-//         // 获取用户数据
-//         const resuser = await axios.get(`http://localhost:63760/api/user`);
-//         user.value = resuser.data;
-        
-//         // 获取角色数据
-//         const res = await axios.get('http://localhost:63760/api/UseRole');
-//         data.value = res.data;
-        
-//         // 重置 roles 和 users 数组
-//         roles = reactive([]);
-//         users = reactive([]);
-
-//         // 处理数据
-//         data.value.forEach(item => {
-//             // 添加角色
-//             if (!roles.find(r => r.roleId === item.roleId)) {
-//                 roles.push({ roleId: item.roleId, roleName: item.roleName });
-//             }
-
-//             // 添加或更新用户
-//             if (!users.find(u => u.userId === item.userId)) {
-//                 users.push({
-//                     userId: item.userId,
-//                     username: item.username,
-//                     nickname: item.nickname,
-//                     avatar: item.avatar,
-//                     email: item.email,
-//                     isDeleted:item.isDeleted,
-//                     telephone: item.email,
-//                     roleRemark: item.roleRemark,
-//                     isActived: item.isActived,
-//                     roles: [item.roleId]
-//                 });
-//             } else {
-//                 const userIndex = users.findIndex(u => u.userId === item.userId);
-//                 users[userIndex].roles.push(item.roleId);
-//             }
-//         });
-
-//         // 重新构建 combinedData
-//         combinedData = user.value.filter(user => !user.isDeleted).map(user => {
-//             const rolesForUser = data.value.filter(roles => roles.userId === user.id);
-//             return {
-//                 ...user,
-//                 roles: rolesForUser.map(role => ({
-//                     roleId: role.roleId,
-//                     roleName: role.roleName
-//                 }))
-//             };
-//         });
-
-//         // 确保每个用户至少有一个角色
-//         combinedData.forEach(user => {
-//             if (user.roles.length === 0) {
-//                 user.roles.push({ roleId: null, roleName: '游客' });
-//             }
-//         });
-
-//         // 更新过滤后的用户列表
-//         updateFilteredUsers();
-
-//         // 确保视图更新
-//         await nextTick();
-//     } catch (err) {
-//         console.error('Failed to fetch data:', err);
-//     }
-// };
 
 </script>
  
