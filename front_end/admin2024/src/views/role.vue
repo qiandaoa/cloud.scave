@@ -141,7 +141,7 @@ let tabArr = reactive([]);
 onMounted(async () => {
     try {
         const res = await axios.get('http://localhost:63760/api/Role');
-        // console.log(res.data.data);
+        console.log(res.data.data);
         const filterDate = res.data.data.filter(item => !item.isDeleted)
         tabArr.push(...filterDate); // 假设 res.data 是一个数组
     } catch (err) {
@@ -198,7 +198,7 @@ let Edit = async (id) => {
         formState = {
             id: res.data.data.id,
             roleName: res.data.data.roleName,
-            remark: res.data.data.$eventremark
+            remark: res.data.data.remark
         }
         display.value = true;
     } catch (err) {
