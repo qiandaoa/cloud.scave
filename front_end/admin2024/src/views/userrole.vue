@@ -210,11 +210,13 @@ const Del=async(id)=>{
         let deleteItem = await axios.delete(`http://localhost:63760/api/UseRole/${id}`);
         if(deleteItem.status===200){
             let item = filteredUsers.findIndex(item => item.id === id);
-            console.log(item);
             if(item !== -1){
+                console.log(filteredUsers);
                 filteredUsers.splice(item, 1);
+                console.log(filteredUsers);
+                updateFilteredUsers(filteredUsers)
             }
-            alert('删除成功')
+            // alert('删除成功')
             
         }else{
             console.log(deleteItem.message);
