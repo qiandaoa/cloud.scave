@@ -5,8 +5,8 @@
       <!-- 首页 -->
       <a-tab-pane key="1" tab="首页">
         <a-card>
-          <a-divider orientation="left">
-            <h1>快捷方式</h1>
+          <a-divider orientation="content">
+            <h1>快速访问</h1>
           </a-divider>
           <a-row justify="space-evenly">
             <a-col :span="4">
@@ -38,11 +38,11 @@
         </a-card>
         <a-card>
           <a-divider orientation="left">
-            <h1>角色统计</h1>
+            <!-- <h1>角色统计</h1> -->
           </a-divider>
           <a-row justify="content">
             <a-col :span="4">
-              <div ref="echartsRef" style="width:630px; height: 300px;"></div>
+              <div ref="echartsRef" style="width:830px; height: 300px; margin-left: 140px;"></div>
             </a-col>
             <a-col :span="4">
             </a-col>
@@ -148,11 +148,11 @@ onMounted(() => {
       }
     },
     // x轴
-    xAxis: {
+    yAxis: {
       type: 'category',
     },
     // y轴
-    yAxis: {
+    xAxis: {
       type: 'value'
     },
     // 数据
@@ -164,22 +164,33 @@ onMounted(() => {
   })
   //获取数据
   let datas = ref([]);
-  axios.get('http://localhost:63760/api/role').then(res => {
-    console.log(res.data.data);
-    let resdata = res.data.data;
+  axios.get('http://localhost:63760/api/UseRole').then(res => {
+    console.log(res.data);
+    let resdata = res.data;
     resdata.forEach(item => {
-      // 获取数据
-      datas.value = item.roleName;
-      // 设置数据
-      datas.value = resdata;
+      if(!datas.value[item.roleName]){
+        datas.value[item.roleName] = 1;
+      }else{
+        datas.value[item.roleName]++;
+      }
+      const roleNames = Object.keys(datas.value);
+      const roleCounts = Object.values(datas.value);
+
+      // // 获取数据
+      // datas.value = item.roleName;
+      // // 设置数据
+      // datas.value = resdata;
+
       // 设置图表数据
       myChart.setOption({
-        xAxis: {
-          data: datas.value.map(item => item.roleName),
+        yAxis: {
+          // data: datas.value.map(item => item.roleName),
+          data:roleNames,
           name: '角色名称'
         },
         series: {
-          data: datas.value.map(item => item.roleName.length),
+          // data: datas.value.map(item => item.roleName.length),
+          data:roleCounts,
           name: '角色数量'
         }
       })
