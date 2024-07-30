@@ -1,6 +1,6 @@
 <template>
-    <a-layout>
-        <a-layout-sider :collapsed="isSiderCollapsed" style="height: 100vh;">
+    <a-layout >
+        <a-layout-sider :collapsed="isSiderCollapsed" style="height: auto;">
             <div class="sider-content">
                 <a-button type="primary" class="collapse-button" @click="toggleSiderCollapse">
                     <MenuUnfoldOutlined  v-if="isSiderCollapsed" style="font-size: 20px;" />
@@ -76,7 +76,7 @@ const toggleSiderCollapse = () => {
 .sider-content {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100vh;
     padding-top: 16px;
     /* 添加顶部填充以避免按钮与顶部边界重叠 */
 }

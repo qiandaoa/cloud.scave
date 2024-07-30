@@ -58,17 +58,21 @@ onMounted(() => {
     let myChart = echarts.init(echartsRef.value)
     // 配置echarts
     myChart.setOption({
+        // 标题
         title: {
             text: '用户活跃度',
             left: 'center'
         },
+        // 提示
         tooltip: {
             trigger: 'item'
         },
+        // 图例
         legend: {
             orient: 'vertical',
             left: 'left'
         },
+        // 数据
         series: [
             {
                 name: '用户活跃度',
