@@ -1,4 +1,5 @@
 <template>
+      <a-watermark content="抓住云朵">
     <!-- 统计 -->
     <div style="background: #ffffff; padding: 30px">
         <a-row :gutter="16">
@@ -27,6 +28,7 @@
     <!-- 饼图 -->
     <div ref="echartsRef" style="width: 100%; height: 400px;">
     </div>
+</a-watermark>
 </template>
 
 <script setup>
