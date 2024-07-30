@@ -72,7 +72,7 @@ public class UseRoleController : ControllerBase
         var list = _useRoleAppService.GetUserWithRole();
         var keywords = baseParameters.keywords;
         if(!string.IsNullOrEmpty(keywords)){
-            var filer = list.FirstOrDefault(u => u.Username.Contains(keywords));
+            var filer = list.Where(u => u.Username.Contains(keywords)).ToList();
             return Ok(filer);
         }
         return Ok(list);

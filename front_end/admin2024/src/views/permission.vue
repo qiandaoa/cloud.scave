@@ -1,4 +1,6 @@
 <template>
+    <a-spin :spinning="loading" style="margin-left: 500px; width: 50px;"></a-spin>
+
     <div class="el">
         <div class="el-left">
             <a-menu class="el-left-menu">
@@ -21,19 +23,21 @@
             <input type="text" placeholder="请输入关键字">
             <table class="el-right-table">
                 <tr>
-                    <!-- <th>#</th> -->
-                    <th>角色</th>
+                    <th>#</th>
+                    <th>分组名称</th>
                     <th>权限列表</th>
                 </tr>
-                <tr v-for="item in filteredRoles">
+                <tr v-for="(item,index) in resource" :key="item.id">
+                    <td>{{ index+1 }}</td>
                     <!-- <td style="max-width: 5%;">{{ item.id }}</td> -->
-                    <td style="max-width: 25%;">{{ item.roleName }}</td>
-                    <td style="max-width: 70%;">
-                        <input type="checkbox" value="浏览" name="" :id="item.id"><span>浏览</span>
-                        <input type="checkbox" value="添加" name="" :id="item.id"><span>添加</span>
-                        <input type="checkbox" value="删除" name="" :id="item.id"><span>删除</span>
-                        <input type="checkbox" value="编辑" name="" :id="item.id"><span>编辑</span>
-                    </td>
+                    
+                    <td style="max-width: 25%;">{{ item.resourceName }}</td>
+                    <div class="permission-list">
+                        <div v-for="permissionItem in permission" :key="permissionItem.id" class="permission-item">
+                            <input type="checkbox"  v-model="permissionItem.isActived" :value="permissionItem.permissionName" name="" />
+                            <span>{{ permissionItem.permissionName }}</span>
+                        </div>
+                    </div>
                 </tr>
             </table>
         </div>
@@ -50,9 +54,29 @@ import {
 } from '@ant-design/icons-vue';
 let Rolearr=reactive([])
 let filteredRoles=ref([])
+let resource=reactive([])
+const loading = ref(true);
+let permission=reactive([])
+
 
 onMounted(async () => {
-  try {
+    await fetchpermission()
+    await fetchrole()
+    await fetchresource()
+    loading.value=false;
+});
+
+const fetchresource=async()=>{
+    try{
+        let res = await axios.get(`http://localhost:63760/api/permission/api/resource`)
+        resource=res.data.data
+        console.log(resource);
+    }catch(error){
+        console.log(error)
+    }
+}
+const fetchrole=async()=>{
+    try {
     let res = await axios.get('http://localhost:63760/api/role');
     Rolearr = res.data;
     // console.log(Rolearr);    
@@ -61,8 +85,15 @@ onMounted(async () => {
   } catch (err) {
     console.log(err);
   }
-});
-
+}
+const fetchpermission=async()=>{
+    try{
+        let res = await axios.get(`http://localhost:63760/api/permission`)
+        permission=res.data.data
+    }catch(err){
+        console.log(err);
+    }
+}
 // 定义一个计算属性来过滤 Rolearr，使其依赖于 Rolearr
 
 </script>
@@ -152,5 +183,22 @@ onMounted(async () => {
 } */
 :where(.css-dev-only-do-not-override-19iuou).ant-menu-light .ant-menu-item-selected {
     background-color: #fff;
+}
+.permission-list {
+    width: 600px;
+    height: 70px;
+    display: flex;
+    flex-wrap: wrap; /* 允许换行 */
+    gap: 5px; /* 项目之间的间隙 */
+}
+
+.permission-item {
+    font-size: 0.8em; /* 缩小字体大小 */
+    display: flex; /* 确保 checkbox 和 text 在一行 */
+    align-items: center; /* 垂直居中 */
+}
+
+.permission-item span {
+    margin-left: 5px; /* checkbox 和 text 之间的间距 */
 }
 </style>

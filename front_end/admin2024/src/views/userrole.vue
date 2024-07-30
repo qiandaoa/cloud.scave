@@ -62,7 +62,7 @@
         <a-modal
      v-model:open="dialogVisible"
      title="添加用户"
-     style="width: 700px;"
+     style=""
    >
         <table>
             <tr>
@@ -130,12 +130,22 @@ onMounted(async () => {
 const search=async()=>{
     let Findkeywords=Findkeyword.value.trim()
     console.log(Findkeywords);
+    try{
+        let res = await axios.get(`http://localhost:63760/api/UseRole?keywords=${Findkeywords}`)
+        console.log(res);
+        // filteredUsers=res.data
+        console.log(filteredUsers);
+        // updateFilteredUsers()
+        
+        
+    }catch(err){
+        console.log(err);
+    }
 }
 
 // 更新过滤后的用户列表
 async function updateFilteredUsers() {
-    // let res = await axios.get('http://localhost:63760/api/UseRole');
-    // let list = res.data;
+ 
     let list = user._rawValue;
     filteredUsers = list.filter(user => 
       user.roleId.includes(selectedRole.value) && user.userRoleIsDeleted==false
@@ -152,6 +162,7 @@ const Del=async(id)=>{
   if(confirm('确定删除吗？')){
         let deleteItem = await axios.delete(`http://localhost:63760/api/UseRole/${id}`);
         if(deleteItem.status===200){
+         
             const currentRole = selectedRole.value;
             await fetchData();  // 重新获取数据，确保界面显示最新状态
             selectedRole.value = currentRole;  // 恢复当前角色选择
@@ -213,16 +224,10 @@ let fetchData=async()=>{
     try {
         // 获取用户数据
         const resuser = await axios.get(`http://localhost:63760/api/UseRole`);
-        // console.log(resuser.data);
         user.value = resuser.data;
-        // console.log(user);
         // 获取角色数据
         const res = await axios.get('http://localhost:63760/api/UseRole');
         data.value= res.data;
-        // console.log(data); 
-        // let delres = await axios.post(`http://localhost:63760/api/UseRole/pagingRole`,
-        //  {pageNumber: 0,pageSize: 0});
-    
 
     data.value.forEach(item => {
             // 添加角色
@@ -249,8 +254,6 @@ let fetchData=async()=>{
                 users[userIndex].roles.push(item.roleId);
             }
         });
-        // console.log(filteredUsers);
-        // const activeUser=user.value.filter(user=>!user.isDeleted)
         let alluser = await axios.get(`http://localhost:63760/api/User`)
         let allusers=alluser.data
 
