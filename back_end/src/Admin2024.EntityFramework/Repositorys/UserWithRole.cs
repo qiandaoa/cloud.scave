@@ -3,7 +3,8 @@ using Microsoft.Net.Http.Headers;
 namespace Admin2024.EntityFramework.Repositories;
 public class UserWithRole
 {
-  public Guid  UserId { get; set; }
+  public Guid Id { get; set; }
+  public Guid UserId { get; set; }
   public Guid RoleId { get; set; }
   public string Username { get; set; }
   public string Nickname { get; set; }
@@ -15,4 +16,5 @@ public class UserWithRole
   public string RoleRemark { get; set; }
   public bool IsActived { get; set; }
   public bool IsDeleted {get;set;}
+  public bool UserRoleIsDeleted {get; set; }
 }

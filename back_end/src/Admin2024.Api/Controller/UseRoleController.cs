@@ -25,14 +25,15 @@ public class UseRoleController : ControllerBase
     /// <summary>
     /// 删除用户角色
     /// </summary>
-    /// <param name="deluseRoleId"></param>
+    /// <param name="id"></param>
     /// <returns></returns>
-     [HttpPost("deleteuserole")]
-        public async Task<ReturnResult<UserRole>> DeleteUseRole([FromBody] DelUseRoleDto deluseRoleId)
-        {
-            var getmgs = await _useRoleAppService.DeleteUseRole(deluseRoleId);
-            return getmgs;
-        }
+     [HttpDelete("{id}")]
+     public async Task<ReturnResult<UserRole>> DeleteUseRole(Guid id)
+     {
+        //  var getmgs = await _useRoleAppService.DeleteUseRole(deluseRoleId);
+        //  return getmgs;
+        return await _useRoleAppService.DeleteUseRole(id);
+     }
 
    
 
