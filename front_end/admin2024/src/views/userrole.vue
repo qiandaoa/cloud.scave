@@ -61,7 +61,6 @@
             </table>
         </div>
         <!-- 新增模态框 -->
-<<<<<<< HEAD
         <a-modal v-model:open="dialogVisible" title="添加用户" @ok="handleok" style="width: 1000px;
      align-items: center;">
             <table style="width:100%;text-align: center; " class="el-modoal-table">
@@ -74,7 +73,7 @@
                     <th>角色</th>
                     <th>操作</th>
                 </tr>
-                <tr v-for="item in combinedData" :key="item.id" style="border-bottom:1px solid #cccccc; margin:10px;" >
+                <tr v-for="item in combinedData" :key="item.id" style="border-bottom:1px solid #cccccc; margin:10px;">
                     <td>{{ item.username }}</td>
                     <td>{{ item.nickName }}</td>
                     <td>{{ item.email }}</td>
@@ -101,48 +100,6 @@
             </table>
 
         </a-modal>
-=======
-        <a-modal
-     v-model:open="dialogVisible"
-     title="添加用户"
-     style=""
-   >
-        <table>
-            <tr>
-            <th>账号</th>
-            <th>昵称</th>
-            <th>邮箱</th>
-            <th>备注</th>
-            <th>是否启用</th>
-            <th>角色</th>
-            <th>操作</th>
-        </tr>
-            <tr  v-for="item in combinedData" :key="item.id">
-                <td>{{ item.username }}</td>
-                <td>{{ item.nickName }}</td>
-                <td>{{ item.email }}</td>
-                <td>{{ item.remark }}</td>
-                <td>
-          <a-space direction="vertical" style="margin-left: 20px;" >
-            <a-switch v-model:checked="item.isActived" size="small" @click="State(item.id)" disabled />
-          </a-space>
-        </td> 
-        <td>
-            <!-- 使用 v-for 遍历 roles 数组 -->
-  <template v-for="(role, index) in item.roles" :key="index">
-    <span>{{ role.roleName }}</span><br>
-  </template>
-        </td>
-        <td>
-            <a-button @click="design(item.id)">
-            分配角色
-            </a-button> 
-        </td>
-            </tr>
-        </table>
-        
-   </a-modal>
->>>>>>> 7df360d994710e02c1f800d10751779236dcb4dc
     </div>
 </template>
 
@@ -158,50 +115,41 @@ let filteredUsers = reactive([]); // 存储根据角色筛选后的用户
 let selectedRole = ref(null); // 当前选中的角色
 let dialogVisible = ref(false)
 const user = ref([]); // 单个用户数据
-<<<<<<< HEAD
 let data = ref([])
 let combinedData = reactive([]);
-=======
-let data=ref([])
-let combinedData=reactive([]);
 // 添加 loading 变量
 const loading = ref(true);
-let Findkeyword=ref('')
->>>>>>> 7df360d994710e02c1f800d10751779236dcb4dc
+let Findkeyword = ref('')
 
 const handleok = async () => {
     dialogVisible.value = false
 }
 
 onMounted(async () => {
-<<<<<<< HEAD
-    await fetchData();
-=======
-   await fetchData()
-   loading.value=false
->>>>>>> 7df360d994710e02c1f800d10751779236dcb4dc
+    await fetchData()
+    loading.value = false
 })
 
 //搜素
-const search=async()=>{
-    let Findkeywords=Findkeyword.value.trim()
+const search = async () => {
+    let Findkeywords = Findkeyword.value.trim()
     console.log(Findkeywords);
-    try{
+    try {
         let res = await axios.get(`http://localhost:63760/api/UseRole?keywords=${Findkeywords}`)
         console.log(res);
         // filteredUsers=res.data
         console.log(filteredUsers);
         // updateFilteredUsers()
-        
-        
-    }catch(err){
+
+
+    } catch (err) {
         console.log(err);
     }
 }
 
 // 更新过滤后的用户列表
 async function updateFilteredUsers() {
- 
+
     let list = user._rawValue;
     filteredUsers = list.filter(user =>
         user.roleId.includes(selectedRole.value) && user.userRoleIsDeleted == false
@@ -217,12 +165,8 @@ function Add(params) {
 const Del = async (id) => {
     if (confirm('确定删除吗？')) {
         let deleteItem = await axios.delete(`http://localhost:63760/api/UseRole/${id}`);
-<<<<<<< HEAD
         if (deleteItem.status === 200) {
-=======
-        if(deleteItem.status===200){
-         
->>>>>>> 7df360d994710e02c1f800d10751779236dcb4dc
+
             const currentRole = selectedRole.value;
             await fetchData();  // 重新获取数据，确保界面显示最新状态
             selectedRole.value = currentRole;  // 恢复当前角色选择
@@ -236,12 +180,8 @@ const Del = async (id) => {
     }
 }
 
-<<<<<<< HEAD
-const design = async (id) => {
-=======
 
-const  design = async (id)=>{
->>>>>>> 7df360d994710e02c1f800d10751779236dcb4dc
+const design = async (id) => {
     console.log(selectedRole.value);
     console.log(id);
     const user = combinedData.find(item => item.id === id)
@@ -254,28 +194,15 @@ const  design = async (id)=>{
                 userid: id,
                 roleid: selectedRole.value
             })
-<<<<<<< HEAD
             if (res.status === 200) {
-                alert('分配成功')
-                dialogVisible.value = false
-                await nextTick(() => {
-                    setTimeout(() => {
-                        fetchData()
-                    })
-                }, 0)
-                // await fetchData()
-            } else {
-=======
-            if(res.status===200){
                 const currentRole = selectedRole.value;
-            await fetchData();  // 重新获取数据，确保界面显示最新状态
-            selectedRole.value = currentRole;  // 恢复当前角色选择
-            updateFilteredUsers();  // 更新过滤用户列表
-            alert('修改成功')
-            dialogVisible.value=false
-               
-            }else{
->>>>>>> 7df360d994710e02c1f800d10751779236dcb4dc
+                await fetchData();  // 重新获取数据，确保界面显示最新状态
+                selectedRole.value = currentRole;  // 恢复当前角色选择
+                updateFilteredUsers();  // 更新过滤用户列表
+                alert('修改成功')
+                dialogVisible.value = false
+
+            } else {
                 console.log(res.message);
             }
 
@@ -332,8 +259,8 @@ let fetchData = async () => {
             }
         });
         let alluser = await axios.get(`http://localhost:63760/api/User`)
-<<<<<<< HEAD
         let allusers = alluser.data
+
         // 构建 combinedData
         combinedData = allusers.filter(user => !user.isDeleted)
             .map(user => {
@@ -349,59 +276,24 @@ let fetchData = async () => {
                 };
             })
             .filter(user => user !== null); // 过滤掉被标记为null的用户，即拥有至少一个userRoleIsDeleted为true的角色的用户
-        //   确保每个用户至少有一个角色
-        combinedData.forEach(user => {
-=======
-        let allusers=alluser.data
 
-        // 构建 combinedData
-        combinedData = allusers.filter(user => !user.isDeleted)
-  .map(user => {
-    const rolesForUser = data.value.filter(role => role.userId === user.id);
-    const hasDeletedRole = rolesForUser.some(role => role.userRoleIsDeleted);
-    return hasDeletedRole ? null : {
-      ...user,
-      roles: rolesForUser.map(role => ({
-        roleId: role.roleId,
-        roleName: role.roleName,
-        userRoleIsDeleted: role.userRoleIsDeleted
-      }))
-    };
-  })
-  .filter(user => user !== null); // 过滤掉被标记为null的用户，即拥有至少一个userRoleIsDeleted为true的角色的用户
-    
-            // 确保每个用户至少有一个角色
-            combinedData.forEach(user => {
->>>>>>> 7df360d994710e02c1f800d10751779236dcb4dc
+        // 确保每个用户至少有一个角色
+        combinedData.forEach(user => {
             if (user.roles.length === 0) {
                 user.roles.push({ roleId: null, roleName: '游客' });
             }
         });
-<<<<<<< HEAD
-        console.log(combinedData);
         // 再次过滤，确保每个用户至少有一个“游客”角色
         combinedData = combinedData.filter(user =>
             user.roles.some(role => role.roleName === '游客')
         );
+        //   console.log(combinedData);
         // 设置默认选中的角色并更新用户列表
         if (roles.length > 0) {
             selectedRole.value = roles[0].roleId;
             updateFilteredUsers()
         }
-        await nextTick()
-=======
-// 再次过滤，确保每个用户至少有一个“游客”角色
-combinedData = combinedData.filter(user => 
-  user.roles.some(role => role.roleName === '游客')
-);
-    //   console.log(combinedData);
-    // 设置默认选中的角色并更新用户列表
-    if (roles.length > 0) {
-      selectedRole.value = roles[0].roleId;
-      updateFilteredUsers()
-    }
-    // await nextTick()
->>>>>>> 7df360d994710e02c1f800d10751779236dcb4dc
+        // await nextTick()
 
 
         // 初始化过滤后的用户列表
@@ -492,7 +384,6 @@ combinedData = combinedData.filter(user =>
     border: 1px solid rgb(231, 213, 237);
 
 }
-
 </style>
 
 <style scoped>
