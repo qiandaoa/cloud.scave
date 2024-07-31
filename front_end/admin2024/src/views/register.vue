@@ -1,8 +1,8 @@
 <template>
     <div class="register-container">
-        <div class="register-form">
+        <div class="register-form" @submit.prevent="onSubmit">
             <h2>注册</h2>
-            <form @submit.prevent="onSubmit">
+            <form>
                 <div class="form-group">
                     <label for="username">用户名</label>
                     <input type="text" id="username" v-model="userinfo.username" required placeholder="请输入用户名" />
@@ -16,7 +16,7 @@
                     <label for="confirm-password">确认密码</label>
                     <input type="password" id="confirm-password" v-model="userinfo.confirmpwd" required  placeholder="请再次输入密码" />
                 </div>
-                <button @click="onSubmit">注册</button>
+                <button >注册</button>
             </form>
             <div class="register-link">
                 已有账号？<a href="#" @click.prevent="goToLogin">登录</a>
@@ -43,7 +43,7 @@ const userinfo=reactive({
     confirmpwd: ""
 })
 
-async function onSubmit(){
+const onSubmit= async()=>{
     // 这里可以添加表单验证和提交逻辑
     if(userinfo.password !== userinfo.confirmpwd){
         alert('两次输入的密码不一致');

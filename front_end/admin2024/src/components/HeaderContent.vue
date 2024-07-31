@@ -74,7 +74,7 @@ import axios from 'axios';
 // 初始化Vue Router实例
 const router = useRouter();
 // 用户头像源地址
-const imageUrl = ref('/avatar.jpg');//默认头像
+const imageUrl = ref('');//默认头像
 // 引用Pinia的路由状态存储
 const routerStore = useRouterStore();
 // 从状态存储中引用tabArr和activeKey
