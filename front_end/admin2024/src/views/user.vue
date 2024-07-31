@@ -175,7 +175,7 @@ let UserEdit = async (id) => {
 
 let UserDelete = async (id) => {
   console.log(id);
-  if (confirm(`确定将id为${id}的数据标记为已删除吗？`)) {
+  if (confirm(`确定删除该用户吗？`)) {
     try {
       let res = await axios.delete(`http://localhost:63760/api/User/${id}`)
       const index = UserDatas.findIndex(item => item.id === id);

@@ -1,103 +1,93 @@
 <template>
   <div class="avatar-uploader-wrap" title="点击更换头像">
-
-  
-  <a-upload
-    v-model:file-list="fileList"
-    name="avatar"
-    list-type="picture-card"
-    class="avatar-uploader"
-    :show-upload-list="false"
-    :action="uploadAxios"
-    :before-upload="beforeUpload"
-    @change="handleChange"
-    
-  >
-    <img v-if="imageUrl" :src="imageUrl" sizes="36" alt="avatar" class="avatar"  />
-    <div v-else>
-      <loading-outlined v-if="loading" />
-      <plus-outlined v-else />
-      <div class="ant-upload-text">点击更新你的头像</div>
-    </div>
-  </a-upload>
-</div>
+    <a-upload
+      v-model:file-list="fileList"
+      name="avatar"
+      list-type="picture-card"
+      class="avatar-uploader"
+      :show-upload-list="false"
+      :action="uploadAxios"
+      :before-upload="beforeUpload"
+    >
+      <img v-if="imageUrl" :src="imageUrl" sizes="36" alt="avatar" class="avatar" />
+      <div v-else>
+        <loading-outlined v-if="loading" />
+        <plus-outlined v-else />
+        <div class="ant-upload-text">点击更新你的头像</div>
+      </div>
+    </a-upload>
+  </div>
 </template>
 
 <script setup>
-import { ref,onMounted} from 'vue';
+import { ref, onMounted, defineEmits } from 'vue';
 import { message } from 'ant-design-vue';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import axios from 'axios';
 
-const id = localStorage.getItem('userId')
-// console.log(id);
-
-const uploadAxios = `http://localhost:63760/api/Avatar/${id}`
-
+const id = localStorage.getItem('userId');
+const uploadAxios = `http://localhost:63760/api/Avatar/${id}`;
 const emit = defineEmits(['update:imageUrl']);
 
 onMounted(async () => {
-  await fetchData()
-})
+  await fetchData();
+});
 
-const fetchData=async()=>{
-  let user = await axios.get(`http://localhost:63760/api/user/${id}`)
-  console.log(user);
+const fetchData = async () => {
+  try {
+    const user = await axios.get(`http://localhost:63760/api/user/${id}`);
+    if (user.data.avatar) {
+      const res = await axios.get(`http://localhost:63760/api/avatar/${id}`);
+      imageUrl.value = res.data;
+    }
+  } catch (err) {
+    console.error('Error fetching user data:', err);
+  }
+};
 
-  if (user.data.avatar) {
-        try{
-          let res = await axios.get(`http://localhost:63760/api/avatar/${id}`)
-          // console.log(res);
-          imageUrl.value = res.data;
-        
-        }catch(err){
-          console.log(err);
-        }
-      }
-}
 function getBase64(img, callback) {
-const reader = new FileReader();
-reader.addEventListener('load', () => callback(reader.result));
-reader.readAsDataURL(img);
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
 }
 
 const fileList = ref([]);
 const loading = ref(false);
 const imageUrl = ref('');
 
-const handleChange = info => {
-if (info.file.status === 'uploading') {
-  loading.value = true;
-  // alert('头像获取成功')
-  return message.info('头像已更新，请刷新页面以查看新头像')
+const beforeUpload = async (file) => {
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  const isLt2M = file.size / 1024 / 1024 < 2;
   
-  // return;
-}
-if (info.file.status === 'done') {
-  getBase64(info.file.originFileObj, base64Url => {
-    imageUrl.value = base64Url;
-    loading.value = false;
-    emit('update:imageUrl', imageUrl.value);
-  });
-}
-if (info.file.status === 'error') {
-  loading.value = false;
-  message.error('upload error');
-}
+  if (!isJpgOrPng) {
+    message.error('You can only upload JPG file!');
+    return false;
+  }
+  if (!isLt2M) {
+    message.error('Image must smaller than 2MB!');
+    return false;
+  }
+  
+  try {
+    const formData = new FormData();
+    formData.append('avatar', file);
+    await axios.post(uploadAxios, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    message.success('头像上传成功，请刷新页面');
+    // Optionally update imageUrl here if needed
+    return true;
+  } catch (error) {
+    console.error('Error uploading avatar:', error);
+    message.error('头像上传失败');
+    return false;
+  }
 };
 
-const beforeUpload = file => {
-const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-if (!isJpgOrPng) {
-  message.error('You can only upload JPG file!');
-}
-const isLt2M = file.size / 1024 / 1024 < 2;
-if (!isLt2M) {
-  message.error('Image must smaller than 2MB!');
-}
-return isJpgOrPng && isLt2M;
-};
 </script>
+
 
 <style scoped>
 

@@ -89,6 +89,7 @@ onMounted(() => {
             data.data.forEach(item => {
                 let uselength = data.data.length;
                 let tureUser=isActiveds.length;
+                console.log(tureUser);
                 let falseUser=uselength-tureUser;
                 myChart.setOption({
                     series: [{
