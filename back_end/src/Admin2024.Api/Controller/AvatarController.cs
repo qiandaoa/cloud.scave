@@ -62,6 +62,6 @@ public class AvatarController : ControllerBase
    public async Task<IActionResult> GetAvatar(Guid id)
    {
        var entity =await _repo.GetByIdAsync(id);
-       return Ok("https://localhost:63759/" + entity.Avatar);
+       return Ok("http://localhost:63760/" + entity.Avatar);
    }
 }

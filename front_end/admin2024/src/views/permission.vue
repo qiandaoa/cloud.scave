@@ -38,8 +38,8 @@
                     <td style="max-width: 25%;">{{ item.resourceName }}</td>
                     <div class="permission-list">
                         <div v-for="permissionItem in permission" :key="permissionItem.id" class="permission-item">
-                            <a-checkbox v-model="permissionItem.isActived" :value="permissionItem.permissionName">
-                            </a-checkbox>
+                            <input type="checkbox"  v-model="permissionItem.isActived" :value="permissionItem.permissionName">
+                        </input>
                             <span>{{ permissionItem.permissionName }}</span>
                         </div>
                     </div>
@@ -70,7 +70,7 @@ onMounted(async () => {
      if (filteredRoles.value.length > 0) {
         selectedKey.value = filteredRoles.value[0].id;
     }
-
+    // console.log(permission.isActived);
     loading.value=false;
 });
 
@@ -98,11 +98,12 @@ const fetchrole = async () => {
     } catch (err) {
         console.log(err);
     }
-}
+}   
 const fetchpermission = async () => {
     try {
         let res = await axios.get(`http://localhost:63760/api/permission`)
-        permission = res.data.data
+        permission = res.data.data 
+        console.log(permission);
     } catch (err) {
         console.log(err);
     }

@@ -126,14 +126,8 @@ const handleok = async () => {
 }
 
 onMounted(async () => {
-<<<<<<< HEAD
-   await fetchData()
-   console.log(roles);
-   loading.value=false
-=======
     await fetchData()
     loading.value = false
->>>>>>> f9653438f7047a48590f7389dc63590ec93639d1
 })
 
 //搜素

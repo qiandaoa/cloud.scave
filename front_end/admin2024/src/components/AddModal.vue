@@ -69,7 +69,7 @@ const useStore = useUserStore()
     })
     console.log(res);
     if (res.status === 200) {
-      await useStore.fetchUserDate();
+      await useStore.getUserDate();
       // await new Promise(resolve => setTimeout(resolve, 0));
       location.reload()
       handleCancel();
