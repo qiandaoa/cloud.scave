@@ -36,7 +36,7 @@
                        </a-form-item>
             
                        <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-                         <a-button type="primary" class="sub" html-type="submit" @click="btnSub">登录</a-button>
+                         <a-button type="primary" class="sub" html-type="submit">登录</a-button>
                          <a-button type="primary" @click="handleregister">注册</a-button>
                        </a-form-item>
                     </a-form>
