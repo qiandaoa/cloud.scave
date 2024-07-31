@@ -17,6 +17,7 @@
   <footer class="copyright">
     <p>官网 | 社区 | Cloud</p>
     <p>Copyright © 2024 云朵 Design All Rights Reserved</p>
+    <p>Design By 抓住云朵 连增钱 Charlie没有巧克力 陈培杰 养生吗喽 邱楷杭</p>
   </footer>
 
 </template>
