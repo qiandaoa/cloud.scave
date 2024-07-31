@@ -1,5 +1,5 @@
 import Layout from '../components/Layout.vue'
-import { MailOutlined, LaptopOutlined, IdcardOutlined, ApartmentOutlined, HomeOutlined,TeamOutlined, SettingOutlined, UserOutlined, CreditCardOutlined } from '@ant-design/icons-vue';
+import { MailOutlined, LaptopOutlined, IdcardOutlined, ApartmentOutlined, DatabaseOutlined,HomeOutlined,TeamOutlined, SettingOutlined, UserOutlined, CreditCardOutlined } from '@ant-design/icons-vue';
 import { h } from 'vue'
 export const routes = [
     {
@@ -56,7 +56,7 @@ export const routes = [
             {
                 path: '/menu',
                 component: () => import('../views/menu.vue'),
-                meta: { title: '菜单管理', icon: () => h(ApartmentOutlined) }
+                meta: { title: '菜单管理', icon: () => h(DatabaseOutlined ) }
             },
             {
                 path: '/userinfo',

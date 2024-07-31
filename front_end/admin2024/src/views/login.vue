@@ -92,7 +92,7 @@ async function btnSub() {
             localStorage.setItem('userId',res.data.data.id)
             // console.log(res.data.data.id);
             // 跳转首页
-            router.push('/');
+            router.push('/desktop');
         } else {
             // 处理其他状态码的情况
             console.error('登录状态码异常:', res.status);
