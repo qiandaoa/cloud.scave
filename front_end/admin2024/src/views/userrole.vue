@@ -381,9 +381,12 @@ let fetchData = async () => {
 .el-modoal-table th,
 .el-modoal-table td {
     height: 50px;
-    border: 1px solid rgb(231, 213, 237);
-
+    border: 1px solid #f0f0f0;
 }
+.el-modoal-table th{
+    background-color:#f0f0f0;
+}
+
 </style>
 
 <style scoped>
