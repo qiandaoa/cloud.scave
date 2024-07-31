@@ -1,4 +1,5 @@
 <template>
+  <a-spin :spinning="loading" style="margin-left: 500px; width: 50px;"></a-spin>
   <div class="user-profile">
     <a-row :gutter="16">
       <a-col :span="8">
@@ -82,7 +83,7 @@ import  AvatarUploader  from '../components/AvatarUploader.vue'
 // 假设这是从后端获取的用户信息
 const yourActionURL = ref('');
 const showAvatarUploaderFlag = ref(false);
-
+const loading = ref(true);
 const showAvatarUploader = () => {
   showAvatarUploaderFlag.value = true;
 };
@@ -153,7 +154,7 @@ onMounted(async () => {
       console.log(res);
       Object.assign(edituserData, res.data)
       Object.assign(userData, res.data)
-
+      loading.value=false
 
     } catch (err) {
       console.log(err);

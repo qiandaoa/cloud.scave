@@ -41,13 +41,16 @@ export const useRouterStore = defineStore('router', () => {
     onMounted(() => {
         const savedActiveKey = localStorage.getItem('activeTab');
         if (savedActiveKey) {
-            activeKey.value = savedActiveKey;
-            // 可能需要调用一些方法来确保界面状态正确更新
-            changeActiveKey(savedActiveKey);
+        // 确保savedActiveKey对应的标签页存在于tabArr中
+        addTab(savedActiveKey);
+        activeKey.value = savedActiveKey;
+        // 更新界面状态
+        
+        changeActiveKey(savedActiveKey);
         }
     })
 
- 
+
  
     // 监听路由变化，设置当前标签项和当前菜单
     watch(route, (newVal) => {
@@ -68,21 +71,20 @@ export const useRouterStore = defineStore('router', () => {
     }
     
 
-    function addTab(key) {// 添加对象到标签数组中（如果不存在则添加）
-        // console.log('拍扁的菜单数据', this.flatMenuArr);
-        var isExist = this.tabArr.filter(item => item.key === key);
-        if (isExist.length > 0) {
-
-        } else {
-            let tmp = getOjbectByKey(key, this.flatMenuArr);
-            // console.log(tmp);
-            let obj = {
-                title: tmp.title,
-                content: ``,
-                key: key,
+    function addTab(key) {
+        // 使用tabArr直接访问，不需要this
+        const isExist = tabArr.some(item => item.key === key);
+        if (!isExist) {
+            // 使用flatMenuArr.value来访问计算属性的结果
+            const tmp = getOjbectByKey(key, flatMenuArr.value);
+            if (tmp) { // 确保tmp存在，避免使用undefined的属性
+                const obj = {
+                    title: tmp.title,
+                    content: '',
+                    key: key,
+                };
+                tabArr.push(obj);
             }
-
-            this.tabArr.push(obj);
         }
     }
 

@@ -18,7 +18,7 @@ let UserDatas = reactive([])
 const useStore = useUserStore()
 let Findkeyword = ref('');
 let originalData = reactive([]);
-
+const loading = ref(true);
 
 onMounted(async () => {
 
@@ -28,12 +28,14 @@ onMounted(async () => {
   originalData.push(...user);
   // 将原始数据复制到 UserDatas
   UserDatas.push(...originalData);
+  loading.value = false;
   //  let total=originnaTotal
 })
 
 const addUserModalRef = ref(null)
 const showModals = () => {
   addUserModalRef.value.show()
+
 }
 // 搜索关键词
 
@@ -229,6 +231,7 @@ const formatItemCreateAt = (item) => {
 </script>
 
 <template>
+  <a-spin :spinning="loading" style="margin-left: 500px; width: 50px;"></a-spin>
   <div class="button-wrap">
     <div class="demo-dropdown-wrap">
       <div class="input-key">

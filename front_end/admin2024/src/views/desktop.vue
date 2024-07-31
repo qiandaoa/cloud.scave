@@ -99,7 +99,7 @@
             <!-- 每日标语卡片 -->
             <a-card hoverable style="width: 30%;margin: 10px;">
               <template #cover>
-                <img alt="example" src="../../public/好运莲莲.png" style="height: 400px;" />
+                <img alt="example" src="/好运莲莲.png" style="height: 400px;" />
               </template>
               <a-card-meta title="每日语录">
                 <template #description>想多了都是问题，做多了都是答案</template>
