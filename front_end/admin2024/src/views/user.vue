@@ -19,18 +19,29 @@ const useStore = useUserStore()
 let Findkeyword = ref('');
 let originalData = reactive([]);
 const loading = ref(true);
-
+let timeoutId;
 onMounted(async () => {
 
-  const res = await useStore.fetchUserDate()
+  await getdata()
+  //  let total=originnaTotal
+  timeoutId = setTimeout(() => {
+    if (loading.value) {
+      location.reload();
+    }
+  }, 5000);
+  loading.value = false;
+
+})
+
+const getdata = async()=>{
+  let res = await axios.get('http://localhost:63760/api/user')
   const user = res.data
 
   originalData.push(...user);
   // 将原始数据复制到 UserDatas
   UserDatas.push(...originalData);
-  loading.value = false;
-  //  let total=originnaTotal
-})
+  
+}
 
 const addUserModalRef = ref(null)
 const showModals = () => {
@@ -146,6 +157,7 @@ let Reset = async () => {
 
 // 编辑
 let UserEdit = async (id) => {
+  console.log(id);
   try {
     let res = await axios.get(`http://localhost:63760/api/User/${id}`)
     // 不再重新定义 ModalData，而是更新现有的 ModalData
