@@ -10,8 +10,10 @@ public class Program
     }
     public static IHostBuilder ConfigureWebHostBuilder(string[] args)
     {
+        
         return Host.CreateDefaultBuilder(args) // 添加Autofac工厂服务
         .ConfigureWebHostDefaults(webBuilder => {
+            webBuilder.UseUrls("http://localhost:63760");
             webBuilder.UseStartup<Startup>().UseWebRoot("wwwroot");
         });
     }
