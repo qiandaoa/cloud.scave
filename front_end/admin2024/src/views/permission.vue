@@ -3,11 +3,11 @@
 
     <div class="el">
         <div class="el-left">
-            <a-menu class="el-left-menu">
-                <a-menu-item disabled>
+            <a-menu class="el-left-menu" :selected-keys="[selectedKey]" >
+                <a-menu-item  disabled  >
                     角色名称
                 </a-menu-item>
-                <a-menu-item v-for="item in filteredRoles" :key="item.id">
+                <a-menu-item  v-for="item in filteredRoles" @click="() => handleClick(item.id)"  :key="item.id" :value="item.id">
                     {{ item.roleName }}
                 </a-menu-item>
             </a-menu>
@@ -61,20 +61,26 @@ let Rolearr = reactive([])
 let filteredRoles = ref([])
 let resource = reactive([])
 const loading = ref(true);
-let permission = reactive([]);
-
+let permission=reactive([])
+const selectedKey = ref(null); // 新增：用于跟踪选中的菜单项
 
 onMounted(async () => {
-    await fetchpermission()
-    await fetchrole()
-    await fetchresource()
-    loading.value = false;
+    await Promise.all([fetchpermission(), fetchrole(), fetchresource()]);
+     // 设置默认选中项
+     if (filteredRoles.value.length > 0) {
+        selectedKey.value = filteredRoles.value[0].id;
+    }
+
+    loading.value=false;
 });
 
-
-
-const fetchresource = async () => {
-    try {
+// 添加点击处理函数
+const handleClick = (key) => {
+    selectedKey.value = key;
+    // 可以在这里添加逻辑，例如根据选中的角色更新资源和权限的显示
+};
+const fetchresource=async()=>{
+    try{
         let res = await axios.get(`http://localhost:63760/api/permission/api/resource`)
         resource = res.data.data
         console.log(resource);

@@ -7,14 +7,7 @@ export const useUserStore = defineStore('user', () => {
 
         return res
     }
-    
-    async function fetchUserDate(){
-        const res = await getUserDate()
-        console.log(res);   
-        return res
-    }
-    
-    return {fetchUserDate}
-
+ 
+    return {getUserDate}
 
 })

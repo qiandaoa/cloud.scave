@@ -1,5 +1,5 @@
 import Layout from '../components/Layout.vue'
-import { MailOutlined, LaptopOutlined, IdcardOutlined, ApartmentOutlined, HomeOutlined, SettingOutlined, UserOutlined, CreditCardOutlined } from '@ant-design/icons-vue';
+import { MailOutlined, LaptopOutlined, IdcardOutlined, ApartmentOutlined, HomeOutlined,TeamOutlined, SettingOutlined, UserOutlined, CreditCardOutlined } from '@ant-design/icons-vue';
 import { h } from 'vue'
 export const routes = [
     {
@@ -62,6 +62,11 @@ export const routes = [
                 path: '/userinfo',
                 component: () => import("../views/userinfo.vue"),
                 meta: { title: '用户个人信息', hide: true }
+            },
+            {
+                path: '/about',
+                component: () => import("../views/about.vue"),
+                meta: { title: '关于我们',  icon: () => h(TeamOutlined)}
             },
 
 

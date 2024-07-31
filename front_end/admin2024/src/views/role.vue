@@ -2,7 +2,7 @@
     <div>
         <div class="role-list-container">
             <span class="role-name">角色名称</span>
-            <input type="text" class="input-text" v-model="Findkeyword" placeholder="角色名称">
+            <input type="text" class="input-text" v-model="Findkeyword" style="width: 250px;" placeholder="角色名称">
             <button type="button" class="search-button" @click="Search">
                 <SearchOutlined /> 搜索
             </button>
