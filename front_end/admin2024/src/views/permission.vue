@@ -3,19 +3,23 @@
 
     <div class="el">
         <div class="el-left">
-            <a-menu class="el-left-menu">
+            <a-menu class="el-left-menu" :selected-keys="[selectedKey]" >
                 <a-menu-item  disabled  >
                     角色名称
                 </a-menu-item>
-                <a-menu-item  v-for="item in filteredRoles" :key="item.id">
+                <a-menu-item  v-for="item in filteredRoles" @click="() => handleClick(item.id)"  :key="item.id" :value="item.id">
                     {{ item.roleName }}
-                </a-menu-item>  
+                </a-menu-item>
             </a-menu>
         </div>
         <div class="el-right">
-            <button type="button" style="background-color: blue;">全部选择</button>
-            <button type="button" style="background-color: red;">全部取消</button>
-            <button type="button" style="background-color: green;">保存设置</button>
+            <button type="button"
+                style="background-color: #037dfe; width: 80px;height: 35px;text-align: center; font-size: 13px;"
+                @click="AllCheck(permission.isActived)">全部选择</button>
+            <button type="button"
+                style="background-color: #ff4949; width: 80px;height: 35px;text-align: center; font-size: 13px;">全部取消</button>
+            <button type="button"
+                style="background-color:#13ce66; width: 80px;height: 35px;text-align: center; font-size: 13px;">保存设置</button>
             <span class="el-right-icon">
                 <SearchOutlined />
             </span>
@@ -27,14 +31,15 @@
                     <th>分组名称</th>
                     <th>权限列表</th>
                 </tr>
-                <tr v-for="(item,index) in resource" :key="item.id">
-                    <td>{{ index+1 }}</td>
+                <tr v-for="(item, index) in resource" :key="item.id">
+                    <td>{{ index + 1 }}</td>
                     <!-- <td style="max-width: 5%;">{{ item.id }}</td> -->
-                    
+
                     <td style="max-width: 25%;">{{ item.resourceName }}</td>
                     <div class="permission-list">
                         <div v-for="permissionItem in permission" :key="permissionItem.id" class="permission-item">
-                            <input type="checkbox"  v-model="permissionItem.isActived" :value="permissionItem.permissionName" name="" />
+                            <input type="checkbox"  v-model="permissionItem.isActived" :value="permissionItem.permissionName">
+                        </input>
                             <span>{{ permissionItem.permissionName }}</span>
                         </div>
                     </div>
@@ -47,50 +52,59 @@
 
 
 <script setup>
-import { reactive,onMounted,computed,ref } from "vue";
+import { reactive, onMounted, computed, ref, vModelCheckbox } from "vue";
 import axios from "axios";
 import {
     SearchOutlined,
 } from '@ant-design/icons-vue';
-let Rolearr=reactive([])
-let filteredRoles=ref([])
-let resource=reactive([])
+let Rolearr = reactive([])
+let filteredRoles = ref([])
+let resource = reactive([])
 const loading = ref(true);
 let permission=reactive([])
-
+const selectedKey = ref(null); // 新增：用于跟踪选中的菜单项
 
 onMounted(async () => {
-    await fetchpermission()
-    await fetchrole()
-    await fetchresource()
+    await Promise.all([fetchpermission(), fetchrole(), fetchresource()]);
+     // 设置默认选中项
+     if (filteredRoles.value.length > 0) {
+        selectedKey.value = filteredRoles.value[0].id;
+    }
+    // console.log(permission.isActived);
     loading.value=false;
 });
 
+// 添加点击处理函数
+const handleClick = (key) => {
+    selectedKey.value = key;
+    // 可以在这里添加逻辑，例如根据选中的角色更新资源和权限的显示
+};
 const fetchresource=async()=>{
     try{
         let res = await axios.get(`http://localhost:63760/api/permission/api/resource`)
-        resource=res.data.data
+        resource = res.data.data
         console.log(resource);
-    }catch(error){
+    } catch (error) {
         console.log(error)
     }
 }
-const fetchrole=async()=>{
+const fetchrole = async () => {
     try {
-    let res = await axios.get('http://localhost:63760/api/role');
-    Rolearr = res.data;
-    // console.log(Rolearr);    
-    filteredRoles.value = Rolearr.data.filter(item=>!item.isDeleted);
-    console.log(filteredRoles.value);
-  } catch (err) {
-    console.log(err);
-  }
-}
-const fetchpermission=async()=>{
-    try{
+        let res = await axios.get('http://localhost:63760/api/role');
+        Rolearr = res.data;
+        // console.log(Rolearr);    
+        filteredRoles.value = Rolearr.data.filter(item => !item.isDeleted);
+        console.log(filteredRoles.value);
+    } catch (err) {
+        console.log(err);
+    }
+}   
+const fetchpermission = async () => {
+    try {
         let res = await axios.get(`http://localhost:63760/api/permission`)
-        permission=res.data.data
-    }catch(err){
+        permission = res.data.data 
+        console.log(permission);
+    } catch (err) {
         console.log(err);
     }
 }
@@ -162,6 +176,22 @@ const fetchpermission=async()=>{
     border: 1px solid rgb(240, 240, 240);
 }
 
+.el-right-table td {
+    text-align: center;
+}
+
+.el-right-table th {
+    background-color: #f0f0f0;
+}
+
+.el-right-table td:nth-child(2) {
+    width: 250px;
+}
+
+.el-right-table td:nth-child(1) {
+    width: 100px;
+}
+
 .el-right th,
 .el-right td {
     padding: 10px;
@@ -184,21 +214,30 @@ const fetchpermission=async()=>{
 :where(.css-dev-only-do-not-override-19iuou).ant-menu-light .ant-menu-item-selected {
     background-color: #fff;
 }
+
 .permission-list {
     width: 600px;
     height: 70px;
     display: flex;
-    flex-wrap: wrap; /* 允许换行 */
-    gap: 5px; /* 项目之间的间隙 */
+    flex-wrap: wrap;
+    /* 允许换行 */
+    gap: 5px;
+    /* 项目之间的间隙 */
+    margin-left: 10px;
+    font-size: 18px;
 }
 
 .permission-item {
-    font-size: 0.8em; /* 缩小字体大小 */
-    display: flex; /* 确保 checkbox 和 text 在一行 */
-    align-items: center; /* 垂直居中 */
+    font-size: 0.8em;
+    /* 缩小字体大小 */
+    display: flex;
+    /* 确保 checkbox 和 text 在一行 */
+    align-items: center;
+    /* 垂直居中 */
 }
 
 .permission-item span {
-    margin-left: 5px; /* checkbox 和 text 之间的间距 */
+    margin-left: 5px;
+    /* checkbox 和 text 之间的间距 */
 }
 </style>

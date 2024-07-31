@@ -15,8 +15,8 @@
   >
     <img v-if="imageUrl" :src="imageUrl" sizes="36" alt="avatar" class="avatar"  />
     <div v-else>
-      <loading-outlined v-if="loading"></loading-outlined>
-      <plus-outlined v-else></plus-outlined>
+      <loading-outlined v-if="loading" />
+      <plus-outlined v-else />
       <div class="ant-upload-text">点击更新你的头像</div>
     </div>
   </a-upload>
@@ -24,13 +24,13 @@
 </template>
 
 <script setup>
-import { ref,onMounted } from 'vue';
+import { ref,onMounted} from 'vue';
 import { message } from 'ant-design-vue';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import axios from 'axios';
 
 const id = localStorage.getItem('userId')
-console.log(id);
+// console.log(id);
 
 const uploadAxios = `http://localhost:63760/api/Avatar/${id}`
 
@@ -47,7 +47,7 @@ const fetchData=async()=>{
   if (user.data.avatar) {
         try{
           let res = await axios.get(`http://localhost:63760/api/avatar/${id}`)
-          console.log(res);
+          // console.log(res);
           imageUrl.value = res.data;
         
         }catch(err){
@@ -68,9 +68,10 @@ const imageUrl = ref('');
 const handleChange = info => {
 if (info.file.status === 'uploading') {
   loading.value = true;
-  alert('头像获取成功，请刷新页面')
+  // alert('头像获取成功')
+  return message.info('头像已更新，请刷新页面以查看新头像')
   
-  return;
+  // return;
 }
 if (info.file.status === 'done') {
   getBase64(info.file.originFileObj, base64Url => {

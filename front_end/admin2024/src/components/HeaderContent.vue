@@ -1,3 +1,4 @@
+```
 <template>
     <!-- 页面布局容器 -->
     <div class="allbody">
@@ -20,7 +21,7 @@
                         <a-space direction="vertical" :size="80">
                             <a-space wrap :size="32">
                                 <!-- 用户头像 -->
-                                <a-avatar :src="imageUrl" alt="User Avatar" :size="48">
+                                <a-avatar :src="imageUrl" alt="User Avatar" :size="52">
                                 </a-avatar>
                                 <!-- <span class="username">{{ username }}</span> -->
                             </a-space>
@@ -41,7 +42,7 @@
                             <hr>
                             <!-- 登出菜单项 -->
                             <a-menu-item>
-                                <a @click="handleLogout" class="a">登出</a>
+                                <a @click="handleLogout" class="a">退出登录</a>
                             </a-menu-item>
                         </a-menu>
                     </template>
@@ -63,14 +64,14 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { useRouterStore } from '../store/router';
-import { nextTick, watch, computed, ref, onMounted,onUnmounted } from 'vue';
+import { nextTick, watch, computed, ref, onMounted, onUnmounted } from 'vue';
 import { useRoute, onBeforeRouteUpdate, useRouter, RouterLink } from 'vue-router';
 
 import axios from 'axios';
 // 初始化Vue Router实例
 const router = useRouter();
 // 用户头像源地址
-const imageUrl = ref('/avatar.jpg');//默认头像
+const imageUrl = ref('');//默认头像
 // 引用Pinia的路由状态存储
 const routerStore = useRouterStore();
 // 从状态存储中引用tabArr和activeKey
@@ -81,28 +82,32 @@ const id = localStorage.getItem('userId')
 // 获取当前路由对象
 const route = useRoute();
 const handleAvatarUpdated = url => {
-  imageUrl.value = url;
+    imageUrl.value = url;
 };
 onMounted(() => {
-  // 注册事件监听器
-  window.addEventListener('imageUrl', handleAvatarUpdated);
+    // 注册事件监听器
+    window.addEventListener('imageUrl', handleAvatarUpdated);
 });
 onUnmounted(() => {
-  // 移除事件监听器，避免内存泄漏
-  window.removeEventListener('imageUrl', handleAvatarUpdated);
+    // 移除事件监听器，避免内存泄漏
+    window.removeEventListener('imageUrl', handleAvatarUpdated);
 });
 //获取头像
-onMounted(async () => { 
-    let user = await axios.get(`http://localhost:63760/api/user`)
+onMounted(async () => {
+
+    let user = await axios.get(`http://localhost:63760/api/user/${id}`)
+    // console.log(user);
+    //
     if (user.data.avatar) {
-        try{
-          let res = await axios.get(`http://localhost:63760/api/avatar/${id}`)
-          imageUrl.value = res.data;
-        }catch(err){
-          console.log(err);
+        try {
+            let res = await axios.get(`http://localhost:63760/api/avatar/${id}`)
+            //   console.log(res);
+            imageUrl.value = res.data;
+        } catch (err) {
+            console.log(err);
         }
-      }
-      
+    }
+
 })
 
 // 计算属性：根据当前路由生成面包屑数组
@@ -188,7 +193,8 @@ const handleLogout = () => {
 }
 
 .acvtar {
-    margin-right: 100px;
+    margin-right: 3%;
+
 }
 
 /* 面包屑样式 */
@@ -201,7 +207,7 @@ const handleLogout = () => {
 }
 
 .breadcrumb .text {
-    color: pink;
+    color: palevioletred;
     font-size: larger;
 }
 
@@ -222,7 +228,7 @@ const handleLogout = () => {
 }
 
 .custom-menu {
-    width: 120px;
+    width: 90px;
     max-height: 120px;
     overflow-y: auto;
 }
@@ -237,3 +243,5 @@ const handleLogout = () => {
 /* font-size: 18px; */
 /* } */
 </style>
+
+

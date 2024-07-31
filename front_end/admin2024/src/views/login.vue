@@ -57,6 +57,7 @@ import axiosInstance from '../store/axiosInstance.js';
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../store/store';
+import { message } from 'ant-design-vue';
 
 const router = useRouter();
 const useStore = useUserStore();
@@ -66,30 +67,32 @@ const userInfo = reactive({
 });
 // 如果用户已经登录，即有token的记录，则跳转至首页
 onMounted(() => {
-    // if (localStorage.getItem('token')) {
-    //     router.push('/');
-    // }
+    if (localStorage.getItem('token')) {
+        router.push('/');
+    }
 });
 
 // 如果用户没有登录，则进行登录验证，获取token
 async function btnSub() {
     try {
         const res = await axiosInstance.post('http://localhost:63760/api/login', userInfo);
-        console.log(res);
+        // console.log(res);
         if (res.status === 200) {
             // 登录成功
             console.log('登录成功');
             // location.reload()
             // 从服务器响应中获取的token存储到本地t
-            useStore.user.token = res.data.data.data;
+             useStore.user.token = res.data.data.data;
+
             // 将 Token 存储到 LocalStorage，以保持用户的登录状态
+            
             localStorage.setItem('token', res.data.data.token);
             // 将用户名存储到 LocalStorage，为了在后续请求或页面加载时能够快速访问用户的身份信息
             localStorage.setItem('username',userInfo.userName);
             localStorage.setItem('userId',res.data.data.id)
             // console.log(res.data.data.id);
             // 跳转首页
-            router.push('/');
+            router.push('/desktop');
         } else {
             // 处理其他状态码的情况
             console.error('登录状态码异常:', res.status);
@@ -103,6 +106,7 @@ async function btnSub() {
            } else {
                // 处理其他类型的错误
                console.error('登录失败:', err);
+               message.error('登录失败，请刷新后重试');
            }
        }
     }      
