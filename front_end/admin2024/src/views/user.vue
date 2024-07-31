@@ -142,7 +142,7 @@ let Reset = async () => {
   Findkeyword.value = "";
   // console.log("重置");s
   try {
-    const res = await useStore.fetchUserDate();
+    const res = await useStore.getUserDate();
     const user = res.data;
     // 清空并用原始数据重新填充
     originalData.splice(0, originalData.length);
