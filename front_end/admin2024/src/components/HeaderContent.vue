@@ -214,7 +214,7 @@ const handleLogout = () => {
 }
 
 .breadcrumb .text {
-    color: pink;
+    color: palevioletred;
     font-size: larger;
 }
 
@@ -250,5 +250,5 @@ const handleLogout = () => {
 /* font-size: 18px; */
 /* } */
 </style>
-```
+
 
