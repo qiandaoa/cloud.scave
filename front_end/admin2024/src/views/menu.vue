@@ -159,7 +159,7 @@ const initializeMenuData = () => {
                     sort: 1,
                     key: 2,
                     name: '工作台',
-                    permissions: '',
+                    permissions: 'PRIV_DESKTOP_VIEW',
                     path: 'desktop',
                     component: '',
                     cache: true,
@@ -169,7 +169,7 @@ const initializeMenuData = () => {
                     sort: 2,
                     key: 3,
                     name: '仪表盘',
-                    permissions: '',
+                    permissions: 'PRIV_DASHBOARD_VIEW',
                     path: 'sdashboard',
                     component: '',
                     cache: true,
@@ -181,9 +181,9 @@ const initializeMenuData = () => {
             sort: 2,
             key: 4,
             name: '系统管理',
-            permissions: '',
+            permissions: 'PRIV_SYSTEM_VIEW',
             path: 'system',
-            component: '',
+            component: 'system',
             cache: true,
             status: true,
             children: [
@@ -201,7 +201,7 @@ const initializeMenuData = () => {
                             sort: 1,
                             key: 6,
                             name: '用户详细',
-                            permissions: '',
+                            permissions: 'PRIV_USERS_VIEW',
                             path: 'detail',
                             component: '',
                             cache: true,
@@ -216,9 +216,9 @@ const initializeMenuData = () => {
             sort: 3,
             key: 7,
             name: '角色管理',
-            permissions: '',
+            permissions: 'PRIV_ROLES_VIEW',
             path: 'role',
-            component: '',
+            component: 'role',
             cache: true,
             status: true
         },
@@ -226,9 +226,9 @@ const initializeMenuData = () => {
             sort: 4,
             key: 8,
             name: '权限管理',
-            permissions: '',
+            permissions: 'PRIV_ROLEPOWERS_VIEW',
             path: 'permission',
-            component: '',
+            component: 'permission',
             cache: true,
             status: true
         },
@@ -236,9 +236,9 @@ const initializeMenuData = () => {
             sort: 5,
             key: 9,
             name: '用户角色',
-            permissions: '',
+            permissions: 'PRIV_ROLEUSERS_VIEW',
             path: 'userrole',
-            component: '',
+            component: 'userole',
             cache: true,
             status: true
         },
@@ -246,9 +246,9 @@ const initializeMenuData = () => {
             sort: 6,
             key: 10,
             name: '菜单管理',
-            permissions: '',
+            permissions: 'PRIV_MENU_VIEW',
             path: 'menu',
-            component: '',
+            component: 'menu',
             cache: true,
             status: true
         },
@@ -501,7 +501,8 @@ button:hover {
 button:active {
     transform: scale(0.9);
 }
-
+</style>
+<style scoped>
 .el-bottom button {
     height: 30px;
     border: 1px solid rgb(240, 240, 240);
@@ -521,7 +522,8 @@ button:active {
 
 .el-bottom .icon {
     width: 50px;
-    float: right;
+    /* float: right; */
+    margin-left: 50px
 }
 
 .el-bottom .icon-search {
@@ -544,7 +546,8 @@ button:active {
     border-radius: 0 5px 5px 0;
     background-color: rgb(255, 0, 0);
 }
-
+</style>
+<style scoped>
 .modal {
     width: 100vw;
     height: 100vh;
