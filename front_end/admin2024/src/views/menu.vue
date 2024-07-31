@@ -501,8 +501,7 @@ button:hover {
 button:active {
     transform: scale(0.9);
 }
-</style>
-<style scoped>
+
 .el-bottom button {
     height: 30px;
     border: 1px solid rgb(240, 240, 240);
@@ -545,8 +544,7 @@ button:active {
     border-radius: 0 5px 5px 0;
     background-color: rgb(255, 0, 0);
 }
-</style>
-<style scoped>
+
 .modal {
     width: 100vw;
     height: 100vh;

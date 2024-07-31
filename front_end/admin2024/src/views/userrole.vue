@@ -327,9 +327,9 @@ let fetchData = async () => {
     width: 100%;
     border: 1px solid rgb(240, 240, 240);
 }
-</style>
 
-<style scoped>
+
+
 .el-right {
     min-width: 81%;
 }
@@ -387,9 +387,7 @@ let fetchData = async () => {
     background-color:#f0f0f0;
 }
 
-</style>
 
-<style scoped>
 .el-dialog {
     width: 100%;
     height: 100%;

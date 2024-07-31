@@ -424,9 +424,7 @@ button:hover,
 button:active {
     transform: scale(0.9);
 }
-</style>
 
-<style scoped>
 .modal {
     min-width: 100vw;
     min-height: 100vh;

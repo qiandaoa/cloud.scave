@@ -1,10 +1,11 @@
 import { createApp } from 'vue';
-import App from './App.vue';
-import axios from 'axios';
-
-// 以下完整引入antdv
 import antdv from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
+
+import App from './App.vue';
+// import axios from 'axios';
+
+// 以下完整引入antdv
 
 
 // 引入路由模块

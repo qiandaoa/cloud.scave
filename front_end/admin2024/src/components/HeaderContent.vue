@@ -57,7 +57,9 @@
                 <a-tab-pane v-for="pane in tabArr" :key="pane.key" :tab="pane.title" :closable="pane.title !== '工作台' && pane.title !== '仪表盘'
                     "></a-tab-pane>
             </a-tabs>
+
         </div>
+
     </div>
 </template>
 
