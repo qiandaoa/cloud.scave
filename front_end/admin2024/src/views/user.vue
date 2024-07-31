@@ -3,13 +3,10 @@
 import { h, ref, reactive, computed, onMounted } from 'vue';
 import {
   SearchOutlined,
-  UserOutlined,
-  DownOutlined,
   SyncOutlined,
   PlusOutlined,
   EditOutlined,
   DeleteOutlined,
-  CloseOutlined
 } from '@ant-design/icons-vue'
 import axios from 'axios'
 import { useUserStore } from '../store/user.js'
@@ -33,14 +30,14 @@ onMounted(async () => {
 
 })
 
-const getdata = async()=>{
+const getdata = async () => {
   let res = await axios.get('http://localhost:63760/api/user')
   const user = res.data
 
   originalData.push(...user);
   // 将原始数据复制到 UserDatas
   UserDatas.push(...originalData);
-  
+
 }
 
 const addUserModalRef = ref(null)
@@ -81,7 +78,7 @@ let ModalData = reactive({
   email: "",
   telephone: "",
   remark: "",
-  avatar:"1"
+  avatar: "1"
 }
 )
 
@@ -167,7 +164,7 @@ let UserEdit = async (id) => {
     ModalData.email = res.data.email;
     ModalData.telephone = res.data.telephone;
     ModalData.remark = res.data.remark;
-    
+
     showModal.value = true;
   } catch (err) {
     console.log(err);
@@ -306,73 +303,65 @@ const formatItemCreateAt = (item) => {
     <button type="button" @click="onChange">跳转</button>
   </div>
   <!-- 编辑添加模态框 -->
-  <div v-if="showModal" class="modal-wrap">
-    <div>
-      <div v-if="showModal" class="modal-backdrop">
-        <div class="modal">
-          <div class="modal-content">
-            <h1>用户编辑</h1>
-            <a-button type="primary" id="modalClose" :icon="h(CloseOutlined)" @click="showModal = false"></a-button>
-          </div>
-          <div class="modal-table-from">
-            <form action="" method="post">
-              <table class="modal-table">
-                <tr>
-                  <th>用户名</th>
-                  <td>
-                    <a-space direction="vertical">
-                      <a-input v-model:value="ModalData.username" placeholder="请输入用户名" />
-                    </a-space>
-                  </td>
-                </tr>
-                <tr>
-                  <th>昵称</th>
-                  <td>
-                    <a-space direction="vertical">
-                      <a-input v-model:value="ModalData.nickName" placeholder="请输入昵称" />
-                    </a-space>
-                  </td>
-                </tr>
-                <tr>
-                  <th>邮箱</th>
-                  <td>
-                    <a-space direction="vertical">
-                      <a-input v-model:value="ModalData.email" placeholder="请输入邮箱" />
-                    </a-space>
-                  </td>
-                </tr>
-                <tr>
-                  <th>手机号</th>
-                  <td>
-                    <a-space direction="vertical">
-                      <a-input v-model:value="ModalData.telephone" placeholder="请输入手机号" />
-                    </a-space>
-                  </td>
-                </tr>
-                <tr>
-                  <th>备注</th>
-                  <td>
-                    <a-space direction="vertical">
-                      <a-input v-model:value="ModalData.remark" placeholder="请输入备注" />
-                    </a-space>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <a-space wrap>
-                      <a-button type="primary" id="ButtonSubmit" @click="ButtonSubmit(ModalData.id)">保存</a-button>
-                    </a-space>
-                  </td>
-                  <td>
-                    <a-space wrap>
-                      <a-button type="primary" id="ButtonSave" @click="Cancel">取消</a-button>
-                    </a-space>
-                  </td>
-                </tr>
-              </table>
-            </form>
-          </div>
-        </div>
+  <div v-if="showModal" class="modal-backdrop" style="height: 100%;">
+    <div class="modal" style="height: auto;width: 500px;">
+      <div class="modal-table-from">
+        <form action="" method="post">
+          <table class="modal-table">
+            <tr>
+              <th>用户名</th>
+              <td>
+                <a-space direction="vertical">
+                  <a-input v-model:value="ModalData.username" placeholder="请输入用户名" />
+                </a-space>
+              </td>
+            </tr>
+            <tr>
+              <th>昵称</th>
+              <td>
+                <a-space direction="vertical">
+                  <a-input v-model:value="ModalData.nickName" placeholder="请输入昵称" />
+                </a-space>
+              </td>
+            </tr>
+            <tr>
+              <th>邮箱</th>
+              <td>
+                <a-space direction="vertical">
+                  <a-input v-model:value="ModalData.email" placeholder="请输入邮箱" />
+                </a-space>
+              </td>
+            </tr>
+            <tr>
+              <th>手机号</th>
+              <td>
+                <a-space direction="vertical">
+                  <a-input v-model:value="ModalData.telephone" placeholder="请输入手机号" />
+                </a-space>
+              </td>
+            </tr>
+            <tr>
+              <th>备注</th>
+              <td>
+                <a-space direction="vertical">
+                  <a-input v-model:value="ModalData.remark" placeholder="请输入备注" />
+                </a-space>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a-space wrap>
+                  <a-button type="primary" id="ButtonSubmit" @click="ButtonSubmit(ModalData.id)">保存</a-button>
+                </a-space>
+              </td>
+              <td>
+                <a-space wrap>
+                  <a-button type="primary" id="ButtonSave" @click="Cancel">取消</a-button>
+                </a-space>
+              </td>
+            </tr>
+          </table>
+        </form>
       </div>
     </div>
   </div>
@@ -403,20 +392,7 @@ const formatItemCreateAt = (item) => {
 }
 
 #ButtonSubmit[data-v-5ccf79a5] {
-  background-color: blue;
-}
-
-h1 {
-  font-size: 40px;
-  /* 设置较大的字体大小 */
-  color: #ffc0ce;
-  /* 设置橙色字体 */
-  font-family: 'Artistic Impression', cursive;
-  /* 使用艺术字风格的字体 */
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  /* 添加阴影效果 */
-  text-align: center;
-  /* 文本居中 */
+  background-color: #a0cfff;
 }
 
 .modal {
