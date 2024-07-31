@@ -58,7 +58,9 @@
                     "></a-tab-pane>
 
             </a-tabs>
+
         </div>
+
     </div>
 </template>
 
