@@ -50,7 +50,7 @@ const cards = ref([
   },
 ])
 </script>
-<style>
+<style scoped>
 .context {
   display: flex;
 }
