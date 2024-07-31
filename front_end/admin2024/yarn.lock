@@ -453,7 +453,7 @@ dom-scroll-into-view@^2.0.0:
 
 echarts@^5.5.1:
   version "5.5.1"
-  resolved "https://registry.yarnpkg.com/echarts/-/echarts-5.5.1.tgz#8dc9c68d0c548934bedcb5f633db07ed1dd2101c"
+  resolved "https://registry.npmmirror.com/echarts/-/echarts-5.5.1.tgz#8dc9c68d0c548934bedcb5f633db07ed1dd2101c"
   integrity sha512-Fce8upazaAXUVUVsjgV6mBnGuqgO+JNDlcgF79Dksy4+wgGpQB2lmYoO4TSweFg/mZITdpGHomw/cNBJZj1icA==
   dependencies:
     tslib "2.3.0"
@@ -690,7 +690,7 @@ vue-demi@^0.13.11:
 
 vue-echarts@^7.0.0-beta.0:
   version "7.0.0-beta.0"
-  resolved "https://registry.yarnpkg.com/vue-echarts/-/vue-echarts-7.0.0-beta.0.tgz#219e331e24f13ecdee3c2e5daa1cbc6e0961cf87"
+  resolved "https://registry.npmmirror.com/vue-echarts/-/vue-echarts-7.0.0-beta.0.tgz#219e331e24f13ecdee3c2e5daa1cbc6e0961cf87"
   integrity sha512-DKmPak9+Al/GlIexC5OvvWIDyO39q/AmZm2aqF7+n2fTDyUq7l/dkdmg/9hBeLafZlU6Yf5J7io/BnDzzRK1+g==
   dependencies:
     vue-demi "^0.13.11"

@@ -55,7 +55,6 @@
                 <!-- 循环生成标签页 -->
                 <a-tab-pane v-for="pane in tabArr" :key="pane.key" :tab="pane.title" :closable="pane.title !== '工作台' && pane.title !== '仪表盘'
                     "></a-tab-pane>
-
             </a-tabs>
         </div>
     </div>
@@ -93,15 +92,11 @@ onUnmounted(() => {
   window.removeEventListener('imageUrl', handleAvatarUpdated);
 });
 //获取头像
-onMounted(async () => {
-    
-    let user = await axios.get(`http://localhost:63760/api/user/${id}`)
-    // console.log(user);
-// 
-  if (user.data.avatar) {
+onMounted(async () => { 
+    let user = await axios.get(`http://localhost:63760/api/user`)
+    if (user.data.avatar) {
         try{
           let res = await axios.get(`http://localhost:63760/api/avatar/${id}`)
-        //   console.log(res);
           imageUrl.value = res.data;
         }catch(err){
           console.log(err);
@@ -122,11 +117,9 @@ onBeforeRouteUpdate(() => {
     // 更新breadcrumbItems
 });
 
-
-
-
 const tabsRef = ref(null); // 在你的组件中定义
 
+// 删除标签页
 const remove = targetKey => {
     let index = tabArr.value.findIndex(pane => pane.key === targetKey);
     let pane = tabArr.value.find(pane => pane.key === targetKey);
@@ -151,7 +144,7 @@ const remove = targetKey => {
         }
     }
 
-    // Filter out the tab to be removed regardless of whether it's the active one
+    // 过滤掉要删除的选项卡，无论它是否是活动的选项卡
     tabArr.value = tabArr.value.filter(pane => pane.key !== targetKey);
 
     // 使用 nextTick 确保 DOM 更新后，再进行组件的强制更新
@@ -161,7 +154,6 @@ const remove = targetKey => {
         }
         console.log('DOM updated after removing tab:', tabArr.value);
         // 新增：保存更新后的标签页状态到 localStorage
-
     });
 };
 
@@ -176,7 +168,6 @@ const onEdit = (targetKey, action) => {
 const handleTabsChange = key => {
     routerStore.changeActiveRoute(key);
     routerStore.selectKeys = [key];
-
 };
 
 // 登出功能
@@ -185,8 +176,6 @@ const handleLogout = () => {
     localStorage.removeItem('userInfo')
     router.push('/login');
 };
-
-
 
 </script>
 

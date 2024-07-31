@@ -24,32 +24,38 @@ export const useRouterStore = defineStore('router', () => {
         },
     ]);
     // 当前的key，用于绑定到菜单栏和标签栏的“当前项”属性
-    let activeKey = ref('/desktop')//标签栏的当前标签
+    let activeKey = ref('/desktop')//存储当前活动的标签页的键
+    // 存储当前选中的菜单项和应该打开的菜单子项的键
     const selectKeys = reactive([]);
     const openKeys = reactive([]);
 
     // 扁平化的菜单数据，这个是计算属性，也是getters
     const flatMenuArr = computed(() => {
-        let arr = flatArr(menuArr);
-       
+        let arr = flatArr(menuArr);      
         return arr;
     })
+
+    // 下面两个函数用于在本地存储中保存和加载当前活动的标签页状态，以实现页面刷新后的状态保持
     function saveStateToLocalStorage() {
-        localStorage.setItem('activeTab', String(activeKey.value));
+        // localStorage.setItem('activeTab', String(activeKey.value));
+        localStorage.setItem('activeTab', JSON.stringify(activeKey.value));
     }
 
-    onMounted(() => {
-        const savedActiveKey = localStorage.getItem('activeTab');
+    function loadStateFromLocalStorage() {
+        const savedActiveKey = JSON.parse(localStorage.getItem('activeTab'));
+        
+        console.log(savedActiveKey);
+       
         if (savedActiveKey) {
             activeKey.value = savedActiveKey;
-            // 可能需要调用一些方法来确保界面状态正确更新
+            console.log(activeKey.value);
+            // 确保界面状态正确更新
             changeActiveKey(savedActiveKey);
         }
-    })
+    }
+    
 
- 
- 
-    // 监听路由变化，设置当前标签项和当前菜单
+    // 监听路由变化，在路由改变时调用 changeActiveKey 更新状态
     watch(route, (newVal) => {
         changeActiveKey(newVal.path)
     })
@@ -63,25 +69,19 @@ export const useRouterStore = defineStore('router', () => {
             if (menu) {
                 this.menuArr.push(menu);
             }
-
         })
     }
-    
-
-    function addTab(key) {// 添加对象到标签数组中（如果不存在则添加）
-        // console.log('拍扁的菜单数据', this.flatMenuArr);
+    // 添加对象到标签数组中（如果不存在则添加）
+    function addTab(key) {
         var isExist = this.tabArr.filter(item => item.key === key);
         if (isExist.length > 0) {
-
         } else {
-            let tmp = getOjbectByKey(key, this.flatMenuArr);
-            // console.log(tmp);
+            let tmp = getOjbectByKey(key, this.flatMenuArr);;
             let obj = {
                 title: tmp.title,
                 content: ``,
                 key: key,
             }
-
             this.tabArr.push(obj);
         }
     }
@@ -92,17 +92,15 @@ export const useRouterStore = defineStore('router', () => {
         this.addTab(key);
     }
 
-    // 改变当前项
-    function changeActiveKey(key) {//切换当前Key
-        // console.log('key值：', key);
-        // console.log('activeKey值：', activeKey.value);
-
+    // 改变当前项,用于更新当前活动的标签页状态
+    function changeActiveKey(key) {
         // 设置标签栏的当前key
         activeKey.value = key;
         
         // 设置菜单栏的当前选择的菜单项
-        selectKeys.splice(0);
-        selectKeys.push(key);
+        // selectKeys.splice(0);
+        // selectKeys.push(key);
+        selectKeys.splice(0,selectKeys.length,key);
 
         // 设置菜单栏当前展开的子菜单
         let x = findParent(key, flatMenuArr.value);
@@ -112,10 +110,11 @@ export const useRouterStore = defineStore('router', () => {
         openKeys.push(...y);
 
         saveStateToLocalStorage();
-            
-
     }
 
+    onMounted(() => {
+        loadStateFromLocalStorage();
+    })
 
     // 这里必须返回
     return {
@@ -131,9 +130,11 @@ export const useRouterStore = defineStore('router', () => {
         changeActiveRoute,
        
     }
-})
+}
 
-// 一个函数，将一个路由对象，转换为左侧菜单栏对象
+)
+
+// 辅助函数，将一个路由对象，转换为左侧菜单栏对象
 const createMenuItemFromRoute = (route) => {
     if (route.meta.hide && route.meta.hide === true) {
         return;
@@ -199,10 +200,7 @@ const findParent = (key, arr) => {
         if (item) {
             res.push(item);
         }
-
     })
-    
-
     return res;
 }
 
@@ -224,6 +222,5 @@ function findParentChainIterative(records, key) {
             break; // 如果找不到父级记录，停止查找
         }
     }
-
     return ancestors.map(x => x.key);
 }
