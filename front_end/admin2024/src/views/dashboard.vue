@@ -48,14 +48,18 @@ onMounted(() => {
         .then(data => {
             // 用户总数
             useState.push(data)
-            let uselength = data.data.length;
-            useState.length = uselength;
+            // let uselength = data.data.length;
+            let filter =  data.data.filter(item => item.isDeleted == false);
+            let total = data.data.filter(item => item.isDeleted == false).length;
+            useState.length = total;
+         
             // 用户活跃数
-            data.data.forEach(item => {
+            filter.forEach(item => {
                 if (item.isActived == true) {
                     isActiveds.push(item.isActived)
                 }
             });
+            console.log(total);
         })
     let myChart = echarts.init(echartsRef.value)
     // 配置echarts
@@ -87,7 +91,8 @@ onMounted(() => {
     axios.get('http://101.133.150.189:63759/api/User')
         .then(data => {
             data.data.forEach(item => {
-                let uselength = data.data.length;
+                // let uselength = data.data.length;
+                let uselength = data.data.filter(item => item.isDeleted == false).length;  
                 let tureUser=isActiveds.length;
                 console.log(tureUser);
                 let falseUser=uselength-tureUser;
