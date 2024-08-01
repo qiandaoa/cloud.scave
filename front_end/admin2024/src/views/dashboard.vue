@@ -44,7 +44,7 @@ let echartsRef = ref(null)
 let useState = reactive([])
 let isActiveds = reactive([])
 onMounted(() => {
-    axios.get('http://localhost:63760/api/User')
+    axios.get('http://101.133.150.189:63759/api/User')
         .then(data => {
             // 用户总数
             useState.push(data)
@@ -84,7 +84,7 @@ onMounted(() => {
         ]
     })
     // 获取数据
-    axios.get('http://localhost:63760/api/User')
+    axios.get('http://101.133.150.189:63759/api/User')
         .then(data => {
             data.data.forEach(item => {
                 let uselength = data.data.length;

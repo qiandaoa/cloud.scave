@@ -26,7 +26,7 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import axios from 'axios';
 
 const id = localStorage.getItem('userId');
-const uploadAxios = `http://localhost:63760/api/Avatar/${id}`;
+const uploadAxios = `http://101.133.150.189:63759/api/Avatar/${id}`;
 const emit = defineEmits(['update:imageUrl']);
 
 onMounted(async () => {
@@ -35,9 +35,9 @@ onMounted(async () => {
 
 const fetchData = async () => {
   try {
-    const user = await axios.get(`http://localhost:63760/api/user/${id}`);
+    const user = await axios.get(`http://101.133.150.189:63759/api/user/${id}`);
     if (user.data.avatar) {
-      const res = await axios.get(`http://localhost:63760/api/avatar/${id}`);
+      const res = await axios.get(`http://101.133.150.189:63759/api/avatar/${id}`);
       imageUrl.value = res.data;
     }
   } catch (err) {

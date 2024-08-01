@@ -81,7 +81,7 @@ const handleClick = (key) => {
 };
 const fetchresource=async()=>{
     try{
-        let res = await axios.get(`http://localhost:63760/api/permission/api/resource`)
+        let res = await axios.get(`http://101.133.150.189:63759/api/permission/api/resource`)
         resource = res.data.data
         console.log(resource);
     } catch (error) {
@@ -90,7 +90,7 @@ const fetchresource=async()=>{
 }
 const fetchrole = async () => {
     try {
-        let res = await axios.get('http://localhost:63760/api/role');
+        let res = await axios.get('http://101.133.150.189:63759/api/role');
         Rolearr = res.data;
         // console.log(Rolearr);    
         filteredRoles.value = Rolearr.data.filter(item => !item.isDeleted);
@@ -101,7 +101,7 @@ const fetchrole = async () => {
 }   
 const fetchpermission = async () => {
     try {
-        let res = await axios.get(`http://localhost:63760/api/permission`)
+        let res = await axios.get(`http://101.133.150.189:63759/api/permission`)
         permission = res.data.data 
         console.log(permission);
     } catch (err) {

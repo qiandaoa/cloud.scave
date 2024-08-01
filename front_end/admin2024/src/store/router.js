@@ -44,11 +44,11 @@ export const useRouterStore = defineStore('router', () => {
     function loadStateFromLocalStorage() {
         const savedActiveKey = JSON.parse(localStorage.getItem('activeTab'));
         
-        console.log(savedActiveKey);
+        // console.log(savedActiveKey);
        
         if (savedActiveKey) {
             activeKey.value = savedActiveKey;
-            console.log(activeKey.value);
+            // console.log(activeKey.value);
             // 确保界面状态正确更新
             changeActiveKey(savedActiveKey);
         }

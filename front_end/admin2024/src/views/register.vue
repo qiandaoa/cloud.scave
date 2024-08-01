@@ -51,7 +51,7 @@ const onSubmit= async()=>{
     } 
     console.log(userinfo);
     try{
-        const res = await axios.post('http://localhost:63760/api/register',userinfo)
+        const res = await axios.post('http://101.133.150.189:63759/api/register',userinfo)
         console.log(res);
         if(res.status === 200){
             console.log('注册成功');

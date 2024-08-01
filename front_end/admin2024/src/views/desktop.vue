@@ -164,7 +164,7 @@ onMounted(() => {
   })
   //获取数据
   let datas = ref([]);
-  axios.get('http://localhost:63760/api/UseRole').then(res => {
+  axios.get('http://101.133.150.189:63759/api/UseRole').then(res => {
     console.log(res.data);
     let resdata = res.data;
     resdata.forEach(item => {

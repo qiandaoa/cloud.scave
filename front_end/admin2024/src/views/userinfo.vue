@@ -110,7 +110,7 @@ const saveConfiguration = async (id) => {
   
     if (confirm('确定保存修改后的个人信息吗？')) {
       try {
-        let res = await axios.put(`http://localhost:63760/api/UserUpdate/${id}`, edituserData)
+        let res = await axios.put(`http://101.133.150.189:63759/api/UserUpdate/${id}`, edituserData)
         console.log(res.data);
         location.reload()
 
@@ -150,7 +150,7 @@ const id = localStorage.getItem('userId')
 onMounted(async () => {
   if (id) {
     try {
-      let res = await axios.get(`http://localhost:63760/api/user/${id}`)
+      let res = await axios.get(`http://101.133.150.189:63759/api/user/${id}`)
       console.log(res);
       Object.assign(edituserData, res.data)
       Object.assign(userData, res.data)
@@ -187,7 +187,7 @@ const submitPasswordChange = async (id) => {
 
   // 如果所有验证都通过，执行密码修改逻辑
   try {
-    let res = await axios.put(`http://localhost:63760/api/modify/${id}`, {
+    let res = await axios.put(`http://101.133.150.189:63759/api/modify/${id}`, {
 
       newPassword: formState.value.newPassword,
       confirmNewPassword: formState.value.confirmNewPassword

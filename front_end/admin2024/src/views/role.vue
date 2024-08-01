@@ -140,7 +140,7 @@ function onChange() {
 let tabArr = reactive([]);
 onMounted(async () => {
     try {
-        const res = await axios.get('http://localhost:63760/api/Role');
+        const res = await axios.get('http://101.133.150.189:63759/api/Role');
         console.log(res.data.data);
         const filterDate = res.data.data.filter(item => !item.isDeleted)
         tabArr.push(...filterDate); // 假设 res.data 是一个数组
@@ -156,7 +156,7 @@ let Search = async () => {
     let keywords = Findkeyword.value.trim()
     try {
         if (keywords) {
-            let res = await axios.get(`http://localhost:63760/api/Role?keywords=${keywords}`)
+            let res = await axios.get(`http://101.133.150.189:63759/api/Role?keywords=${keywords}`)
             // console.log(res);
             tabArr.splice(0, tabArr.length, ...res.data.data); // 清空并填充新的搜索结果
 
@@ -192,7 +192,7 @@ function BatchDelete() {
 
 let Edit = async (id) => {
     try {
-        let res = await axios.get(`http://localhost:63760/api/Role/${id}`)
+        let res = await axios.get(`http://101.133.150.189:63759/api/Role/${id}`)
         // console.log(res.data);
 
         formState = {
@@ -209,7 +209,7 @@ let Delete = async (id) => {
     console.log(id);
     if (confirm(`确定将id为${id}的数据标记为已删除吗？`)) {
         try {
-            let res = await axios.delete(`http://localhost:63760/api/Role/${id}`)
+            let res = await axios.delete(`http://101.133.150.189:63759/api/Role/${id}`)
             const index = tabArr.findIndex(item => item.id === id);
             if (index !== -1) {
                 tabArr.splice(index, 1);
@@ -236,7 +236,7 @@ let confirm = async (id) => {
 
         if (formState.id) {
             //编辑
-            let res = await axios.put(`http://localhost:63760/api/role/${formState.id}`, {
+            let res = await axios.put(`http://101.133.150.189:63759/api/role/${formState.id}`, {
                 roleName: formState.roleName,
                 remark: formState.remark
             })
@@ -248,7 +248,7 @@ let confirm = async (id) => {
             }
 
         } else {
-            let res = await axios.post('http://localhost:63760/api/role', {
+            let res = await axios.post('http://101.133.150.189:63759/api/role', {
                 roleName: formState.roleName,
                 remark: formState.remark
             })
@@ -264,7 +264,7 @@ let confirm = async (id) => {
 // 定义一个新的方法用于获取角色数据
 const fetchRoles = async (page = 1) => {
     try {
-        const res = await axios.get(`http://localhost:63760/api/role?page=${page}`);
+        const res = await axios.get(`http://101.133.150.189:63759/api/role?page=${page}`);
         const filterDate = res.data.data.filter(item => !item.isDeleted);
         tabArr.splice(0, tabArr.length, ...filterDate); // 清空并重新填充数据
     } catch (err) {

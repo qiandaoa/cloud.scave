@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // 创建axios实例
 const instance = axios.create({
-    baseURL: 'http://localhost:63760',
+    baseURL: 'http://101.133.150.189:63759',
 });
 
 // 请求拦截器

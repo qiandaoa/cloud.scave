@@ -57,7 +57,7 @@ const useStore = useUserStore()
   const handleSubmit = async () => {
     console.log('Form data:', formState);
     try{
-        let res = await axios.post('http://localhost:63760/api/User',{
+        let res = await axios.post('http://101.133.150.189:63759/api/User',{
             username: formState.username,
             password:formState.password,
            

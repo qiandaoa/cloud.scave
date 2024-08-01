@@ -97,12 +97,12 @@ onUnmounted(() => {
 //获取头像
 onMounted(async () => {
 
-    let user = await axios.get(`http://localhost:63760/api/user/${id}`)
+    let user = await axios.get(`http://101.133.150.189:63759/api/user/${id}`)
     // console.log(user);
     //
     if (user.data.avatar) {
         try {
-            let res = await axios.get(`http://localhost:63760/api/avatar/${id}`)
+            let res = await axios.get(`http://101.133.150.189:63759/api/avatar/${id}`)
             //   console.log(res);
             imageUrl.value = res.data;
         } catch (err) {
