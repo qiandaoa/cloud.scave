@@ -1,4 +1,4 @@
-@url =  http://localhost:63760
+@url =  http://101.133.150.189:63759
 
 ###
 GET {{url}}/api/user
@@ -10,7 +10,7 @@ GET {{url}}/api/role HTTP/1.1
 ###
 GET {{url}}/api/user/0afa952f-381a-49de-a874-59521a90e44e HTTP/1.1
 
-### 
+###
 DELETE {{url}}/api/user/6fcaf10d-8c22-e594-5e4f-13750bbff3b4  HTTP/1.1
 
 ### 登录
@@ -18,8 +18,8 @@ POST {{url}}/api/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "username":"admin",
-    "password":"admin123456"
+    "username":"abc",
+    "password":"12345678"
 }
 
 ### 注册
@@ -33,11 +33,11 @@ Content-Type: application/json
 }
 
 ### 重置密码操作前验证密码
-POST {{url}}/api/verify/d141fd64-4298-4996-a7ec-d934e7e6b47f HTTP/1.1
+POST {{url}}/api/verify/49bc19b2-df3c-4670-88aa-19ae2289fdef HTTP/1.1
 Content-Type: application/json
 
 {
-    "oldpassword":"abc123456"
+    "oldpassword":"admin123456"
 }
 
 ### 重置密码
@@ -74,13 +74,13 @@ Content-Type: application/json
   "useRoleId":"8c6aee45-a156-44b0-afe8-dce718e6bc96"
 }
 
-### 对角色用户的分页查询 
+### 对角色用户的分页查询
 
 Post {{url}}/api/UseRole/pagingRole HTTP/1.1
 Content-Type: application/json
 
 {
-  
+
 }
 
 
@@ -111,10 +111,10 @@ POST  {{url}}/api/Operation/pagingOp HTTP/1.1
 Content-Type: application/json
 
 {
-  
+
 }
 
-### 关键字查询操作 
+### 关键字查询操作
 
 POST  {{url}}/api/Operation/findkey HTTP/1.1
 Content-Type: application/json

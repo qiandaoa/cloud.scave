@@ -79,7 +79,7 @@
 import { nextTick, onMounted, reactive, ref } from 'vue';
 import { LoginOutlined, PhoneOutlined, MailOutlined, InsuranceOutlined } from '@ant-design/icons-vue';
 import axios from 'axios';
-import  AvatarUploader  from '../components/AvatarUploader.vue' 
+import  AvatarUploader  from '../components/AvatarUploader.vue'
 // 假设这是从后端获取的用户信息
 const yourActionURL = ref('');
 const showAvatarUploaderFlag = ref(false);
@@ -107,7 +107,7 @@ const saveConfiguration = async (id) => {
       return
     }
   // console.log(id);
-  
+
     if (confirm('确定保存修改后的个人信息吗？')) {
       try {
         let res = await axios.put(`http://101.133.150.189:63759/api/UserUpdate/${id}`, edituserData)
@@ -117,7 +117,7 @@ const saveConfiguration = async (id) => {
       } catch (err) {
         console.log(err);
       }
-    
+
   }
 
 }
@@ -360,7 +360,7 @@ button[type="button"]:hover {
 }
 
 .input-group input[type="text"] {
-  width: 100px;
+  width: 200px;
   /* 或者你希望的任何其他宽度 */
 }
 
