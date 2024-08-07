@@ -35,6 +35,7 @@
 import { TeamOutlined, SmileOutlined } from '@ant-design/icons-vue';
 import { reactive, onMounted, onUnmounted, ref } from 'vue';
 import axios from 'axios'
+import axiosInstance from '../store/axiosInstance.js';
 // 引入echarts
 import * as echarts from 'echarts'
 // 获取echarts实例
@@ -44,7 +45,7 @@ let echartsRef = ref(null)
 let useState = reactive([])
 let isActiveds = reactive([])
 onMounted(() => {
-    axios.get('http://101.133.150.189:63759/api/User')
+    axios.get(axiosInstance.getUsers)
         .then(data => {
             // 用户总数
             useState.push(data)
@@ -88,7 +89,7 @@ onMounted(() => {
         ]
     })
     // 获取数据
-    axios.get('http://101.133.150.189:63759/api/User')
+    axios.get(axiosInstance.getUsers)
         .then(data => {
             data.data.forEach(item => {
                 // let uselength = data.data.length;

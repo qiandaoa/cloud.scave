@@ -97,14 +97,14 @@ onUnmounted(() => {
 //获取头像
 onMounted(async () => {
     let user = await axios.get(`http://101.133.150.189:63759/api/user/${id}`)
-    console.log(user);
+    // console.log(user);
     //
     if (user.data.avatar) {
         try {
             let res = await axios.get(`http://101.133.150.189:63759/api/avatar/${id}`)
             //   console.log(res);
             imageUrl.value = res.data;
-            console.log(imageUrl);
+            // console.log(imageUrl);
         } catch (err) {
             console.log(err);
         }
@@ -159,7 +159,7 @@ const remove = targetKey => {
         if (tabsRef.value) {
             tabsRef.value.$forceUpdate(); // 强制更新 a-tabs 组件
         }
-        console.log('DOM updated after removing tab:', tabArr.value);
+        // console.log('DOM updated after removing tab:', tabArr.value);
         // 新增：保存更新后的标签页状态到 localStorage
     });
 };

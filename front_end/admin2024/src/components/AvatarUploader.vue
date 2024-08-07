@@ -36,6 +36,7 @@ onMounted(async () => {
 const fetchData = async () => {
   try {
     const user = await axios.get(`http://101.133.150.189:63759/api/user/${id}`);
+    console.log(user);
     if (user.data.avatar) {
       const res = await axios.get(`http://101.133.150.189:63759/api/avatar/${id}`);
       imageUrl.value = res.data;

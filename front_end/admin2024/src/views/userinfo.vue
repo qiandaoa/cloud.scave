@@ -80,6 +80,7 @@ import { nextTick, onMounted, reactive, ref } from 'vue';
 import { LoginOutlined, PhoneOutlined, MailOutlined, InsuranceOutlined } from '@ant-design/icons-vue';
 import axios from 'axios';
 import  AvatarUploader  from '../components/AvatarUploader.vue'
+import axiosInstance from '../store/axiosInstance';
 // 假设这是从后端获取的用户信息
 const yourActionURL = ref('');
 const showAvatarUploaderFlag = ref(false);
@@ -110,7 +111,7 @@ const saveConfiguration = async (id) => {
 
     if (confirm('确定保存修改后的个人信息吗？')) {
       try {
-        let res = await axios.put(`http://101.133.150.189:63759/api/UserUpdate/${id}`, edituserData)
+        let res = await axios.put(axiosInstance.updateuser(id), edituserData)
         console.log(res.data);
         location.reload()
 
@@ -150,7 +151,7 @@ const id = localStorage.getItem('userId')
 onMounted(async () => {
   if (id) {
     try {
-      let res = await axios.get(`http://101.133.150.189:63759/api/user/${id}`)
+      let res = await axios.get(axiosInstance.getUserByid + id)
       console.log(res);
       Object.assign(edituserData, res.data)
       Object.assign(userData, res.data)
@@ -187,7 +188,7 @@ const submitPasswordChange = async (id) => {
 
   // 如果所有验证都通过，执行密码修改逻辑
   try {
-    let res = await axios.put(`http://101.133.150.189:63759/api/modify/${id}`, {
+    let res = await axios.put(axiosInstance.modify(id), {
 
       newPassword: formState.value.newPassword,
       confirmNewPassword: formState.value.confirmNewPassword

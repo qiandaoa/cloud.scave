@@ -107,6 +107,7 @@
 import { ref, reactive, onMounted, nextTick } from "vue";
 import axios, { all } from "axios";
 import { SearchOutlined, CheckCircleFilled, CloseCircleFilled, FundTwoTone } from '@ant-design/icons-vue';
+import axiosInstance from "../store/axiosInstance";
 
 // 定义引用变量
 let roles = reactive([]); // 存储所有角色
@@ -135,7 +136,7 @@ const search = async () => {
     let Findkeywords = Findkeyword.value.trim()
     console.log(Findkeywords);
     try {
-        let res = await axios.get(`http://101.133.150.189:63759/api/UseRole?keywords=${Findkeywords}`)
+        let res = await axios.get(axiosInstance.getuserolebykeyword(Findkeywords))
         console.log(res);
         // filteredUsers=res.data
         console.log(filteredUsers);
@@ -164,7 +165,7 @@ function Add(params) {
 }
 const Del = async (id) => {
     if (confirm('确定删除吗？')) {
-        let deleteItem = await axios.delete(`http://101.133.150.189:63759/api/UseRole/${id}`);
+        let deleteItem = await axios.delete(axiosInstance.deleteuserole(id));
         if (deleteItem.status === 200) {
 
             const currentRole = selectedRole.value;
@@ -190,7 +191,7 @@ const design = async (id) => {
     // 检查角色名称数组中是否包含 '游客'
     if (roleName.includes('游客')) {
         try {
-            let res = await axios.post(`http://101.133.150.189:63759/api/UseRole/createuserole`, {
+            let res = await axios.post(axiosInstance.adduserole, {
                 userid: id,
                 roleid: selectedRole.value
             })
@@ -227,10 +228,10 @@ function handleClick(role) {
 let fetchData = async () => {
     try {
         // 获取用户数据
-        const resuser = await axios.get(`http://101.133.150.189:63759/api/UseRole`);
+        const resuser = await axios.get(axiosInstance.getuserole);
         user.value = resuser.data;
         // 获取角色数据
-        const res = await axios.get('http://101.133.150.189:63759/api/UseRole');
+        const res = await axios.get(axiosInstance.getuserole);
         data.value = res.data;
 
         data.value.forEach(item => {
@@ -258,7 +259,7 @@ let fetchData = async () => {
                 users[userIndex].roles.push(item.roleId);
             }
         });
-        let alluser = await axios.get(`http://101.133.150.189:63759/api/User`)
+        let alluser = await axios.get(axiosInstance.getUsers)
         let allusers = alluser.data
 
         // 构建 combinedData

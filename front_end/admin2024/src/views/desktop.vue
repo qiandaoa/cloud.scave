@@ -123,6 +123,7 @@ import {
 import { useRouter } from 'vue-router';
 import * as echarts from 'echarts'
 import axios from 'axios'
+import axiosInstance from '../store/axiosInstance';
 let router = useRouter()
 
 
@@ -164,7 +165,7 @@ onMounted(() => {
   })
   //获取数据
   let datas = ref([]);
-  axios.get('http://101.133.150.189:63759/api/UseRole').then(res => {
+  axios.get(axiosInstance.getuserole).then(res => {
     console.log(res.data);
     let resdata = res.data;
     resdata.forEach(item => {

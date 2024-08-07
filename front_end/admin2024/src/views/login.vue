@@ -59,6 +59,7 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '../store/store';
 import { message } from 'ant-design-vue';
 
+
 const router = useRouter();
 const useStore = useUserStore();
 const userInfo = reactive({
@@ -75,7 +76,7 @@ onMounted(() => {
 // 如果用户没有登录，则进行登录验证，获取token
 async function btnSub() {
     try {
-        const res = await axiosInstance.post('http://101.133.150.189:63759/api/login', userInfo);
+        const res = await axios.post(axiosInstance.login,userInfo);
         // console.log(res);
         if (res.status === 200) {
             // 登录成功

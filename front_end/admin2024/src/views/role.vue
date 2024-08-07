@@ -15,6 +15,7 @@
                 <PlusOutlined /> 添加
             </button>
             <button type="button" class="delete-button" @click="BatchDelete">批量删除</button>
+            <a-button type="primary" @click="opens">分配权限</a-button>
         </div>
         <div class="role-list-container">
             <table>
@@ -46,9 +47,7 @@
                             <button type="button" class="red" @click="Delete(item.id)">
                                 <DeleteOutlined />
                             </button>
-                            <button type="button" class="yellow">
-                                <PlusCircleOutlined />
-                            </button>
+                          
                         </td>
                     </tr>
                 </tbody>
@@ -86,6 +85,33 @@
             </table>
         </div>
     </div>
+    <a-drawer
+    v-model:open="open"
+    class="custom-class"
+    width="500"
+    root-class-name="root-class-name"
+    :root-style="{ color: 'blue' }"
+    style="color: red;"
+    title="新增权限"
+    placement="right"
+  >
+  <div class="drawer-content">
+  <a-select 
+  v-model:value="selectedRoleId" 
+    style="width: 240px"
+    placeholder="选择添加权限的角色"
+    :options="formattedRoles"
+    ></a-select>
+    <a-select 
+                v-model:value="selectedPermissionId" 
+                style="width: 240px"
+                placeholder="选择要添加的权限"
+                :options="permissions"
+            ></a-select>
+  
+    <a-button type="primary" @click="handleSubmit"  style="width: 100px;">提交</a-button>
+</div>
+  </a-drawer>
 </template>
 
 
@@ -101,6 +127,7 @@ import {
     PlusCircleOutlined
 } from '@ant-design/icons-vue';
 import axios from 'axios';
+import axiosInstance from '../store/axiosInstance';
 
 // 创建响应式状态
 let display = ref(false);
@@ -112,6 +139,43 @@ let formState = reactive({
     roleName: '',
     remark: ''
 })
+let permission=ref([])
+let permissions=ref([])
+//抽屉代码
+let open=ref(false)
+const opens=async()=>{
+    open.value=true
+}
+let selectedRoleId = ref(null);
+let selectedPermissionId=ref(null)
+
+const formattedRoles = computed(() => {
+    return currentPageData.value.map(item => ({
+        label: item.roleName,
+        value: item.id
+    }));
+});
+
+const handleSubmit = async () => {
+    if (!selectedRoleId.value || !selectedPermissionId.value) {
+        alert('请确保所有字段都已填写！');
+        return
+    }else{
+        try{
+            let res = await axios.post(`http://localhost:63760/api/RolePerAssign?roleId=${selectedRoleId.value}&perId=${selectedPermissionId.value}`)
+            console.log(res);
+            
+        }catch(err){
+            console.log('添加权限失败');
+            
+        }
+    }
+    
+    console.log(selectedRoleId.value);
+    console.log(selectedPermissionId.value);
+    
+}
+
 // 分页
 let page = ref();
 const pageSize = 5;
@@ -134,13 +198,29 @@ function onChange() {
     page = '';
 }
 
+//获取权限
+const fetchpermission = async () => {
+    try {
+        let res = await axios.get(axiosInstance.getpermission);
+        permission.value = res.data.data; // 更新 ref 的值
+        permissions.value = permission.value.filter(permissionItem => !permissionItem.isDeleted)
+        .map(item=>({
+            label:item.permissionName,
+            value:item.id
+        }));
+        console.log(permissions);
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 
 //页面加载获取列表
 let tabArr = reactive([]);
 onMounted(async () => {
+    await fetchpermission()
     try {
-        const res = await axios.get('http://101.133.150.189:63759/api/Role');
+        const res = await axios.get(axiosInstance.getrole);
         console.log(res.data.data);
         const filterDate = res.data.data.filter(item => !item.isDeleted)
         tabArr.push(...filterDate); // 假设 res.data 是一个数组
@@ -156,7 +236,7 @@ let Search = async () => {
     let keywords = Findkeyword.value.trim()
     try {
         if (keywords) {
-            let res = await axios.get(`http://101.133.150.189:63759/api/Role?keywords=${keywords}`)
+            let res = await axios.get(axiosInstance.getrolebykeyword(keywords))
             // console.log(res);
             tabArr.splice(0, tabArr.length, ...res.data.data); // 清空并填充新的搜索结果
 
@@ -192,7 +272,7 @@ function BatchDelete() {
 
 let Edit = async (id) => {
     try {
-        let res = await axios.get(`http://101.133.150.189:63759/api/Role/${id}`)
+        let res = await axios.get(axiosInstance.getrolebyid(id))
         // console.log(res.data);
 
         formState = {
@@ -209,7 +289,7 @@ let Delete = async (id) => {
     console.log(id);
     if (confirm(`确定将id为${id}的数据标记为已删除吗？`)) {
         try {
-            let res = await axios.delete(`http://101.133.150.189:63759/api/Role/${id}`)
+            let res = await axios.delete(axiosInstance.deleterole(id))
             const index = tabArr.findIndex(item => item.id === id);
             if (index !== -1) {
                 tabArr.splice(index, 1);
@@ -236,7 +316,7 @@ let confirm = async (id) => {
 
         if (formState.id) {
             //编辑
-            let res = await axios.put(`http://101.133.150.189:63759/api/role/${formState.id}`, {
+            let res = await axios.put(axiosInstance.updaterole(formState.id), {
                 roleName: formState.roleName,
                 remark: formState.remark
             })
@@ -248,7 +328,7 @@ let confirm = async (id) => {
             }
 
         } else {
-            let res = await axios.post('http://101.133.150.189:63759/api/role', {
+            let res = await axios.post(axiosInstance.addrole, {
                 roleName: formState.roleName,
                 remark: formState.remark
             })
@@ -264,7 +344,7 @@ let confirm = async (id) => {
 // 定义一个新的方法用于获取角色数据
 const fetchRoles = async (page = 1) => {
     try {
-        const res = await axios.get(`http://101.133.150.189:63759/api/role?page=${page}`);
+        const res = await axios.get(axiosInstance.getroles(pege));
         const filterDate = res.data.data.filter(item => !item.isDeleted);
         tabArr.splice(0, tabArr.length, ...filterDate); // 清空并重新填充数据
     } catch (err) {
@@ -342,7 +422,12 @@ const formatItemCreateAt = (item) => {
     justify-content: center;
     text-align: center;
 }
-
+.drawer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* 间距 */
+    padding: 20px; /* 内边距 */
+}
 .pagination input,
 .pagination button {
     width: 50px;

@@ -11,27 +11,24 @@ import {
 import axios from 'axios'
 import { useUserStore } from '../store/user.js'
 import AddUserModal from '../components/AddModal.vue'
+import axiosInstance from '../store/axiosInstance.js';
 let UserDatas = reactive([])
 const useStore = useUserStore()
 let Findkeyword = ref('');
 let originalData = reactive([]);
 const loading = ref(true);
-let timeoutId;
+
 onMounted(async () => {
 
   await getdata()
   //  let total=originnaTotal
-  timeoutId = setTimeout(() => {
-    if (loading.value) {
-      location.reload();
-    }
-  }, 5000);
   loading.value = false;
 
 })
 
 const getdata = async () => {
-  let res = await axios.get('http://101.133.150.189:63759/api/user')
+  let res = await axios.get(axiosInstance.getUsers)
+  console.log(res);
   const user = res.data
 
   originalData.push(...user);
@@ -52,7 +49,7 @@ let Find = async () => {
   let keywords = Findkeyword.value.trim()
   try {
     if (keywords) {
-      let res = await axios.get(`http://101.133.150.189:63759/api/GetAllUsers?keywords=${keywords}`)
+      let res = await axios.get(axiosInstance.getUsersbykeyword(keywords))
       console.log(res);
       // tabArr.splice(0, tabArr.length, ...res.data); // 清空并填充新的搜索结果
       UserDatas.splice(0, UserDatas.length);
@@ -122,7 +119,7 @@ let State = async (id) => {
   try {
     const isActive = user.isActived;
     // console.log(isActive);
-    let res = await axios.put(`http://101.133.150.189:63759/api/actived/${id}?or=${isActive}`)
+    let res = await axios.put(axiosInstance.changeActive(id, !isActive))
     if (res.status === 200) {
       console.log(res);
       UserDatas[index].isActived = isActive
@@ -139,7 +136,7 @@ let Reset = async () => {
   Findkeyword.value = "";
   // console.log("重置");s
   try {
-    const res = await useStore.getUserDate();
+    const res = await getdata();
     const user = res.data;
     // 清空并用原始数据重新填充
     originalData.splice(0, originalData.length);
@@ -156,7 +153,8 @@ let Reset = async () => {
 let UserEdit = async (id) => {
   console.log(id);
   try {
-    let res = await axios.get(`http://101.133.150.189:63759/api/User/${id}`)
+    let res = await axios.get(axiosInstance.getUserByid+id)
+    console.log(res.data);
     // 不再重新定义 ModalData，而是更新现有的 ModalData
     ModalData.id = id;
     ModalData.username = res.data.username;
@@ -177,7 +175,7 @@ let UserDelete = async (id) => {
   console.log(id);
   if (confirm(`确定删除该用户吗？`)) {
     try {
-      let res = await axios.delete(`http://101.133.150.189:63759/api/User/${id}`)
+      let res = await axios.delete(axiosInstance.deleteUser(id))
       const index = UserDatas.findIndex(item => item.id === id);
       if (index !== -1) {
         UserDatas[index].isDeleted = true;
@@ -202,7 +200,7 @@ else {
 const ButtonSubmit = async (id) => {
   try {
     if (id) {
-      await axios.put(`http://101.133.150.189:63759/api/UserUpdate/${id}`, ModalData);
+      await axios.put(axiosInstance.updateuser(id),ModalData);
       const index = UserDatas.findIndex(item => item.id === id);
       if (index !== -1) {
         UserDatas[index] = { ...UserDatas[index], ...ModalData };

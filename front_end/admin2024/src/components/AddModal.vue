@@ -28,6 +28,7 @@
 import axios from 'axios';
 import { nextTick, reactive, ref } from 'vue';
 import { useUserStore } from '../store/user.js'
+import axiosInstance from '../store/axiosInstance.js';
 //   import { aModal } from 'ant-design-vue';
 const userList = reactive([])
 const useStore = useUserStore()
@@ -57,7 +58,7 @@ const useStore = useUserStore()
   const handleSubmit = async () => {
     console.log('Form data:', formState);
     try{
-        let res = await axios.post('http://101.133.150.189:63759/api/User',{
+        let res = await axios.post(axiosInstance.adduser,{
             username: formState.username,
             password:formState.password,
            
