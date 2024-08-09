@@ -20,7 +20,7 @@
                         name="username"
                         :rules="[{ required: false, message: '用户名不能为空!',trigger: ['blur'] }]"
                       >
-                         <a-input v-model:value="userInfo.userName" placeholder="putongren">
+                         <a-input v-model:value="userInfo.userName" placeholder="ceshiyonghu">
                             <template #prefix>
                                 <user-outlined />
                             </template>
