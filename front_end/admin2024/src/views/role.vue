@@ -11,7 +11,7 @@
             </button>
         </div>
         <div class="role-list-container">
-            <button type="button" class="add-button" @click="Add">
+            <button type="button" class="add-button"  @click="Add">
                 <PlusOutlined /> 添加
             </button>
             <button type="button" class="delete-button" @click="BatchDelete">批量删除</button>
@@ -41,10 +41,10 @@
                         <td>{{ item.remark }}</td>
                         <td>{{ formatItemCreateAt(item) }}</td>
                         <td class="tdcenter">
-                            <button type="button" class="blue" @click="Edit(item.id)">
+                            <button type="button" class="blue" @click="isDisabled ? noPermission() : Edit(item.id)">
                                 <EditOutlined />
                             </button>
-                            <button type="button" class="red" @click="Delete(item.id)">
+                            <button type="button" class="red" @click="isDisabled ? noPermission() : Delete(item.id)">
                                 <DeleteOutlined />
                             </button>
                           
@@ -80,7 +80,7 @@
                 </tr>
                 <div>
                     <button type="button" class="cancel-button" @click="cancel">取消</button>
-                    <button type="submit" class="confirm-button" @click="confirm(id)">确认</button>
+                    <button type="submit" class="confirm-button" @click="isDisabled ? noPermission() : confirm(id)">确认</button>
                 </div>
             </table>
         </div>
@@ -109,7 +109,7 @@
                 :options="permissions"
             ></a-select>
   
-    <a-button type="primary" @click="handleSubmit"  style="width: 100px;">提交</a-button>
+    <a-button type="primary" @click="isDisabled ? noPermission() : handleSubmit" style="width: 100px;">提交</a-button>
 </div>
   </a-drawer>
 </template>
@@ -127,7 +127,29 @@ import {
     PlusCircleOutlined
 } from '@ant-design/icons-vue';
 import axios from 'axios';
+import { message } from 'ant-design-vue';
 import axiosInstance from '../store/axiosInstance';
+import { useResourceStore } from '../store/permission';
+import hasPermission from '../store/hasPermission.js';
+import { useRoute } from "vue-router";
+const route = useRoute();
+let isDisabled = ref(true);
+let noPermission = () => {
+  message.error("没有权限");
+};
+const render = async () => {
+  // 权限判断
+  let token = sessionStorage.getItem('token');
+  hasPermission(token, route.meta.Permissions).then((x) => {
+    if (x == true) {
+      isDisabled.value = false;
+    } else {
+      isDisabled.value = true;
+    }
+  });}
+const resourceStore = useResourceStore();
+
+
 
 // 创建响应式状态
 let display = ref(false);
@@ -141,6 +163,7 @@ let formState = reactive({
 })
 let permission=ref([])
 let permissions=ref([])
+let isAdmin=ref(true)
 //抽屉代码
 let open=ref(false)
 const opens=async()=>{
@@ -162,7 +185,7 @@ const handleSubmit = async () => {
         return
     }else{
         try{
-            let res = await axios.post(`http://localhost:63760/api/RolePerAssign?roleId=${selectedRoleId.value}&perId=${selectedPermissionId.value}`)
+            let res = await axios.post(`http://139.9.80.124:66/api/RolePerAssign?roleId=${selectedRoleId.value}&perId=${selectedPermissionId.value}`)
             console.log(res);
             
         }catch(err){
@@ -219,7 +242,10 @@ const fetchpermission = async () => {
 let tabArr = reactive([]);
 onMounted(async () => {
     await fetchpermission()
+    resourceStore.fetchResourcesAndPermissions()
+    render()
     try {
+
         const res = await axios.get(axiosInstance.getrole);
         console.log(res.data.data);
         const filterDate = res.data.data.filter(item => !item.isDeleted)

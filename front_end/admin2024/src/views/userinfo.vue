@@ -13,7 +13,7 @@
 
               <PhoneOutlined /><span>手机号: {{ userData.telephone }}</span>
               <MailOutlined /><span class="email">邮箱: {{ userData.email }}</span>
-              <InsuranceOutlined /><span>安全设置 <span @click="showModal"
+              <InsuranceOutlined /><span>安全设置 <span @click="isDisabled ? noPermission() : showModal"
                   style="cursor: pointer;color: blue ;">修改密码</span></span>
             </div>
           </div>
@@ -42,7 +42,7 @@
             </div>
           </div>
           <div class="action-buttons">
-            <a-button type="primary" @click="saveConfiguration(edituserData.id)">保存配置</a-button>
+            <a-button type="primary"@click="isDisabled ? noPermission() : saveConfiguration(edituserData.id)">保存配置</a-button>
           </div>
         </a-card>
 
@@ -54,7 +54,7 @@
     <div class="modal" v-if="isModalVisible">
       <div class="modal-content">
         <h3>修改密码</h3>
-        <form @submit.prevent="submitPasswordChange(id)">
+        <form @submit.prevent="isDisabled ? noPermission() : submitPasswordChange(id)">
           <div class="form-group">
             <label for="oldPassword">旧密码</label>
             <input type="password" id="oldPassword" v-model="formState.oldPassword" required />
@@ -81,6 +81,24 @@ import { LoginOutlined, PhoneOutlined, MailOutlined, InsuranceOutlined } from '@
 import axios from 'axios';
 import  AvatarUploader  from '../components/AvatarUploader.vue'
 import axiosInstance from '../store/axiosInstance';
+import hasPermission from '../store/hasPermission.js';
+import { message } from 'ant-design-vue';
+import { useRoute } from "vue-router";
+const route = useRoute();
+let isDisabled = ref(true);
+let noPermission = () => {
+  message.error("没有权限");
+};
+const render = async () => {
+  // 权限判断
+  let token = sessionStorage.getItem('token');
+  hasPermission(token, route.meta.Permissions).then((x) => {
+    if (x == true) {
+      isDisabled.value = false;
+    } else {
+      isDisabled.value = true;
+    }
+  });}
 // 假设这是从后端获取的用户信息
 const yourActionURL = ref('');
 const showAvatarUploaderFlag = ref(false);
@@ -155,6 +173,7 @@ onMounted(async () => {
       console.log(res);
       Object.assign(edituserData, res.data)
       Object.assign(userData, res.data)
+      render()
       loading.value=false
 
     } catch (err) {

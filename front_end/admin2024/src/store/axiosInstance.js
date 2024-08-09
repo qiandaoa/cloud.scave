@@ -40,7 +40,9 @@ import Permission from '../views/permission.vue';
 // 暴露模块
 // export default instance;
 
-let baseURL= "http://139.9.80.124:66"
+// let baseURL= "http://139.9.80.124:66"
+let baseURL= "http://localhost:63760"
+
 
 export default {
   //用户的基本操作
@@ -54,6 +56,7 @@ export default {
   adduser:`${baseURL}/api/user`,
   modify:(userId)=>`${baseURL}/api/modify/${userId}`,
   //用户角色
+  getrolename:(userId)=>`${baseURL}/api/userole/${userId}`,
   getuserole:`${baseURL}/api/userole`,
   getuserolebykeyword:(keyword)=>`${baseURL}/api/userole?keywords=${keyword}`,
   adduserole:`${baseURL}/api/userole/createuserole`,

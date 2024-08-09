@@ -77,5 +77,12 @@ public class UseRoleController : ControllerBase
         }
         return Ok(list);
      }
+    [HttpGet("{Id}")]
+    public async Task<IActionResult> GetUserRole(Guid Id) 
+    {
+        var list = _useRoleAppService.GetUserWithRole();
+        var entity = list.Where(u => u.UserId == Id);
+        return Ok(entity);
+    }
 
 }

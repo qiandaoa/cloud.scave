@@ -20,7 +20,7 @@
                         name="username"
                         :rules="[{ required: false, message: '用户名不能为空!',trigger: ['blur'] }]"
                       >
-                         <a-input v-model:value="userInfo.userName" placeholder="请输入用户名">
+                         <a-input v-model:value="userInfo.userName" placeholder="putongren">
                             <template #prefix>
                                 <user-outlined />
                             </template>
@@ -32,7 +32,7 @@
                           name="password"
                           :rules="[{ required: true, message: '密码不能为空!' }]"
                        >
-                           <a-input-password v-model:value="userInfo.password" placeholder="请输入密码" />
+                           <a-input-password v-model:value="userInfo.password" placeholder="aa112233" />
                        </a-form-item>
             
                        <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
@@ -77,7 +77,7 @@ onMounted(() => {
 async function btnSub() {
     try {
         const res = await axios.post(axiosInstance.login,userInfo);
-        // console.log(res);
+        console.log(res);
         if (res.status === 200) {
             // 登录成功
             console.log('登录成功');
@@ -91,8 +91,17 @@ async function btnSub() {
             // 将用户名存储到 LocalStorage，为了在后续请求或页面加载时能够快速访问用户的身份信息
             localStorage.setItem('username',userInfo.userName);
             localStorage.setItem('userId',res.data.data.id)
-            // console.log(res.data.data.id);
-            // 跳转首页
+            // const id = localStorage.getItem('userId');
+            const ress = await axios(axiosInstance.getrolename(res.data.data.id));
+             let data = ress.data[0];
+             let rolename = data.roleName;
+             console.log(rolename);
+             
+             localStorage.setItem('role', rolename);
+    
+                
+
+                // // 跳转首页
             router.push('/desktop');
         } else {
             // 处理其他状态码的情况

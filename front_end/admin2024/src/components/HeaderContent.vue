@@ -181,6 +181,9 @@ const handleTabsChange = key => {
 const handleLogout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('userInfo')
+    localStorage.removeItem('username')
+    localStorage.removeItem('role')
+    localStorage.removeItem('userId')   
     router.push('/login');
 };
 
@@ -201,11 +204,12 @@ const handleLogout = () => {
 
 /* 面包屑样式 */
 .breadcrumb {
+    /* margin-left: 25px; */
     position: sticky;
     top: 0;
     flex-grow: 1;
     display: flex;
-    margin-left: 20px;
+    margin-left: 50px;
 }
 
 .breadcrumb .text {

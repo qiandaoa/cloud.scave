@@ -26,11 +26,32 @@
 
 <script setup>
 import axios from 'axios';
-import { nextTick, reactive, ref } from 'vue';
+import { nextTick, onMounted, reactive, ref } from 'vue';
 import { useUserStore } from '../store/user.js'
 import axiosInstance from '../store/axiosInstance.js';
+import hasPermission from '../store/hasPermission.js';
+import { message } from 'ant-design-vue';
+import { useRoute } from "vue-router";
+const route = useRoute();
 //   import { aModal } from 'ant-design-vue';
 const userList = reactive([])
+let isDisabled = ref(true);
+let noPermission = () => {
+  message.error("没有权限");
+};
+onMounted(async()=>{
+  render()
+})
+const render = async () => {
+  // 权限判断
+  let token = sessionStorage.getItem('token');
+  hasPermission(token, route.meta.Permissions).then((x) => {
+    if (x == true) {
+      isDisabled.value = false;
+    } else {
+      isDisabled.value = true;
+    }
+  });}
 const useStore = useUserStore()
   const isModalOpen = ref(false);
   const formState = reactive({

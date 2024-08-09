@@ -19,7 +19,7 @@
         <div class="el-right">
             <!-- 操作按钮 -->
             <button type="button" class="el-right-button" style="background-color: rgb(24, 144, 255);"
-                @click="Add">添加用户</button>
+            @click="Add">添加用户</button>
             <button type="button" class="el-right-button" style="background-color: rgb(255,73,73);"
                 @click="cancels">全部取消</button>
             <!-- 搜索图标 -->
@@ -56,12 +56,12 @@
                         </div>
                     </td>
                     <td>{{ user.roleRemark }}</td>
-                    <td><a-button @click="() => Del(user.id)">删除</a-button></td>
+                    <td><a-button @click="isDisabled ? noPermission() : Del(user.id)">删除</a-button></td>
                 </tr>
             </table>
         </div>
         <!-- 新增模态框 -->
-        <a-modal v-model:open="dialogVisible" title="添加用户" @ok="handleok" style="width: 1000px;
+        <a-modal v-model:open="dialogVisible" title="添加用户" @click="isDisabled ? noPermission() : handleok" style="width: 1000px;
      align-items: center;">
             <table style="width:100%;text-align: center; " class="el-modoal-table">
                 <tr>
@@ -90,7 +90,7 @@
                         </template>
                     </td>
                     <td>
-                        <a-button @click="design(item.id)" style="background-color:#fbb3bf; width: 100px;">
+                        <a-button @click="isDisabled ? noPermission() : design(item.id)"style="background-color:#fbb3bf; width: 100px;">
                             <span style="color: azure; ">
                                 分配角色
                             </span>
@@ -108,7 +108,24 @@ import { ref, reactive, onMounted, nextTick } from "vue";
 import axios, { all } from "axios";
 import { SearchOutlined, CheckCircleFilled, CloseCircleFilled, FundTwoTone } from '@ant-design/icons-vue';
 import axiosInstance from "../store/axiosInstance";
-
+import hasPermission from '../store/hasPermission.js';
+import { useRoute } from "vue-router";
+import { message } from "ant-design-vue";
+const route = useRoute();
+let isDisabled = ref(true);
+let noPermission = () => {
+  message.error("没有权限");
+};
+const render = async () => {
+  // 权限判断
+  let token = sessionStorage.getItem('token');
+  hasPermission(token, route.meta.Permissions).then((x) => {
+    if (x == true) {
+      isDisabled.value = false;
+    } else {
+      isDisabled.value = true;
+    }
+  });}
 // 定义引用变量
 let roles = reactive([]); // 存储所有角色
 let users = reactive([]); // 存储所有用户
@@ -128,6 +145,7 @@ const handleok = async () => {
 
 onMounted(async () => {
     await fetchData()
+    render()
     loading.value = false
 })
 

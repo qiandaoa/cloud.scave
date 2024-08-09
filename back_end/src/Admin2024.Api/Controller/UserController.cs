@@ -14,7 +14,7 @@ public class UserController : ControllerBase
     private readonly IRepository<User> _repo;
     private readonly IUserAppService _userAppService;
     private readonly IMapper _mapper;
-    public UserController(IRepository<User> repo, IUserAppService userAppService,IMapper mapper)
+    public UserController(IRepository<User> repo, IUserAppService userAppService, IMapper mapper)
     {
         _repo = repo;
         _userAppService = userAppService;
@@ -51,7 +51,7 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="baseParameters"></param>
     /// <returns></returns>
-    [HttpGet(("/api/GetAllUsers"),Name = "GetAllUsers")]
+    [HttpGet(("/api/GetAllUsers"), Name = "GetAllUsers")]
     public ActionResult<List<User>> GetAllUser([FromQuery] BaseParameters baseParameters)
     {
         var users = _repo.Table;
@@ -103,9 +103,8 @@ public class UserController : ControllerBase
     {
         var result = _userAppService.Login(user);
         Console.WriteLine(result);
-        return result.IsSuccess  ? Ok(new { success = true, code = 200, data = new { token = result.Message ,Id = result.Data.Id}, msg = "登录成功!" }) : Unauthorized();
+        return result.IsSuccess ? Ok(new { success = true, code = 200, data = new { token = result.Message, Id = result.Data.Id }, msg = "登录成功!" }) : Unauthorized();
     }
-
     /// <summary>
     /// 注册用户
     /// </summary>
@@ -164,7 +163,7 @@ public class UserController : ControllerBase
     /// <param name="or"></param>
     /// <returns></returns>
     [HttpPut("/api/actived/{id}")]
-    public async Task<IActionResult> Actived(Guid id,bool or)
+    public async Task<IActionResult> Actived(Guid id, bool or)
     {
         var entity = await _repo.GetByIdAsync(id);
         if (entity == null)
@@ -175,8 +174,8 @@ public class UserController : ControllerBase
         // {
         //     return entity.IsActived ? Ok("用户已经是启用状态,请更换bool值!!!!") : Ok("用户已经是禁用状态,请更换bool值！！！");
         // }
-        await _repo.UpdateActiveState(id,or);
-        return Ok(new { IsActived = entity.IsActived, code = 200, msg = $"用户状态已经更新:{entity.IsActived}"});
+        await _repo.UpdateActiveState(id, or);
+        return Ok(new { IsActived = entity.IsActived, code = 200, msg = $"用户状态已经更新:{entity.IsActived}" });
     }
     /// <summary>
     /// 修改用户信息

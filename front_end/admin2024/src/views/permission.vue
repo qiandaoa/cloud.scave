@@ -76,7 +76,7 @@
     :options="operation"   
   ></a-select>
   <a-input v-model:value="value" placeholder="权限名称" style="width: 240px;" />
-    <a-button type="primary" @click="handleSubmit"  style="width: 100px;">提交</a-button>
+    <a-button type="primary" @click="handleSumbitClick" style="width: 100px;">提交</a-button>
 </div>
   </a-drawer>
   <a-drawer
@@ -94,7 +94,7 @@
                 placeholder="选择要删除的权限"
                 :options="permissionsToDelete"
             ></a-select>
-            <a-button type="danger" @click="handleDelete" style="width: 100px;">删除</a-button>
+            <a-button type="danger" @click="handleDeleteClick" style="width: 100px;">删除</a-button>
         </div>
     </a-drawer>
 </template>
@@ -106,7 +106,7 @@ import {
     SearchOutlined,
 } from '@ant-design/icons-vue';
 import axiosInstance from "../store/axiosInstance";
-
+import { message } from "ant-design-vue";
 
 let Rolearr = reactive([]);
 let filteredRoles = ref([]);
@@ -124,7 +124,23 @@ let resources = ref([]);
 const value=ref('')
 let operation=ref([])
 let deleteOpen=ref(false)
-
+import hasPermission from '../store/hasPermission.js';
+import { useRoute } from "vue-router";
+const route = useRoute();
+let isDisabled = ref(true);
+let noPermission = () => {
+  message.error("没有权限");
+};
+const render = async () => {
+  // 权限判断
+  let token = sessionStorage.getItem('token');
+  hasPermission(token, route.meta.Permissions).then((x) => {
+    if (x == true) {
+      isDisabled.value = false;
+    } else {
+      isDisabled.value = true;
+    }
+  });}
 const showDrawer = () => {
     open.value=true
 };
@@ -143,7 +159,21 @@ const permissionsToDelete = computed(() => {
         }));
     });
 });
-
+// 修改点击事件处理器
+const handleDeleteClick = () => {
+  if (isDisabled.value) {
+    noPermission();
+  } else {
+    handleDelete();
+  }
+};
+const handleSumbitClick = () => {
+  if (isDisabled.value) {
+    noPermission();
+  } else {
+    handleDelete();
+  }
+};
 const handleDelete = async()=>{
     console.log(selectedPermissionId.value);
     try{
@@ -163,7 +193,9 @@ const handleDelete = async()=>{
 
     
 }
-const handleSubmit = async()=>{
+const handleSubmits = async()=>{
+    
+
     // if (!selectedRoleId.value || !resourceId.value || !value.value) {
     // alert('请确保所有字段都已填写！');
     try{
@@ -181,7 +213,7 @@ const handleSubmit = async()=>{
         
     }catch(error){
         console.log('添加权限失败！');
-        alert('添加权限失败，请检查输入或稍后再试！');
+        
         
     }
   }
@@ -189,7 +221,7 @@ const handleSubmit = async()=>{
 
 onMounted(async () => {
     await Promise.all([fetchpermission(), fetchrole(), fetchresource(),fetoperation()]);
-    
+    render()
     // 设置默认选中项
     if (filteredRoles.value.length > 0) {
         selectedKey.value = filteredRoless.value[0].id;

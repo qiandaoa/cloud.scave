@@ -8,24 +8,49 @@ import {
   EditOutlined,
   DeleteOutlined,
 } from '@ant-design/icons-vue'
+import { message } from 'ant-design-vue'
 import axios from 'axios'
 import { useUserStore } from '../store/user.js'
 import AddUserModal from '../components/AddModal.vue'
 import axiosInstance from '../store/axiosInstance.js';
+import hasPermission from '../store/hasPermission.js';
+import { useRoute } from "vue-router";
+const route = useRoute();
+
 let UserDatas = reactive([])
 const useStore = useUserStore()
 let Findkeyword = ref('');
 let originalData = reactive([]);
 const loading = ref(true);
-
+let isDisabled = ref(true);
+let noPermission = () => {
+  message.error("没有权限");
+};
 onMounted(async () => {
 
   await getdata()
+  render()
   //  let total=originnaTotal
   loading.value = false;
 
 })
-
+const handleButtonClick = () => {
+    if (isDisabled.value) {
+      noPermission();
+    } else {
+      showModals();
+    }
+  };
+const render = async () => {
+  // 权限判断
+  let token = sessionStorage.getItem('token');
+  hasPermission(token, route.meta.Permissions).then((x) => {
+    if (x == true) {
+      isDisabled.value = false;
+    } else {
+      isDisabled.value = true;
+    }
+  });}
 const getdata = async () => {
   let res = await axios.get(axiosInstance.getUsers)
   console.log(res);
@@ -137,7 +162,7 @@ let Reset = async () => {
   // console.log("重置");s
   try {
     const res = await getdata();
-    const user = res.data;
+    const user = res.data
     // 清空并用原始数据重新填充
     originalData.splice(0, originalData.length);
     originalData.push(...user);
@@ -258,7 +283,7 @@ const formatItemCreateAt = (item) => {
     </div>
   </div>
   <div class="button-wrap-UserAdd">
-    <a-button type="primary" id="AddButton" :icon="h(PlusOutlined)" @click="showModals"> 添加</a-button>
+    <a-button type="primary" id="AddButton" :icon="h(PlusOutlined)" @click="handleButtonClick"> 添加</a-button>
     <AddUserModal ref="addUserModalRef" />
   </div>
   <div class="table-wrap">
@@ -283,14 +308,14 @@ const formatItemCreateAt = (item) => {
         <td>{{ item.telephone }}</td>
         <td>
           <a-space direction="vertical">
-            <a-switch v-model:checked="item.isActived" size="small" @click="State(item.id)" />
+            <a-switch v-model:checked="item.isActived" size="small" @click="isDisabled ? noPermission() : State(item.id)" />
           </a-space>
         </td>
         <td>{{ formatItemCreateAt(item) }}</td>
         <td>{{ item.remark }}</td>
         <td>
-          <a-button type="primary" id="EditButton" :icon="h(EditOutlined)" @click="UserEdit(item.id)"></a-button>
-          <a-button type="primary" id="DeleteButton" :icon="h(DeleteOutlined)" @click="UserDelete(item.id)"></a-button>
+          <a-button type="primary" id="EditButton" :icon="h(EditOutlined)" @click="isDisabled ? noPermission() : UserEdit(item.id)"></a-button>
+          <a-button type="primary" id="DeleteButton" :icon="h(DeleteOutlined)"  @click="isDisabled ? noPermission() : UserDelete(item.id)"></a-button>
         </td>
       </tr>
     </table>
@@ -349,7 +374,7 @@ const formatItemCreateAt = (item) => {
             <tr>
               <td>
                 <a-space wrap>
-                  <a-button type="primary" id="ButtonSubmit" @click="ButtonSubmit(ModalData.id)">保存</a-button>
+                  <a-button type="primary" id="ButtonSubmit" @click="isDisabled ? noPermission() : ButtonSubmit(ModalData.id)">保存</a-button>
                 </a-space>
               </td>
               <td>
