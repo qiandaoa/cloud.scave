@@ -32,6 +32,7 @@
     MenuUnfoldOutlined,
     MenuFoldOutlined 
   } from '@ant-design/icons-vue';
+  import axios from 'axios';
   
   let theme = ref('dark');
   let headerStyle = reactive({ background: '#fff', padding: 0 })
@@ -39,6 +40,7 @@
   
   let isSiderCollapsed = ref(false); // 控制 sider 折叠状态
   
+
   // 动态调整contentStyle的paddingLeft
 //   watch(isSiderCollapsed, (newVal) => {
 //     if (newVal) {

@@ -92,14 +92,7 @@ async function btnSub() {
             localStorage.setItem('username',userInfo.userName);
             localStorage.setItem('userId',res.data.data.id)
             // const id = localStorage.getItem('userId');
-            const ress = await axios(axiosInstance.getrolename(res.data.data.id));
-             let data = ress.data[0];
-             let rolename = data.roleName;
-             console.log(rolename);
-             
-             localStorage.setItem('role', rolename);
-    
-                
+            await fetchRoleName(res.data.data.id)
 
                 // // 跳转首页
             router.push('/desktop');
@@ -120,7 +113,19 @@ async function btnSub() {
            }
        }
     }      
+    async function fetchRoleName(userId) {
+    try {
+        const res = await axios(axiosInstance.getrolename(userId));
+        const data = res.data[0];
+        const rolename = data.roleName;
 
+        // 存储角色信息
+        localStorage.setItem('role', rolename);
+        useStore.user.role = rolename; // 假设你有一个 userStore 用来存储用户信息
+    } catch (error) {
+        console.error('获取角色信息失败:', error);
+    }
+}
 // 注册跳转
 function handleregister() {
     router.push('/register');
