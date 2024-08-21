@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\Users\20712\Desktop\training-group-6-first-project\打包</_PublishTargetUrl>
+    <History>True|2024-07-31T02:43:36.1221882Z;True|2024-07-31T10:33:08.4376144+08:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="pg">
+      <Value>server=0929zs.top%3bport=5929%3bdatabase=admin_demo%3buid=postgres%3bpwd=HXFlll091023%2a%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

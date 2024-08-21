@@ -1,0 +1,134 @@
+@url =  http://101.133.150.189:63759
+
+###
+GET {{url}}/api/user
+Accept: application/json
+
+###
+GET {{url}}/api/role HTTP/1.1
+
+###
+GET {{url}}/api/user/0afa952f-381a-49de-a874-59521a90e44e HTTP/1.1
+
+###
+DELETE {{url}}/api/user/6fcaf10d-8c22-e594-5e4f-13750bbff3b4  HTTP/1.1
+
+### 登录
+POST {{url}}/api/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username":"abc",
+    "password":"12345678"
+}
+
+### 注册
+POST {{url}}/api/register HTTP/1.1
+Content-Type: application/json
+
+{
+    "username":"aaa141",
+    "password":"ab111111",
+    "confirmpwd":"ab111111"
+}
+
+### 重置密码操作前验证密码
+POST {{url}}/api/verify/49bc19b2-df3c-4670-88aa-19ae2289fdef HTTP/1.1
+Content-Type: application/json
+
+{
+    "oldpassword":"admin123456"
+}
+
+### 重置密码
+PUT {{url}}/api/reset/d141fd64-4298-4996-a7ec-d934e7e6b47f HTTP/1.1
+Content-Type: application/json
+
+{
+    "newpassword":"ab",
+    "confirmnewpassword":"ab"
+}
+
+### 修改用户
+PUT {{url}}/api/UserUpdate/0afa952f-381a-49de-a874-59521a90e44e HTTP/1.1
+Content-Type: application/json
+
+{
+    "nickName": "xx"
+}
+
+### 添加用户角色
+POST {{url}}/api/UseRole/createuserole HTTP/1.1
+Content-Type: application/json
+
+{
+    "userid":"3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "roleid":"22f5f98a-38d8-4304-bc6e-1358c9654b2b"
+}
+
+### 删除用户角色
+Post {{url}}/api/UseRole/deleteuserole HTTP/1.1
+Content-Type: application/json
+
+{
+  "useRoleId":"8c6aee45-a156-44b0-afe8-dce718e6bc96"
+}
+
+### 对角色用户的分页查询
+
+Post {{url}}/api/UseRole/pagingRole HTTP/1.1
+Content-Type: application/json
+
+{
+
+}
+
+
+### 创造操作权限
+Post {{url}}/api/Operation/addOp HTTP/1.1
+Content-Type: application/json
+
+{
+  "poweName":"新增",
+   "Descriptions":"测试数据",
+  "CreateUse":"286d168d-b453-4908-9c94-442807f85dd8"
+}
+
+### 更新操作权限
+PUT  {{url}}/api/Operation/updateOp HTTP/1.1
+Content-Type: application/json
+
+{
+  "poweName":"删除",
+   "Descriptions":"测试数据",
+  "CreateUse":"286d168d-b453-4908-9c94-442807f85dd8",
+  "UpdateOP":"ef89ee70-17c0-48f7-b8c7-3bdda444e890"
+}
+
+### 获取操作
+
+POST  {{url}}/api/Operation/pagingOp HTTP/1.1
+Content-Type: application/json
+
+{
+
+}
+
+### 关键字查询操作
+
+POST  {{url}}/api/Operation/findkey HTTP/1.1
+Content-Type: application/json
+
+{
+   "keyword":"删除"
+}
+
+### 删除操作
+
+POST  {{url}}/api/Operation/deleteOp HTTP/1.1
+Content-Type: application/json
+
+{
+   "DeleteItem":"ef89ee70-17c0-48f7-b8c7-3bdda444e890"
+}
+
