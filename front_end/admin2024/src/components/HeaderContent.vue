@@ -96,12 +96,12 @@ onUnmounted(() => {
 });
 //获取头像
 onMounted(async () => {
-    let user = await axios.get(`http://101.133.150.189:63759/api/user/${id}`)
+    let user = await axios.get(`http://101.133.150.189:24731/api/user/${id}`)
     // console.log(user);
     //
     if (user.data.avatar) {
         try {
-            let res = await axios.get(`http://101.133.150.189:63759/api/avatar/${id}`)
+            let res = await axios.get(`http://101.133.150.189:24731/api/avatar/${id}`)
             //   console.log(res);
             imageUrl.value = res.data;
             // console.log(imageUrl);
@@ -183,7 +183,7 @@ const handleLogout = () => {
     localStorage.removeItem('userInfo')
     localStorage.removeItem('username')
     localStorage.removeItem('role')
-    localStorage.removeItem('userId')   
+    localStorage.removeItem('userId')
     router.push('/login');
 };
 

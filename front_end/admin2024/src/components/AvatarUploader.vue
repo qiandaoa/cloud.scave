@@ -26,7 +26,7 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import axios from 'axios';
 
 const id = localStorage.getItem('userId');
-const uploadAxios = `http://101.133.150.189:63759/api/Avatar/${id}`;
+const uploadAxios = `http://101.133.150.189:24731/api/Avatar/${id}`;
 const emit = defineEmits(['update:imageUrl']);
 
 onMounted(async () => {
@@ -35,10 +35,10 @@ onMounted(async () => {
 
 const fetchData = async () => {
   try {
-    const user = await axios.get(`http://101.133.150.189:63759/api/user/${id}`);
+    const user = await axios.get(`http://101.133.150.189:24731/api/user/${id}`);
     console.log(user);
     if (user.data.avatar) {
-      const res = await axios.get(`http://101.133.150.189:63759/api/avatar/${id}`);
+      const res = await axios.get(`http://101.133.150.189:24731/api/avatar/${id}`);
       imageUrl.value = res.data;
     }
   } catch (err) {
@@ -59,7 +59,7 @@ const imageUrl = ref('');
 const beforeUpload = async (file) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
   const isLt2M = file.size / 1024 / 1024 < 2;
-  
+
   if (!isJpgOrPng) {
     message.error('You can only upload JPG file!');
     return false;
@@ -68,7 +68,7 @@ const beforeUpload = async (file) => {
     message.error('Image must smaller than 2MB!');
     return false;
   }
-  
+
   try {
     const formData = new FormData();
     formData.append('avatar', file);

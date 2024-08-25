@@ -9,18 +9,18 @@ let list = reactive([]);
 let username = localStorage.getItem('username')
 let hasPermission = async (token,perm) => {
     let userInfo =await axios.get(
-      `http://localhost:63760/api/UserPermission/${username}`
+      `http://101.133.150.189:24731/api/UserPermission/${username}`
     )
   console.log(userInfo);
-  
+
 //   console.log(perm);
-  
+
    // 假设当前用户的权限存储在变量 userPermissions 中
   const userPermissions = userInfo.data.permissionName;
   userPermissions.forEach(element => {
     list.push(element);
     // console.log(list);
-    
+
   });
 //   router.beforeEach((to, from, next) => {
 //   window.document.title = to.meta.title;
@@ -45,4 +45,3 @@ let hasPermission = async (token,perm) => {
   return true;
 }
 export default hasPermission;
- 

@@ -10,7 +10,7 @@ import Permission from '../views/permission.vue';
 // instance.interceptors.request.use(
 //   function (config) {
 //     // 添加token到请求头
-//     const token = localStorage.getItem('token');            
+//     const token = localStorage.getItem('token');
 //     if (token) {
 //         config.headers['Authorization'] = `Bearer ${token}`;
 //     }
@@ -41,7 +41,7 @@ import Permission from '../views/permission.vue';
 // export default instance;
 
 // let baseURL= "http://139.9.80.124:66"
-let baseURL= "http://localhost:63760"
+let baseURL = "http://101.133.150.189:24731"
 
 
 export default {

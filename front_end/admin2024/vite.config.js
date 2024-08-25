@@ -1,15 +1,7 @@
-import { defineConfig } from 'vite';
-import { env } from 'process';
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
 
+// https://vitejs.dev/config/
 export default defineConfig({
-  // ...其他配置...
-  server: {
-    proxy: {
-      '/api': {
-        target: env.PROXY_TARGET,
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '/api'),
-      },
-    },
-  },
-});
+  plugins: [vue()],
+})

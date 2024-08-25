@@ -7,7 +7,7 @@
                     <label for="username">用户名</label>
                     <input type="text" id="username" v-model="userinfo.username" required placeholder="请输入用户名" />
                 </div>
-           
+
                 <div class="form-group">
                     <label for="password">密码</label>
                     <input type="password" id="password" v-model="userinfo.password" required placeholder="密码长度需要大于8位" />
@@ -48,10 +48,10 @@ const onSubmit= async()=>{
     if(userinfo.password !== userinfo.confirmpwd){
         alert('两次输入的密码不一致');
         return
-    } 
+    }
     console.log(userinfo);
     try{
-        const res = await axios.post('http://101.133.150.189:63759/api/register',userinfo)
+        const res = await axios.post('http://101.133.150.189:24731/api/register',userinfo)
         console.log(res);
         if(res.status === 200){
             console.log('注册成功');
